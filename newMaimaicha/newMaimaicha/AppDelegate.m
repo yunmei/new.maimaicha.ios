@@ -7,18 +7,35 @@
 //
 
 #import "AppDelegate.h"
-
-#import "ViewController.h"
-
+#import "IndexViewController.h"
+#import "CategoryViewController.h"
+#import "CartViewController.h"
+#import "SearchViewController.h"
+#import "MoreViewController.h"
+#import "MyViewController.h"
 @implementation AppDelegate
-
+@synthesize engine = _engine;
+@synthesize tabBarctrl = _tabBarctrl;
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
     self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
     // Override point for customization after application launch.
-    self.viewController = [[ViewController alloc] initWithNibName:@"ViewController" bundle:nil];
-    self.window.rootViewController = self.viewController;
+   UINavigationController *indexNav = [[UINavigationController alloc]initWithRootViewController: [[IndexViewController alloc]initWithNibName:@"IndexViewController" bundle:nil]];
+    [indexNav.navigationBar setTintColor:[UIColor colorWithPatternImage:[UIImage imageNamed:@"navigation_bar_bg.png"]]];
+   UINavigationController *categoryNav = [[UINavigationController alloc]initWithRootViewController: [[CategoryViewController alloc]initWithNibName:@"CategoryViewController" bundle:nil]];
+    [categoryNav.navigationBar setTintColor:[UIColor colorWithPatternImage:[UIImage imageNamed:@"navigation_bar_bg.png"]]];
+    UINavigationController *MoreNav = [[UINavigationController alloc]initWithRootViewController: [[MoreViewController alloc]initWithNibName:@"MoreViewController" bundle:nil]];
+    [MoreNav.navigationBar setTintColor:[UIColor colorWithPatternImage:[UIImage imageNamed:@"navigation_bar_bg.png"]]];
+    UINavigationController *cartNav = [[UINavigationController alloc]initWithRootViewController: [[CartViewController alloc]initWithNibName:@"CartViewController" bundle:nil]];
+    [cartNav.navigationBar setTintColor:[UIColor colorWithPatternImage:[UIImage imageNamed:@"navigation_bar_bg.png"]]];
+    UINavigationController *myNav = [[UINavigationController alloc]initWithRootViewController:[[MyViewController alloc]initWithNibName:@"MyViewController" bundle:nil]];
+    [myNav.navigationBar setTintColor:[UIColor colorWithPatternImage:[UIImage imageNamed:@"navigation_bar_bg.png"]]];
+    self.tabBarctrl.viewControllers = @[indexNav,categoryNav,cartNav,myNav,MoreNav];
+    self.window.rootViewController = self.tabBarctrl;
+    
+   // self.window.rootViewController = self.viewController;
     [self.window makeKeyAndVisible];
+    
     return YES;
 }
 
@@ -49,4 +66,24 @@
     // Called when the application is about to terminate. Save data if appropriate. See also applicationDidEnterBackground:.
 }
 
+- (MKNetworkEngine *)engine
+{
+    if(_engine == nil)
+    {
+        _engine = [[MKNetworkEngine alloc]initWithHostName:API_HOSTNAME customHeaderFields:nil];
+    }
+    return _engine;
+}
+
+- (UITabBarController *)tabBarctrl
+{
+    if(_tabBarctrl == nil)
+    {
+        _tabBarctrl = [[UITabBarController alloc]init];
+        [_tabBarctrl.tabBar setBackgroundImage:[UIImage imageNamed:@"tabbar_bg.png"]];
+
+        _tabBarctrl.tabBar.selectionIndicatorImage = [UIImage imageNamed:@"tabbar_selection.png"];
+    }
+    return _tabBarctrl;
+}
 @end

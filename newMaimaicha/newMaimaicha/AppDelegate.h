@@ -7,13 +7,13 @@
 //
 
 #import <UIKit/UIKit.h>
-
-@class ViewController;
+#import "MKNetworkKit.h"
+#import "Constants.h"
+#define ApplicationDelegate ((AppDelegate *)[UIApplication sharedApplication].delegate)
 
 @interface AppDelegate : UIResponder <UIApplicationDelegate>
 
 @property (strong, nonatomic) UIWindow *window;
-
-@property (strong, nonatomic) ViewController *viewController;
-
+@property (strong, nonatomic) MKNetworkEngine *engine;
+@property (strong, nonatomic) UITabBarController *tabBarctrl;
 @end
