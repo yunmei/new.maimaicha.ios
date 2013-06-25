@@ -7,7 +7,7 @@
 //
 
 #import <UIKit/UIKit.h>
-
-@interface IndexViewController : UIViewController
+#import "ZBarSDK.h"
+@interface IndexViewController : UIViewController<ZBarReaderDelegate>
 
 @end

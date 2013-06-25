@@ -8,6 +8,16 @@
 
 #import <UIKit/UIKit.h>
 
-@interface SearchViewController : UIViewController
-
+@interface SearchViewController : UIViewController<UISearchBarDelegate,
+                                                UISearchDisplayDelegate,
+                                                UITableViewDataSource,
+                                                UITableViewDelegate,
+                                                UITextFieldDelegate>
+@property (strong, nonatomic) IBOutlet UISearchBar *searchBar;
+@property (strong, nonatomic) NSMutableArray *hotKeywordsArray;
+- (IBAction)backView:(id)sender;
+@property (strong, nonatomic) IBOutlet UITableView *keywordsTableView;
+@property (strong,nonatomic)UIView *superView;
+@property (strong, nonatomic) IBOutlet UISegmentedControl *viewSegmentCtrl;
+@property (strong, nonatomic) NSMutableArray *searchDbArray;
 @end
