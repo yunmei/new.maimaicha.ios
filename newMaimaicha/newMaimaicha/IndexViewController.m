@@ -16,6 +16,9 @@
 @end
 
 @implementation IndexViewController
+@synthesize adScrollView = _adScrollView;
+@synthesize adPageView = _adPageView;
+@synthesize adPageProgressView = _adPageProgressView;
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
@@ -44,7 +47,30 @@
     UIBarButtonItem *dbItem = [[UIBarButtonItem alloc]initWithBarButtonSystemItem:UIBarButtonSystemItemCamera target:self action:@selector(dbItemClick:)];
     [dbItem setTintColor:[UIColor colorWithRed:130/255.0 green:183/255.0 blue:34/255.0 alpha:1.0]];
     self.navigationItem.rightBarButtonItems = @[seachItem,dbItem];
+   // [self.adStrollView setBackgroundColor:[UIColor colorWithPatternImage:[UIImage imageNamed:@"ad_default.png"]]];
+   //初始化广告
+    [self.view addSubview:self.adScrollView];
+    [self.view addSubview:self.adPageView];
+    [self.adPageView addSubview:self.adPageProgressView];
+
     
+    // 获取广告
+    NSMutableDictionary *params = [NSMutableDictionary dictionaryWithObject:@"ad_getAdList" forKey:@"act"];
+    MKNetworkOperation* op = [YMGlobal getOperation:params];
+    [op addCompletionHandler:^(MKNetworkOperation *completedOperation) {
+        SBJsonParser *parser = [[SBJsonParser alloc]init];
+        NSMutableDictionary *object = [parser objectWithData:[completedOperation responseData]];
+        if([[object objectForKey:@"errorCode"]isEqualToString:@"0"])
+        {
+            self.adListArray = [object objectForKey:@"result"];
+            [self loadAdList];
+        }
+    } errorHandler:^(MKNetworkOperation *completedOperation, NSError *error) {
+        NSLog(@"Error:%@", error);
+    }];
+    [ApplicationDelegate.engine enqueueOperation: op];
+    
+
 }
 
 - (void)didReceiveMemoryWarning
@@ -53,6 +79,24 @@
     // Dispose of any resources that can be recreated.
 }
 
+//开始加载ad
+- (void)loadAdList
+{
+    if([self.adListArray count] >0)
+    {
+        self.adScrollView.contentSize = CGSizeMake(320*[self.adListArray count], 129);
+        int i=0;
+        for(id o in self.adListArray)
+        {
+            UIButton *imageBtn = [[UIButton alloc]initWithFrame:CGRectMake(320*i, 0, 320, 129)];
+            [imageBtn setBackgroundImage:[UIImage imageNamed:@"ad_default.png"] forState:UIControlStateNormal];
+            NSDictionary *obj = (NSDictionary *)o;
+            [YMGlobal loadImage:[obj objectForKey:@"imageUrl"] andButton:imageBtn andControlState:UIControlStateNormal];
+            [self.adScrollView addSubview:imageBtn];
+            i++;
+        }
+    }
+}
 
 //点击搜索
 - (void)search:(id)sender
@@ -95,5 +139,53 @@
         [alertView show];
     }
 
+}
+
+- (UIScrollView *)adScrollView
+{
+    if(_adScrollView == nil)
+    {
+        _adScrollView = [[UIScrollView alloc]initWithFrame:CGRectMake(0, 0, 320, 129)];
+        _adScrollView.contentSize = CGSizeMake(320, 129);
+        _adScrollView.pagingEnabled = true;
+        _adScrollView.tag =1;
+        _adScrollView.delegate = self;
+        _adScrollView.showsHorizontalScrollIndicator = NO;
+        _adScrollView.showsVerticalScrollIndicator = NO;
+        UIImageView *imageView = [[UIImageView alloc]initWithFrame:CGRectMake(0, 0, 320, 129)];
+        [imageView setImage:[UIImage imageNamed:@"ad_default"]];
+        [imageView setBackgroundColor:[UIColor blackColor]];
+        [_adScrollView addSubview:imageView];
+    }
+    return _adScrollView;
+}
+- (UIView *)adPageView
+{
+    if(_adPageView == nil)
+    {
+        _adPageView = [[UIView alloc]initWithFrame:CGRectMake(0, 129, 320, 2)];
+        [_adPageView setBackgroundColor:[UIColor colorWithRed:167/255.0 green:216/255.0 blue:100/255.0 alpha:1]];
+    }
+    return _adPageView;
+}
+
+-(UIView *)adPageProgressView
+{
+    if (_adPageProgressView == nil) {
+        _adPageProgressView = [[UIView alloc]initWithFrame:CGRectMake(0, 0, 320/3, 4)];
+        [_adPageProgressView setBackgroundColor:[UIColor colorWithRed:128/255.0 green:181/255.0 blue:73/255.0 alpha:0.8]];
+    }
+    return _adPageProgressView;
+}
+
+-(void)scrollViewDidScroll:(UIScrollView *)scrollView
+{
+    if(scrollView.tag == 1)
+    {
+        CGFloat contentoffset = scrollView.contentOffset.x;
+        int i = floor(contentoffset/320);
+        CGFloat progressLength = 320/(scrollView.contentSize.width/320);
+        [self.adPageProgressView setFrame:CGRectMake(i*progressLength, 0, progressLength, 4)];
+    }
 }
 @end

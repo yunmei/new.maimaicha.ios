@@ -71,6 +71,7 @@
     if(_engine == nil)
     {
         _engine = [[MKNetworkEngine alloc]initWithHostName:API_HOSTNAME customHeaderFields:nil];
+        [_engine useCache];
     }
     return _engine;
 }
