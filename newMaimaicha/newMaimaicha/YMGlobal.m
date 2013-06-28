@@ -9,7 +9,7 @@
 #import "YMGlobal.h"
 #import "Constants.h"
 #import "AppDelegate.h"
-
+#import <QuartzCore/QuartzCore.h>
 @implementation YMGlobal
 
 + (MKNetworkOperation *)getOperation:(NSMutableDictionary *)params
@@ -25,10 +25,43 @@
         [imageView setImage:fetchedImage];
     }];
 }
+//已翻滚效果载入图片
 + (void)loadImage:(NSString *)imageUrl andButton:(UIButton *)button andControlState:(UIControlState)buttonState
 {
-    [ApplicationDelegate.engine imageAtURL:[NSURL URLWithString:imageUrl] onCompletion:^(UIImage *fetchedImage, NSURL *url, BOOL isInCache) {
+    [ApplicationDelegate.engine imageAtURL:[NSURL URLWithString:imageUrl] onCompletion:^(UIImage *fetchedImage, NSURL *url, BOOL isInCache){
+        CATransition *transtion = [CATransition animation];
+        transtion.duration = 0.5;
+        [transtion setTimingFunction:[CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionEaseInEaseOut]];
+        [transtion setType:kCATransitionFade];
+        [transtion setSubtype:kCATransitionFromRight];
+        [button.layer addAnimation:transtion forKey:@"transtionKey"];
         [button setBackgroundImage:fetchedImage forState:buttonState];
+    }];
+}
+//以淡入方式载入图片
++ (void)loadFlipImage:(NSString *)imageUrl andButton:(UIButton *)button andControlState:(UIControlState)buttonState
+{
+    [ApplicationDelegate.engine imageAtURL:[NSURL URLWithString:imageUrl] onCompletion:^(UIImage *fetchedImage, NSURL *url, BOOL isInCache) {
+        CATransition *transtion = [CATransition animation];
+        transtion.duration = 0.5;
+        [transtion setTimingFunction:[CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionEaseInEaseOut]];
+        [transtion setType:@"oglFlip"];
+        [transtion setSubtype:kCATransitionFromRight];
+        [button.layer addAnimation:transtion forKey:@"transtionKey"];
+        [button setBackgroundImage:fetchedImage forState:buttonState];
+    }];
+}
+
++ (void)loadFlipImage:(NSString *)imageUrl andImageView:(UIImageView *)imageView
+{
+    [ApplicationDelegate.engine imageAtURL:[NSURL URLWithString:imageUrl] onCompletion:^(UIImage *fetchedImage, NSURL *url, BOOL isInCache) {
+            CATransition *transtion = [CATransition animation];
+            transtion.duration = 0.5;
+            [transtion setTimingFunction:[CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionEaseInEaseOut]];
+            [transtion setType:@"oglFlip"];
+            [transtion setSubtype:kCATransitionFromRight];
+            [imageView.layer addAnimation:transtion forKey:@"transtionKey"];
+            [imageView setImage:fetchedImage];
     }];
 }
 @end

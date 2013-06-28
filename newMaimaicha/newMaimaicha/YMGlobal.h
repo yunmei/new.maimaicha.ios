@@ -16,4 +16,6 @@
 // 加载图片
 + (void)loadImage:(NSString *)imageUrl andImageView:(UIImageView *)imageView;
 + (void)loadImage:(NSString *)imageUrl andButton:(UIButton *)button andControlState:(UIControlState)buttonState;
++ (void)loadFlipImage:(NSString *)imageUrl andButton:(UIButton *)button andControlState:(UIControlState)buttonState;
++ (void)loadFlipImage:(NSString *)imageUrl andImageView:(UIImageView *)imageView;
 @end

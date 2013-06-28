@@ -13,4 +13,5 @@
 @property (strong,nonatomic) UIScrollView *adScrollView;
 @property (strong,nonatomic) UIView *adPageView;
 @property (strong,nonatomic) UIView *adPageProgressView;
+@property (strong,nonatomic) NSMutableArray *commendGoodsList;
 @end

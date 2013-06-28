@@ -8,6 +8,7 @@
 
 #import <UIKit/UIKit.h>
 
-@interface CategoryViewController : UIViewController
-
+@interface CategoryViewController : UIViewController<UITableViewDataSource,UITableViewDelegate>
+@property (strong, nonatomic) IBOutlet UITableView *catTableView;
+@property (strong, nonatomic)NSMutableArray *catArray;
 @end
