@@ -11,13 +11,14 @@
 @implementation GoodsListCell
 @synthesize goodsNameLabel = _goodsNameLabel;
 @synthesize goodsPriceLabel = _goodsPriceLabel;
+@synthesize goodsImageView = _goodsImageView;
 - (id)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier
 {
     self = [super initWithStyle:style reuseIdentifier:reuseIdentifier];
     if (self) {
         [self addSubview:self.goodsNameLabel];
         [self addSubview:self.goodsPriceLabel];
-        [self.imageView setImage:[UIImage imageNamed:@"goods_default.png"]];
+        [self addSubview:self.goodsImageView];
     }
     return self;
 }
@@ -47,5 +48,15 @@
         _goodsPriceLabel = [[UILabel alloc]init];
     }
     return _goodsPriceLabel;
+}
+
+- (UIImageView *)goodsImageView
+{
+    if(_goodsImageView == nil)
+    {
+        _goodsImageView = [[UIImageView alloc]initWithFrame:CGRectMake(5, 5, 70, 70)];
+        [_goodsImageView setImage:[UIImage imageNamed:@"goods_default.png"]];
+    }
+    return _goodsImageView;
 }
 @end

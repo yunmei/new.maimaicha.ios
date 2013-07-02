@@ -10,4 +10,5 @@
 
 @interface SecCategoryViewController : UIViewController<UITableViewDataSource,UITableViewDelegate>
 @property (strong,nonatomic)NSMutableArray *secCatArray;
+@property (strong, nonatomic)NSString *catName;
 @end

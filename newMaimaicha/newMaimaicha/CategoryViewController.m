@@ -113,6 +113,7 @@
            {
                SecCategoryViewController *secondCatVC = [[SecCategoryViewController alloc]init];
                secondCatVC.secCatArray = [obj objectForKey:@"result"];
+               secondCatVC.catName = [[self.catArray objectAtIndex:indexPath.row] objectForKey:@"catName"];
                UIBarButtonItem *backItem = [[UIBarButtonItem alloc]init];
                backItem.tintColor = [UIColor colorWithRed:167/255.0 green:216/255.0 blue:106/255.0 alpha:1.0];
                self.navigationItem.backBarButtonItem = backItem;

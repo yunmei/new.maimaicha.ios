@@ -13,6 +13,7 @@
 #import "SearchViewController.h"
 #import "MoreViewController.h"
 #import "MyViewController.h"
+#import "goodsModel.h"
 @implementation AppDelegate
 @synthesize engine = _engine;
 @synthesize tabBarctrl = _tabBarctrl;
@@ -32,7 +33,11 @@
     [myNav.navigationBar setTintColor:[UIColor colorWithPatternImage:[UIImage imageNamed:@"navigation_bar_bg.png"]]];
     self.tabBarctrl.viewControllers = @[indexNav,categoryNav,cartNav,myNav,MoreNav];
     self.window.rootViewController = self.tabBarctrl;
-    
+    if([goodsModel countGoods]>0)
+    {
+        [[self.tabBarctrl.tabBar.items objectAtIndex:2] setBadgeValue:[NSString stringWithFormat:@"%i",[goodsModel countGoods]]];
+    }
+
    // self.window.rootViewController = self.viewController;
     [self.window makeKeyAndVisible];
     

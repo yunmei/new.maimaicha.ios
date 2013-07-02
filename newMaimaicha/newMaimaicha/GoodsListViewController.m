@@ -13,6 +13,7 @@
 #import "SBJson.h"
 #import "AppDelegate.h"
 #import "GoodsListCell.h"
+#import "GoodsInfoViewController.h"
 @interface GoodsListViewController ()
 
 @end
@@ -39,16 +40,15 @@
 {
     [super viewDidLoad];
     // Do any additional setup after loading the view from its nib.
+    self.navigationItem.title = self.catName;
     [self.view addSubview:self.goodsListTableView];
     self.headBgView.layer.borderWidth = 1;
     self.headBgView.layer.borderColor = [UIColor grayColor].CGColor;
     [self.headBgView setFrame:CGRectMake(-0.5, 0, 321, 43)];
     [self.view bringSubviewToFront:self.headBgView];
     NSDictionary *attribute = [NSDictionary dictionaryWithObjectsAndKeys:[UIColor blackColor],UITextAttributeTextColor,[UIFont systemFontOfSize:12.0],UITextAttributeFont,[UIColor clearColor],UITextAttributeTextShadowColor,nil];
-    [self.segControl setTintColor:[UIColor colorWithRed:228/255.0 green:244/255.0 blue:174/255.0 alpha:1.0]];
     [self.segControl setTitleTextAttributes:attribute forState:UIControlStateNormal];
     [self.segControl addTarget:self action:@selector(contrlSelected:) forControlEvents:UIControlEventValueChanged];
-    
     [self.view bringSubviewToFront:self.segControl];
     NSMutableDictionary *param = [[NSMutableDictionary alloc]init];
     [param setObject:self.catId forKey:@"catId"];
@@ -66,8 +66,7 @@
     } errorHandler:^(MKNetworkOperation *completedOperation, NSError *error) {
         NSLog(@"%@",error);
     }];
-    [ApplicationDelegate.engine enqueueOperation:op];
-   
+    [ApplicationDelegate.engine enqueueOperation:op];   
 }
 
 - (void)didReceiveMemoryWarning
@@ -94,11 +93,13 @@
     if(cell == nil)
     {
         cell = [[GoodsListCell alloc]initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:identifier];
+        cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
+        cell.selectionStyle = UITableViewCellSelectionStyleNone;
     }
     if(self.goodsListArray != nil)
     {
         NSString *urlString = [[self.goodsListArray objectAtIndex:indexPath.row] objectForKey:@"imageUrl"];
-        [YMGlobal loadFlipImage:urlString andImageView:cell.imageView];
+        [YMGlobal loadFlipImage:urlString andImageView:cell.goodsImageView];
         NSString *nameString = [[self.goodsListArray objectAtIndex:indexPath.row] objectForKey:@"goodsName"];
         CGSize nameLabelSize =  [nameString sizeWithFont:[UIFont systemFontOfSize:13.0] constrainedToSize:CGSizeMake(190, 1000.0)];
         cell.goodsNameLabel.numberOfLines = 0;
@@ -106,10 +107,10 @@
         cell.goodsNameLabel.text = nameString;
         cell.goodsNameLabel.font = [UIFont systemFontOfSize:13.0];
         [cell.goodsNameLabel setFrame:CGRectMake(100, 15, nameLabelSize.width, nameLabelSize.height)];
-        [cell.goodsPriceLabel setFrame:CGRectMake(100, 60, 100, 20)];
+        [cell.goodsPriceLabel setFrame:CGRectMake(100, 50, 100, 20)];
         [cell.goodsPriceLabel setFont:[UIFont systemFontOfSize:13.0]];
         cell.goodsPriceLabel.textColor = [UIColor redColor];
-        NSString *detailString = [NSString stringWithFormat:@"￥%@",[[self.goodsListArray objectAtIndex:indexPath.row]objectForKey:@"goodsPrice"]];
+        NSString *detailString = [NSString stringWithFormat:@"￥%.2f",[[[self.goodsListArray objectAtIndex:indexPath.row]objectForKey:@"goodsPrice"] floatValue]];
         cell.goodsPriceLabel.text = detailString;
     }
     return  cell;
@@ -135,7 +136,6 @@
         [params setObject:@"goods_getListByCatId" forKey:@"act"];
         [params setObject:self.catId forKey:@"catId"];
         [params setObject:[NSString stringWithFormat:@"%i",countPage+1] forKey:@"page"];
-        [params setObject:self.sort forKey:self.orderBy];
         MKNetworkOperation *op = [YMGlobal getOperation:params];
         [op addCompletionHandler:^(MKNetworkOperation *completedOperation) {
             [HUD hide:YES];
@@ -234,7 +234,7 @@
         self.sort = @"desc";
         self.orderBy = @"viewCount";
         [params setObject:self.sort forKey:self.orderBy];
-        [seg setTitle:@"人气" forSegmentAtIndex:0];
+        [seg setTitle:@"价格" forSegmentAtIndex:0];
     }
     MKNetworkOperation *op = [YMGlobal getOperation:params];
     [op addCompletionHandler:^(MKNetworkOperation *completedOperation) {
@@ -251,5 +251,17 @@
          NSLog(@"%@",error);
     }];
     [ApplicationDelegate.engine enqueueOperation:op];
+}
+
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
+{
+   NSString *goodsId = [[self.goodsListArray objectAtIndex:indexPath.row] objectForKey:@"goodsId"];
+    GoodsInfoViewController *goodsInfoVC = [[GoodsInfoViewController alloc]init];
+    goodsInfoVC.goodsId = goodsId;
+    goodsInfoVC.goodsName = self.catName;
+    UIBarButtonItem *backItem = [[UIBarButtonItem alloc]initWithTitle:@"返回" style:UIBarButtonItemStyleBordered target:nil action:nil];
+    [backItem setTintColor:[UIColor colorWithRed:167/255.0 green:216/255.0 blue:106/255.0 alpha:1.0]];
+    self.navigationItem.backBarButtonItem = backItem;
+    [self.navigationController pushViewController:goodsInfoVC animated:YES];
 }
 @end

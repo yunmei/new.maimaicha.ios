@@ -11,4 +11,5 @@
 @interface GoodsListCell : UITableViewCell
 @property (strong, nonatomic)UILabel *goodsNameLabel;
 @property (strong, nonatomic)UILabel *goodsPriceLabel;
+@property (strong, nonatomic)UIImageView *goodsImageView;
 @end

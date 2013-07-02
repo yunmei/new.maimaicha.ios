@@ -248,7 +248,7 @@
         _adScrollView.showsHorizontalScrollIndicator = NO;
         _adScrollView.showsVerticalScrollIndicator = NO;
         UIImageView *imageView = [[UIImageView alloc]initWithFrame:CGRectMake(0, 0, 320, 129)];
-        [imageView setImage:[UIImage imageNamed:@"ad_default"]];
+        [imageView setImage:[UIImage imageNamed:@"ad_default.png"]];
         [imageView setBackgroundColor:[UIColor blackColor]];
         [_adScrollView addSubview:imageView];
     }
