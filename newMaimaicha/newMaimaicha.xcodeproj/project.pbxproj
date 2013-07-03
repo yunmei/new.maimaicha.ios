@@ -68,6 +68,12 @@
 		468EFAE6177C1DF3000AC0FB /* GoodsListCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 468EFAE5177C1DF3000AC0FB /* GoodsListCell.m */; };
 		468EFAEA177D6037000AC0FB /* GoodsInfoViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 468EFAE8177D6035000AC0FB /* GoodsInfoViewController.m */; };
 		468EFAEB177D6037000AC0FB /* GoodsInfoViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 468EFAE9177D6035000AC0FB /* GoodsInfoViewController.xib */; };
+		46A675DF17840B3200761668 /* carBuy.png in Resources */ = {isa = PBXBuildFile; fileRef = 46A675DE17840B3200761668 /* carBuy.png */; };
+		46A675E217841B3600761668 /* UserModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 46A675E117841B3600761668 /* UserModel.m */; };
+		46A675E71784261100761668 /* LoginViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 46A675E51784261100761668 /* LoginViewController.m */; };
+		46A675E81784261100761668 /* LoginViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 46A675E61784261100761668 /* LoginViewController.xib */; };
+		46A675EC17844B1D00761668 /* RegisterViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 46A675EA17844B1D00761668 /* RegisterViewController.m */; };
+		46A675ED17844B1D00761668 /* RegisterViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 46A675EB17844B1D00761668 /* RegisterViewController.xib */; };
 		46AE9A631782EE77001A0810 /* cartCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 46AE9A621782EE77001A0810 /* cartCell.m */; };
 		46F53729177AD77000651FAA /* tdc_btn.png in Resources */ = {isa = PBXBuildFile; fileRef = 46F53728177AD77000651FAA /* tdc_btn.png */; };
 		46F5372B177AD85A00651FAA /* search_bg.png in Resources */ = {isa = PBXBuildFile; fileRef = 46F5372A177AD85A00651FAA /* search_bg.png */; };
@@ -237,6 +243,15 @@
 		468EFAE7177D6034000AC0FB /* GoodsInfoViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GoodsInfoViewController.h; sourceTree = "<group>"; };
 		468EFAE8177D6035000AC0FB /* GoodsInfoViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GoodsInfoViewController.m; sourceTree = "<group>"; };
 		468EFAE9177D6035000AC0FB /* GoodsInfoViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = GoodsInfoViewController.xib; sourceTree = "<group>"; };
+		46A675DE17840B3200761668 /* carBuy.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = carBuy.png; sourceTree = "<group>"; };
+		46A675E017841B3600761668 /* UserModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UserModel.h; sourceTree = "<group>"; };
+		46A675E117841B3600761668 /* UserModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UserModel.m; sourceTree = "<group>"; };
+		46A675E41784261100761668 /* LoginViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LoginViewController.h; sourceTree = "<group>"; };
+		46A675E51784261100761668 /* LoginViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LoginViewController.m; sourceTree = "<group>"; };
+		46A675E61784261100761668 /* LoginViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = LoginViewController.xib; sourceTree = "<group>"; };
+		46A675E917844B1D00761668 /* RegisterViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RegisterViewController.h; sourceTree = "<group>"; };
+		46A675EA17844B1D00761668 /* RegisterViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RegisterViewController.m; sourceTree = "<group>"; };
+		46A675EB17844B1D00761668 /* RegisterViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = RegisterViewController.xib; sourceTree = "<group>"; };
 		46AE9A611782EE77001A0810 /* cartCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = cartCell.h; sourceTree = "<group>"; };
 		46AE9A621782EE77001A0810 /* cartCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = cartCell.m; sourceTree = "<group>"; };
 		46F53728177AD77000651FAA /* tdc_btn.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = tdc_btn.png; sourceTree = "<group>"; };
@@ -417,6 +432,7 @@
 				464FF76617753CB70092334B /* MyViewController.m */,
 				464FF76717753CB80092334B /* MyViewController.xib */,
 				46180850177426FF00AF8B51 /* ViewController.xib */,
+				46A675E3178425E400761668 /* center */,
 				466414591782B06900028C0D /* Cart */,
 				46F53730177AFF7B00651FAA /* category */,
 				46857BC01779C61400B42F49 /* goods */,
@@ -532,6 +548,20 @@
 			name = goods;
 			sourceTree = "<group>";
 		};
+		46A675E3178425E400761668 /* center */ = {
+			isa = PBXGroup;
+			children = (
+				46A675E41784261100761668 /* LoginViewController.h */,
+				46A675E51784261100761668 /* LoginViewController.m */,
+				46A675E61784261100761668 /* LoginViewController.xib */,
+				46A675E917844B1D00761668 /* RegisterViewController.h */,
+				46A675EA17844B1D00761668 /* RegisterViewController.m */,
+				46A675EB17844B1D00761668 /* RegisterViewController.xib */,
+			);
+			name = center;
+			path = ..;
+			sourceTree = "<group>";
+		};
 		46F53730177AFF7B00651FAA /* category */ = {
 			isa = PBXGroup;
 			children = (
@@ -564,6 +594,8 @@
 				4682CCC9178295E10048EA5D /* UILabelStrikeThrough.m */,
 				46AE9A611782EE77001A0810 /* cartCell.h */,
 				46AE9A621782EE77001A0810 /* cartCell.m */,
+				46A675E017841B3600761668 /* UserModel.h */,
+				46A675E117841B3600761668 /* UserModel.m */,
 			);
 			name = class;
 			sourceTree = "<group>";
@@ -662,6 +694,7 @@
 		46FAB5B417744DF700D6508C /* images */ = {
 			isa = PBXGroup;
 			children = (
+				46A675DE17840B3200761668 /* carBuy.png */,
 				4664145C1782CC7800028C0D /* lightYellow.png */,
 				4664145A1782CC0F00028C0D /* empty.jpg */,
 				4682CCC0178267C20048EA5D /* sc.png */,
@@ -836,6 +869,9 @@
 				4664145817829DF700028C0D /* CommentsViewController.xib in Resources */,
 				4664145B1782CC0F00028C0D /* empty.jpg in Resources */,
 				4664145D1782CC7800028C0D /* lightYellow.png in Resources */,
+				46A675DF17840B3200761668 /* carBuy.png in Resources */,
+				46A675E81784261100761668 /* LoginViewController.xib in Resources */,
+				46A675ED17844B1D00761668 /* RegisterViewController.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -890,6 +926,9 @@
 				4682CCCA178295E10048EA5D /* UILabelStrikeThrough.m in Sources */,
 				4664145717829DF700028C0D /* CommentsViewController.m in Sources */,
 				46AE9A631782EE77001A0810 /* cartCell.m in Sources */,
+				46A675E217841B3600761668 /* UserModel.m in Sources */,
+				46A675E71784261100761668 /* LoginViewController.m in Sources */,
+				46A675EC17844B1D00761668 /* RegisterViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

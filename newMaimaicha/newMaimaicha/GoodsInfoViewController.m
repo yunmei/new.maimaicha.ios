@@ -78,6 +78,7 @@
     [buyButton setFrame:CGRectMake(56, 290, 208, 41)];
     [buyButton setBackgroundImage:[UIImage imageNamed:@"quickBuyBtn.png"] forState:UIControlStateNormal];
     [buyButton addTarget:self action:@selector(buy:) forControlEvents:UIControlEventTouchUpInside];
+    [buyButton setEnabled:NO];
     [self.view addSubview:buyButton];
 
     //property tableView
@@ -114,7 +115,7 @@
             [storeLabel setText:[NSString stringWithFormat:@"库存量:%@",self.goodsModel.store]];
             [storeLabel setFrame:CGRectMake(240, nameLabel.frame.size.height+nameLabel.frame.origin.y+6, 80, 40)];
             [buyButton setFrame:CGRectMake(56, priceLabel.frame.size.height+priceLabel.frame.origin.y+15, 208, 41)];
-
+            [buyButton setEnabled:YES];
             [self.propertyTableView setFrame:CGRectMake(0, buyButton.frame.origin.y+buyButton.frame.size.height+20, 320, 200)];
             [self.propertyTableView reloadData];
             [self.flowView reloadData];

@@ -7,7 +7,8 @@
 //
 
 #import "MyViewController.h"
-
+#import "LoginViewController.h"
+#import "UserModel.h"
 @interface MyViewController ()
 
 @end
@@ -29,6 +30,13 @@
     return self;
 }
 
+- (void)viewWillAppear:(BOOL)animated
+{
+    if(![UserModel checkLogin])
+    {
+        [[NSNotificationCenter defaultCenter] postNotificationName:@"INeedLogin" object:nil];
+    }
+}
 - (void)viewDidLoad
 {
     [super viewDidLoad];

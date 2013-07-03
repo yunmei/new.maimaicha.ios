@@ -14,4 +14,8 @@
 @property (strong, nonatomic)UIView *cartNullView;
 @property (strong, nonatomic)NSMutableArray *textFieldArray;
 @property (strong, nonatomic)NSMutableArray *labelArray;
+@property (strong, nonatomic)UIView *footerView;
+@property (strong, nonatomic)NSString *totalAmount;
+@property (strong, nonatomic)UILabel *amountLabel;
+@property (strong, nonatomic)UILabel *footerFirstLabel;
 @end

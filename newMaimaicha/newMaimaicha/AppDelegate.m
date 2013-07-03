@@ -14,6 +14,8 @@
 #import "MoreViewController.h"
 #import "MyViewController.h"
 #import "goodsModel.h"
+#import "UserModel.h"
+#import "LoginViewController.h"
 @implementation AppDelegate
 @synthesize engine = _engine;
 @synthesize tabBarctrl = _tabBarctrl;
@@ -37,13 +39,27 @@
     {
         [[self.tabBarctrl.tabBar.items objectAtIndex:2] setBadgeValue:[NSString stringWithFormat:@"%i",[goodsModel countGoods]]];
     }
-
+    [UserModel creatTable];
    // self.window.rootViewController = self.viewController;
     [self.window makeKeyAndVisible];
-    
+    //add NSNotificationCenter
+    [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(openLoginView:) name:@"INeedLogin" object:nil];
+    [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(respondsLogin:) name:@"UserRespondsLogin" object:nil];
     return YES;
 }
 
+- (void)openLoginView:(NSNotification *)note
+{
+    LoginViewController *loginVC = [[LoginViewController alloc]initWithNibName:@"LoginViewController" bundle:nil];
+    UINavigationController *loginNav = [[UINavigationController alloc]initWithRootViewController:loginVC];
+    [loginNav.navigationBar setTintColor:[UIColor colorWithRed:139/255.0 green:192/255.0 blue:52/255.0 alpha:0.9]];
+    [self.tabBarctrl.selectedViewController presentViewController:loginNav animated:YES completion:nil];
+}
+
+- (void)respondsLogin:(NSNotification *)note
+{
+    [self.tabBarctrl setSelectedIndex:0];
+}
 - (void)applicationWillResignActive:(UIApplication *)application
 {
     // Sent when the application is about to move from active to inactive state. This can occur for certain types of temporary interruptions (such as an incoming phone call or SMS message) or when the user quits the application and it begins the transition to the background state.

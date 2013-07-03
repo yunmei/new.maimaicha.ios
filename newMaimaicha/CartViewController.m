@@ -19,6 +19,10 @@
 @synthesize cartNullView = _cartNullView;
 @synthesize textFieldArray = _textFieldArray;
 @synthesize labelArray = _labelArray;
+@synthesize footerView = _footerView;
+@synthesize totalAmount;
+@synthesize amountLabel;
+@synthesize footerFirstLabel;
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
@@ -46,6 +50,15 @@
         NSMutableArray *resultArray = [goodsModel fetchGoodsList];
         if(resultArray != nil)
         {
+            self.goodsInfoArray = resultArray;
+            float amount = 0;
+            for(id o in self.goodsInfoArray)
+            {
+                float count = [[o objectForKey:@"goods_count"] floatValue];
+                float price = [[o objectForKey:@"price"] floatValue];
+                amount += count*price;
+            }
+            self.totalAmount = [NSString stringWithFormat:@"%.2f",amount];
             BOOL isTableViewOn = NO;
             self.goodsInfoArray = resultArray;
             for(UIView *oneView in self.view.subviews)
@@ -53,6 +66,7 @@
                 if([oneView isKindOfClass:[self.goodsTableView class]])
                 {
                     isTableViewOn = YES;
+                    break;
                 }else{
                      isTableViewOn = NO;
                 }
@@ -63,12 +77,18 @@
                 self.goodsTableView.dataSource = self;
                 self.goodsTableView.delegate = self;
                 self.goodsTableView.scrollEnabled = NO;
-                
                 [self.view addSubview:self.goodsTableView];
+                [self.view addSubview:self.footerView];
+                UIScrollView *selfScrollView = (UIScrollView *)self.view;
+                selfScrollView.contentSize = CGSizeMake(320, self.goodsTableView.frame.size.height+100);
             }else{
-                NSLog(@"reload");
                 [self.goodsTableView reloadData];
                 [self.goodsTableView setFrame:CGRectMake(0, 0, 320, self.goodsInfoArray.count*80)];
+                [self.footerView setFrame:CGRectMake(0, self.goodsInfoArray.count*80, 320, 100)];
+                [self.amountLabel setText:[NSString stringWithFormat:@"￥%@",self.totalAmount]];
+                [self.footerFirstLabel setText:[NSString stringWithFormat:@"原始金额 : ￥%@ - 返现 : ￥0.00",self.totalAmount]];
+                 UIScrollView *selfScrollView = (UIScrollView *)self.view;
+                selfScrollView.contentSize = CGSizeMake(320, self.goodsTableView.frame.size.height+100);
             }
 
         }
@@ -92,6 +112,10 @@
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
+    [tableView setFrame:CGRectMake(0, 0, 320, self.goodsInfoArray.count*80)];
+    [self.amountLabel setText:[NSString stringWithFormat:@"￥%@",self.totalAmount]];
+    [self.footerFirstLabel setText:[NSString stringWithFormat:@"原始金额 : ￥%@ - 返现 : ￥0.00",self.totalAmount]];
+    [self.footerView setFrame:CGRectMake(0, self.goodsInfoArray.count*80, 320, 100)];
     return self.goodsInfoArray.count;
 }
 
@@ -112,7 +136,7 @@
     cell.buyCountField.delegate = self;
     [self.textFieldArray addObject:cell.buyCountField];
     cell.bnLabel.text = [NSString stringWithFormat:@"商品编号: %@",[[self.goodsInfoArray objectAtIndex:indexPath.row]objectForKey:@"goodsBn"]];
-    cell.priceLabel.text = [NSString stringWithFormat:@"商品价格: ￥%.2f",[[[self.goodsInfoArray objectAtIndex:indexPath.row]objectForKey:@"price"] floatValue]];
+    cell.priceLabel.text = [NSString stringWithFormat:@"价格: ￥%.2f",[[[self.goodsInfoArray objectAtIndex:indexPath.row]objectForKey:@"price"] floatValue]];
     return cell;
 }
 
@@ -135,10 +159,6 @@
     return UITableViewCellEditingStyleDelete;
 }
 
--(BOOL)tableView:(UITableView *)tableView canMoveRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    return NO;
-}
 
 -(void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath
 {
@@ -189,10 +209,19 @@
         if(resultArray != nil)
         {
             self.goodsInfoArray = resultArray;
+            float amount = 0;
+            for(id o in self.goodsInfoArray)
+            {
+                float count = [[o objectForKey:@"goods_count"] floatValue];
+                float price = [[o objectForKey:@"price"] floatValue];
+                amount += count*price;
+            }
+            self.totalAmount = [NSString stringWithFormat:@"%.2f",amount];
         }
     }else{
         [[self.tabBarController.tabBar.items objectAtIndex:2]setBadgeValue:nil];
         [self.goodsTableView removeFromSuperview];
+        [self.footerView removeFromSuperview];
         [self.view addSubview:self.cartNullView];
     }
 }
@@ -263,4 +292,35 @@
    }
 }
 
+- (UIView *)footerView
+{
+    if(_footerView == nil)
+    {
+        _footerView = [[UIView alloc]initWithFrame:CGRectMake(0,self.goodsTableView.frame.size.height, 320, 100)];
+        self.footerFirstLabel = [[UILabel alloc]initWithFrame:CGRectMake(60, 10, 200, 20)];
+        [self.footerFirstLabel setText:[NSString stringWithFormat:@"原始金额 : ￥%@ - 返现 : ￥0.00",self.totalAmount]];
+        [self.footerFirstLabel setFont:[UIFont systemFontOfSize:12.0]];
+        [_footerView addSubview:self.footerFirstLabel];
+        UILabel *gongji = [[UILabel alloc]initWithFrame:CGRectMake(110, 35, 35, 20)];
+        [gongji setFont:[UIFont systemFontOfSize:12.0]];
+        [gongji setText:@"共计 : "];
+        [_footerView addSubview:gongji];
+        self.amountLabel = [[UILabel alloc]initWithFrame:CGRectMake(145, 35, 50, 20)];
+        [self.amountLabel setTextColor:[UIColor redColor]];
+        [self.amountLabel setFont:[UIFont systemFontOfSize:12.0]];
+        [self.amountLabel setText:[NSString stringWithFormat:@"￥%@",self.totalAmount]];
+        [_footerView addSubview:self.amountLabel];
+        UIButton *payButton = [UIButton buttonWithType:UIButtonTypeCustom];
+        [payButton setBackgroundImage:[UIImage imageNamed:@"carBuy.png"] forState:UIControlStateNormal];
+        [payButton setFrame:CGRectMake(56, 60, 209, 40)];
+        [payButton addTarget:self action:@selector(pay:) forControlEvents:UIControlEventTouchUpInside];
+        [_footerView addSubview:payButton];
+    }
+    return _footerView;
+}
+
+- (void)pay:(id)sender
+{
+    
+}
 @end
