@@ -17,7 +17,8 @@
 @synthesize goodsInfoArray;
 @synthesize goodsTableView = _goodsTableView;
 @synthesize cartNullView = _cartNullView;
-
+@synthesize textFieldArray = _textFieldArray;
+@synthesize labelArray = _labelArray;
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
@@ -25,6 +26,8 @@
         // Custom initialization
         self.tabBarItem.title = @"购物车";
         self.navigationItem.title = @"购物车";
+        self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc]initWithTitle:@"编辑" style:UIBarButtonItemStyleBordered target:self action:@selector(edit:)];
+        [self.navigationItem.rightBarButtonItem setTintColor:[UIColor colorWithRed:167/255.0 green:216/255.0 blue:106/255.0 alpha:1.0]];
         self.tabBarItem.image = [UIImage imageNamed:@"tabbar_cart_unselected.png"];
         if([[[UIDevice currentDevice] systemVersion] floatValue]>=5.0)
         {
@@ -41,20 +44,31 @@
     {
         [self.cartNullView removeFromSuperview];
         NSMutableArray *resultArray = [goodsModel fetchGoodsList];
-        NSLog(@"jige:%i",resultArray.count);
         if(resultArray != nil)
         {
+            BOOL isTableViewOn = NO;
             self.goodsInfoArray = resultArray;
-            if(self.goodsTableView == nil)
+            for(UIView *oneView in self.view.subviews)
             {
-                NSLog(@"add");
+                if([oneView isKindOfClass:[self.goodsTableView class]])
+                {
+                    isTableViewOn = YES;
+                }else{
+                     isTableViewOn = NO;
+                }
+            }
+            if(!isTableViewOn)
+            {
                 self.goodsTableView = [[UITableView alloc]initWithFrame:CGRectMake(0, 0, 320, self.goodsInfoArray.count*80) style:UITableViewStylePlain];
                 self.goodsTableView.dataSource = self;
                 self.goodsTableView.delegate = self;
+                self.goodsTableView.scrollEnabled = NO;
+                
                 [self.view addSubview:self.goodsTableView];
             }else{
-                NSLog(@"reloadself.goodsINfoArray:%@",self.goodsInfoArray);
+                NSLog(@"reload");
                 [self.goodsTableView reloadData];
+                [self.goodsTableView setFrame:CGRectMake(0, 0, 320, self.goodsInfoArray.count*80)];
             }
 
         }
@@ -66,7 +80,7 @@
 {
     [super viewDidLoad];
     // Do any additional setup after loading the view from its nib.
-    NSLog(@"viewdidload");
+   
 
 }
 
@@ -78,16 +92,25 @@
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    NSLog(@"count:%i",self.goodsInfoArray.count);
     return self.goodsInfoArray.count;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     cartCell *cell = [[cartCell alloc]init];
+    cell.selectionStyle = UITableViewCellSelectionStyleNone;
+    if(indexPath.row%2>0)
+    {
+        cell.contentView.backgroundColor = [UIColor colorWithRed:209/255.0 green:241/255.0 blue:133/255.0 alpha:0.4];
+    }
     cell.nameLabel.text = [[self.goodsInfoArray objectAtIndex:indexPath.row] objectForKey:@"name"];
     cell.buyCountLabel.text = [[self.goodsInfoArray objectAtIndex:indexPath.row]objectForKey:@"goods_count"];
+    cell.buyCountLabel.tag = indexPath.row;
+    [self.labelArray addObject:cell.buyCountLabel];
     cell.buyCountField.text = [[self.goodsInfoArray objectAtIndex:indexPath.row]objectForKey:@"goods_count"];
+    cell.buyCountField.tag = indexPath.row;
+    cell.buyCountField.delegate = self;
+    [self.textFieldArray addObject:cell.buyCountField];
     cell.bnLabel.text = [NSString stringWithFormat:@"商品编号: %@",[[self.goodsInfoArray objectAtIndex:indexPath.row]objectForKey:@"goodsBn"]];
     cell.priceLabel.text = [NSString stringWithFormat:@"商品价格: ￥%.2f",[[[self.goodsInfoArray objectAtIndex:indexPath.row]objectForKey:@"price"] floatValue]];
     return cell;
@@ -121,7 +144,12 @@
 {
     if(editingStyle == UITableViewCellEditingStyleDelete)
     {
-        NSLog(@"deletedelete");
+        NSString *goodsId = [[self.goodsInfoArray objectAtIndex:indexPath.row] objectForKey:@"id"];
+        if([goodsModel deleteCartData:goodsId])
+        {
+            [self refreshData];
+            [self.goodsTableView reloadData];
+        }
     }
 }
 - (UIView *)cartNullView
@@ -149,7 +177,6 @@
 
 - (void)goBuy:(id)sender
 {
-    NSLog(@"11");
     [self.tabBarController setSelectedIndex:1];
 }
 
@@ -157,15 +184,83 @@
 {
     if([goodsModel countGoods]>0)
     {
+        [[self.tabBarController.tabBar.items objectAtIndex:2]setBadgeValue:[NSString stringWithFormat:@"%i",[goodsModel countGoods]]];
         NSMutableArray *resultArray = [goodsModel fetchGoodsList];
         if(resultArray != nil)
         {
             self.goodsInfoArray = resultArray;
         }
     }else{
+        [[self.tabBarController.tabBar.items objectAtIndex:2]setBadgeValue:nil];
+        [self.goodsTableView removeFromSuperview];
         [self.view addSubview:self.cartNullView];
     }
 }
 
+- (void)edit:(id)sender
+{
+    [self.goodsTableView setEditing:!self.goodsTableView.editing animated:YES];
+    if(self.goodsTableView.editing)
+    {
+        self.navigationItem.rightBarButtonItem.title = @"完成";
+        for(id o in self.labelArray)
+        {
+            UILabel *countLabel = (UILabel *)o;
+            [countLabel setHidden:YES];
+        }
+        for(id i in self.textFieldArray)
+        {
+            UITextField *countTextField = (UITextField *)i;
+            [countTextField setHidden:NO];
+        }
+    }else{
+        for(id i in self.textFieldArray)
+        {
+            UITextField *countTextField = (UITextField *)i;
+            if(![countTextField.text isEqualToString:@""])
+            {
+                NSInteger k = countTextField.tag;
+                NSMutableDictionary *record = [self.goodsInfoArray objectAtIndex:k];
+                NSString *goodsId = [record objectForKey:@"id"];
+               if([goodsModel updateCartData:goodsId goodsCount:countTextField.text])
+               {
+                   [self refreshData];
+                   [self.goodsTableView reloadData];
+               }
+            }
+        }
+        self.navigationItem.rightBarButtonItem.title = @"编辑";
+    }
+}
+
+- (NSMutableArray *)textFieldArray
+{
+    if(_textFieldArray == nil)
+    {
+        _textFieldArray = [[NSMutableArray alloc]init];
+    }
+    return _textFieldArray;
+}
+
+- (NSMutableArray *)labelArray
+{
+    if(_labelArray == nil)
+    {
+        _labelArray = [[NSMutableArray alloc]init];
+    }
+    return _labelArray;
+}
+
+
+
+- (BOOL)textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string
+{
+   if([string isEqualToString:@"0"])
+   {
+       return NO;
+   }else{
+       return YES;
+   }
+}
 
 @end

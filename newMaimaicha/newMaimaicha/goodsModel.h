@@ -23,4 +23,8 @@
 +(void)AddCar:(goodsModel *)goodsItem;
 +(NSInteger)countGoods;
 +(NSMutableArray *)fetchGoodsList;
+
++(BOOL)updateCartData:(NSString *)goodsId
+           goodsCount:(NSString *)goodsCount;
++(BOOL)deleteCartData:(NSString *)goodsId;
 @end

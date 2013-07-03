@@ -70,4 +70,39 @@
     }
     return resultArray;
 }
+
++(BOOL)updateCartData:(NSString *)goodsId
+           goodsCount:(NSString *)goodsCount
+{
+    YMDbClass *db = [[YMDbClass alloc]init];
+    if([db connect])
+    {
+        NSString *query = [NSString stringWithFormat:@"update goodslist_car set goods_count = '%@' where id = '%@'",goodsCount,goodsId];;
+        if([db exec:query])
+        {
+            return YES;
+        }else{
+            return NO;
+        }
+    }else{
+        return NO;
+    }
+}
+
++(BOOL)deleteCartData:(NSString *)goodsId
+{
+    YMDbClass *db = [[YMDbClass alloc]init];
+    if([db connect])
+    {
+        NSString *query = [NSString stringWithFormat:@"delete from goodslist_car where id = '%@'",goodsId];;
+        if([db exec:query])
+        {
+            return YES;
+        }else{
+            return NO;
+        }
+    }else{
+        return NO;
+    }
+}
 @end

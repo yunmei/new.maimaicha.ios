@@ -8,9 +8,10 @@
 
 #import <UIKit/UIKit.h>
 
-@interface CartViewController : UIViewController<UITableViewDataSource,UITableViewDelegate>
+@interface CartViewController : UIViewController<UITableViewDataSource,UITableViewDelegate,UITextFieldDelegate>
 @property (strong, nonatomic)UITableView *goodsTableView;
 @property (strong, nonatomic)NSMutableArray *goodsInfoArray;
 @property (strong, nonatomic)UIView *cartNullView;
-
+@property (strong, nonatomic)NSMutableArray *textFieldArray;
+@property (strong, nonatomic)NSMutableArray *labelArray;
 @end

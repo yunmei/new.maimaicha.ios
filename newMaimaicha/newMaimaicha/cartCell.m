@@ -20,12 +20,12 @@
     self = [super initWithStyle:style reuseIdentifier:reuseIdentifier];
     if (self) {
         // Initialization code
-        [self addSubview:self.numberLabel];
-        [self addSubview:self.nameLabel];
-        [self addSubview:self.buyCountField];
-        [self addSubview:self.priceLabel];
-        [self addSubview:self.bnLabel];
-        [self addSubview:self.buyCountLabel];
+        [self.contentView addSubview:self.numberLabel];
+        [self.contentView addSubview:self.nameLabel];
+        [self.contentView addSubview:self.buyCountField];
+        [self.contentView addSubview:self.priceLabel];
+        [self.contentView addSubview:self.bnLabel];
+        [self.contentView addSubview:self.buyCountLabel];
     }
     return self;
 }
@@ -41,8 +41,11 @@
 {
     if(_buyCountField == nil)
     {
-        _buyCountField = [[UITextField alloc]initWithFrame:CGRectMake(40, 53, 40, 20)];
+        _buyCountField = [[UITextField alloc]initWithFrame:CGRectMake(40, 53, 40, 25)];
         _buyCountField.hidden = YES;
+         [_buyCountField setBorderStyle:UITextBorderStyleRoundedRect];
+        [_buyCountField setTextAlignment:NSTextAlignmentCenter];
+        _buyCountField.keyboardType = UIKeyboardTypeNumberPad;
     }
     return _buyCountField;
 }
@@ -53,6 +56,7 @@
     {
         _nameLabel = [[UILabel alloc]initWithFrame:CGRectMake(0, 5, 300, 20)];
         [_nameLabel setFont:[UIFont systemFontOfSize:13.0]];
+        [_nameLabel setBackgroundColor:[UIColor clearColor]];
     }
     return _nameLabel;
 }
@@ -61,8 +65,10 @@
 {
     if(_bnLabel == nil)
     {
-        _bnLabel = [[UILabel alloc]initWithFrame:CGRectMake(5, 25, 300, 20)];
+        _bnLabel = [[UILabel alloc]initWithFrame:CGRectMake(10, 25, 300, 20)];
         _bnLabel.font = [UIFont systemFontOfSize:13.0];
+        [_bnLabel setTextColor:[UIColor grayColor]];
+         [_bnLabel setBackgroundColor:[UIColor clearColor]];
     }
     return _bnLabel;
 }
@@ -74,6 +80,7 @@
         _numberLabel = [[UILabel alloc]initWithFrame:CGRectMake(5, 53, 35, 20)];
         [_numberLabel setFont:[UIFont systemFontOfSize:12.0]];
         [_numberLabel setText:@"数量: "];
+        [_numberLabel setBackgroundColor:[UIColor clearColor]];
     }
     return _numberLabel;
 }
@@ -85,6 +92,7 @@
         _priceLabel = [[UILabel alloc]initWithFrame:CGRectMake(120, 53, 100, 20)];
         [_priceLabel setTextColor:[UIColor redColor]];
         [_priceLabel setFont:[UIFont systemFontOfSize:12.0]];
+         [_priceLabel setBackgroundColor:[UIColor clearColor]];
     }
     return _priceLabel;
 }
@@ -96,6 +104,7 @@
         _buyCountLabel = [[UILabel alloc]initWithFrame:CGRectMake(40, 53, 40, 20)];
         _buyCountLabel.hidden = NO;
         _buyCountLabel.font = [UIFont systemFontOfSize:12.0];
+        [_buyCountLabel setBackgroundColor:[UIColor clearColor]];
     }
 return _buyCountLabel;
 }
