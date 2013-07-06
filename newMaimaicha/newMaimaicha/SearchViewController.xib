@@ -131,10 +131,7 @@
 							<object class="NSNull" id="4"/>
 							<reference ref="4"/>
 						</array>
-						<object class="NSColor" key="IBTintColor">
-							<int key="NSColorSpace">2</int>
-							<bytes key="NSRGB">MC41MDk4MDM5NTA4IDAuODAzOTIxNjM5OSAwLjEwNTg4MjM2MTUAA</bytes>
-						</object>
+						<reference key="IBTintColor" ref="146509293"/>
 					</object>
 					<object class="IBUITableView" id="590792712">
 						<reference key="NSNextResponder" ref="191373211"/>
@@ -187,11 +184,9 @@
 				<string key="targetRuntimeIdentifier">IBCocoaTouchFramework</string>
 			</object>
 			<object class="IBUITableView" id="327686729">
-				<reference key="NSNextResponder"/>
+				<nil key="NSNextResponder"/>
 				<int key="NSvFlags">274</int>
 				<string key="NSFrameSize">{320, 459}</string>
-				<reference key="NSSuperview"/>
-				<reference key="NSWindow"/>
 				<string key="NSReuseIdentifierKey">_NS:9</string>
 				<object class="NSColor" key="IBUIBackgroundColor">
 					<int key="NSColorSpace">3</int>

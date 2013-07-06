@@ -26,6 +26,11 @@
         {
             [self.tabBarItem setFinishedSelectedImage:[UIImage imageNamed:@"tabbar_my.png"] withFinishedUnselectedImage:[UIImage imageNamed:@"tabbar_my_unselected.png"]];
         }
+        UIBarButtonItem *buttonItem = [[UIBarButtonItem alloc] initWithTitle:@"注销"
+                                                                       style:UIBarButtonItemStyleBordered
+                                                                      target:self
+                                                                      action:@selector(deleteLogin)];
+        self.navigationItem.rightBarButtonItem = buttonItem;
     }
     return self;
 }
@@ -49,4 +54,9 @@
     // Dispose of any resources that can be recreated.
 }
 
+- (void)deleteLogin
+{
+    [UserModel clearTable];
+    [[NSNotificationCenter defaultCenter]postNotificationName:@"INeedLogin" object:nil];
+}
 @end

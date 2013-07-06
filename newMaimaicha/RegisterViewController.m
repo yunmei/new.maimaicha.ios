@@ -80,7 +80,6 @@
 
 - (void)userRegister
 {
-    NSLog(@"userRegister");
     NSString *regEx = @"^[a-zA-Z0-9_-]+@[a-zA-Z0-9_-]+(\\.[a-zA-Z0-9_-]+)+$";
     NSRange r = [usernameTextField.text rangeOfString:regEx options:NSRegularExpressionSearch];
     
@@ -116,10 +115,14 @@
                 UserModel *user = [[UserModel alloc]init];
                 user.userId = [[obj objectForKey:@"result"] objectForKey:@"userId"];
                 user.session = [[obj objectForKey:@"result"] objectForKey:@"session"];
-//                if([user addUser])
-//                {
-//                    UIAlertView *registerAlert = [UIAlertView alloc]initWithTitle:@"提示" message:@"恭喜你" delegate:<#(id)#> cancelButtonTitle:<#(NSString *)#> otherButtonTitles:<#(NSString *), ...#>, nil
-//                }
+                if([user addUser])
+                {
+                    NSLog(@"add yes");
+                    UIAlertView *registerAlert = [[UIAlertView alloc]initWithTitle:@"提示" message:@"恭喜你,注册成功" delegate:self cancelButtonTitle:@"确定" otherButtonTitles:nil, nil];
+                    registerAlert.delegate = self;
+                    registerAlert.tag = 1;
+                    [registerAlert show];
+                }
             }
         } errorHandler:^(MKNetworkOperation *completedOperation, NSError *error) {
             NSLog(@"%@",error);
@@ -127,7 +130,6 @@
         [ApplicationDelegate.engine enqueueOperation:op];
     }
 
-    
     
     
 //    NSMutableDictionary *params = [[NSMutableDictionary alloc]init];
@@ -142,6 +144,14 @@
 //    }];
 //    [ApplicationDelegate.engine enqueueOperation:op];
     
+}
+
+- (void)alertView:(UIAlertView *)alertView didDismissWithButtonIndex:(NSInteger)buttonIndex
+{
+    if(alertView.tag == 1)
+    {
+        [self.navigationController dismissViewControllerAnimated:NO completion:nil];
+    }
 }
 
 - (void)userCancel

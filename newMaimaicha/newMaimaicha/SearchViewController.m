@@ -34,6 +34,8 @@
 {
     [super viewDidLoad];
     // Do any additional setup after loading the view from its nib.
+    NSDictionary *attribute = [NSDictionary dictionaryWithObjectsAndKeys:[UIColor blackColor],UITextAttributeTextColor,[UIFont systemFontOfSize:12.0],UITextAttributeFont,[UIColor clearColor],UITextAttributeTextShadowColor,nil];
+    [self.viewSegmentCtrl setTitleTextAttributes:attribute forState:UIControlStateNormal];
     NSMutableDictionary *param = [[NSMutableDictionary alloc]init];
     [param setObject:@"goods_getHotKeyWords" forKey:@"act"];
     [viewSegmentCtrl addTarget:self action:@selector(segmentChange:) forControlEvents:UIControlEventValueChanged];

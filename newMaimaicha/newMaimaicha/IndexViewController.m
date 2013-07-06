@@ -26,7 +26,26 @@
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
     if (self) {
         // Custom initialization
-        self.navigationItem.title = @"买买茶";
+        UIButton *searchView = [UIButton buttonWithType:UIButtonTypeCustom];
+        [searchView setImage:[UIImage imageNamed:@"search_ico.png"] forState:UIControlStateNormal];
+        [searchView setFrame:CGRectMake(0, 0, 25, 20)];
+        [searchView addTarget:self action:@selector(search:) forControlEvents:UIControlEventTouchUpInside];
+        UIBarButtonItem *searchItem = [[UIBarButtonItem alloc]initWithCustomView:searchView];
+        //self.navigationItem.rightBarButtonItem = searchItem;
+        UIButton *kongView = [UIButton buttonWithType:UIButtonTypeCustom];
+        [kongView setFrame:CGRectMake(0, 0, 5, 20)];
+        UIBarButtonItem *kongItem = [[UIBarButtonItem alloc]initWithCustomView:kongView];
+        
+        UIButton *dbView = [UIButton buttonWithType:UIButtonTypeCustom];
+        [dbView setImage:[UIImage imageNamed:@"barcode_ico.png"] forState:UIControlStateNormal];
+        [dbView setFrame:CGRectMake(0, 0, 25, 20)];
+        [dbView addTarget:self action:@selector(dbItemClick:) forControlEvents:UIControlEventTouchUpInside];
+        UIBarButtonItem *dbItem = [[UIBarButtonItem alloc]initWithCustomView:dbView];
+        self.navigationItem.rightBarButtonItems = @[kongItem,searchItem,kongItem,dbItem];
+        
+        UIImageView *rightView = [[UIImageView alloc]initWithFrame:CGRectMake(0, 0, 90, 30)];
+        [rightView setImage:[UIImage imageNamed:@"mmc.png"]];
+        self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc]initWithCustomView:rightView];
         self.tabBarItem.title = @"首页";
         [self.tabBarItem setImage:[UIImage imageNamed:@"tabbar_index_unselected.png"]];
         if([[[UIDevice currentDevice] systemVersion] floatValue] >=5.0)
