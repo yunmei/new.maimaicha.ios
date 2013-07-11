@@ -108,6 +108,7 @@
         [params setObject:passwordTextField.text forKey:@"password"];
         MKNetworkOperation *op = [YMGlobal getOperation:params];
         [op addCompletionHandler:^(MKNetworkOperation *completedOperation) {
+            NSLog(@"completedString%@",[completedOperation responseString]);
             SBJsonParser *parser = [[SBJsonParser alloc]init];
             NSMutableDictionary *obj = [parser objectWithData:[completedOperation responseData]];
             if([[obj objectForKey:@"errorCode"]isEqualToString:@"0"])
@@ -115,6 +116,9 @@
                 UserModel *user = [[UserModel alloc]init];
                 user.userId = [[obj objectForKey:@"result"] objectForKey:@"userId"];
                 user.session = [[obj objectForKey:@"result"] objectForKey:@"session"];
+                user.userName = [[obj objectForKey:@"result"] objectForKey:@"userName"];
+                user.point = [[obj objectForKey:@"result"] objectForKey:@"point"];
+                user.advance = [[obj objectForKey:@"result"] objectForKey:@"advance"];
                 if([user addUser])
                 {
                     NSLog(@"add yes");
@@ -123,6 +127,9 @@
                     registerAlert.tag = 1;
                     [registerAlert show];
                 }
+            }else{
+                UIAlertView *registerAlert = [[UIAlertView alloc]initWithTitle:@"提示" message:[obj objectForKey:@"errorMessage"] delegate:self cancelButtonTitle:@"确定" otherButtonTitles:nil, nil];
+                [registerAlert show];
             }
         } errorHandler:^(MKNetworkOperation *completedOperation, NSError *error) {
             NSLog(@"%@",error);

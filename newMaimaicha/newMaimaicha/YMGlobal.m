@@ -64,4 +64,19 @@
             [imageView setImage:fetchedImage];
     }];
 }
+
+
++ (void)loadButtonImage:(NSString *)imageUrl andButton:(UIButton *)button andControlState:(UIControlState)buttonState
+{
+    [ApplicationDelegate.engine imageAtURL:[NSURL URLWithString:imageUrl] onCompletion:^(UIImage *fetchedImage, NSURL *url, BOOL isInCache){
+        CATransition *transtion = [CATransition animation];
+        transtion.duration = 0.5;
+        [transtion setTimingFunction:[CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionEaseInEaseOut]];
+        [transtion setType:kCATransitionFade];
+        [transtion setSubtype:kCATransitionFromRight];
+        [button.layer addAnimation:transtion forKey:@"transtionKey"];
+        [button setImage:fetchedImage forState:buttonState];
+    }];
+}
+
 @end

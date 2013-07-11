@@ -12,15 +12,17 @@
 #import "YMGlobal.h"
 #import "AppDelegate.h"
 #import <QuartzCore/QuartzCore.h>
+#import "GoodsInfoViewController.h"
 @interface IndexViewController ()
 
 @end
 
 @implementation IndexViewController
 @synthesize adScrollView = _adScrollView;
-@synthesize adPageView = _adPageView;
-@synthesize adPageProgressView = _adPageProgressView;
 @synthesize commendGoodsList;
+@synthesize pageCtrol = _pageCtrol;
+@synthesize nhScrollView = _nhScrollView;
+@synthesize comScrollView = _comScrollView;
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
@@ -43,7 +45,7 @@
         UIBarButtonItem *dbItem = [[UIBarButtonItem alloc]initWithCustomView:dbView];
         self.navigationItem.rightBarButtonItems = @[kongItem,searchItem,kongItem,dbItem];
         
-        UIImageView *rightView = [[UIImageView alloc]initWithFrame:CGRectMake(0, 0, 90, 30)];
+        UIImageView *rightView = [[UIImageView alloc]initWithFrame:CGRectMake(0, 0, 90, 35)];
         [rightView setImage:[UIImage imageNamed:@"mmc.png"]];
         self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc]initWithCustomView:rightView];
         self.tabBarItem.title = @"首页";
@@ -59,31 +61,42 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    // Do any additional setup after loading the view from its nib.
     UIScrollView *rootView = (UIScrollView *)self.view;
-    [rootView setContentSize:CGSizeMake(320, 664)];
-    UIView *searchView = [[UIView alloc]initWithFrame:CGRectMake(0, 131, 320, 43)];
-    UIImageView *searchBgImageView = [[UIImageView alloc]initWithFrame:CGRectMake(0, 0, 320, 43)];
-    [searchBgImageView setImage:[UIImage imageNamed:@"search_bg"]];
-    [searchView addSubview:searchBgImageView];
-    UIButton *searchBtn = [[UIButton alloc]initWithFrame:CGRectMake(8, 5, 207, 31)];
-    [searchBtn setBackgroundImage:[UIImage imageNamed:@"search_btn"] forState:UIControlStateNormal];
-    [searchBtn addTarget:self action:@selector(search:) forControlEvents:UIControlEventTouchUpInside];
-    [searchView addSubview:searchBtn];
-    UIButton *tdbBtn = [[UIButton alloc]initWithFrame:CGRectMake(220, 4, 91, 32)];
-    [tdbBtn setBackgroundImage:[UIImage imageNamed:@"tdc_btn"] forState:UIControlStateNormal];
-    [tdbBtn addTarget:self action:@selector(dbItemClick:) forControlEvents:UIControlEventTouchUpInside];
-    [searchView addSubview:tdbBtn];
-    [self.view addSubview:searchView];
+    [rootView setContentSize:CGSizeMake(320, 566)];
    //初始化广告
     [self.view addSubview:self.adScrollView];
-    [self.view addSubview:self.adPageView];
-    [self.adPageView addSubview:self.adPageProgressView];
-    //添加最新最热
+    
+    UILabel *hotLabel = [[UILabel alloc]initWithFrame:CGRectMake(0, 129, 320, 35)];
+    hotLabel.layer.borderWidth = 1.0;
+    hotLabel.layer.borderColor = [UIColor colorWithRed:162/255.0 green:162/255.0 blue:162/255.0 alpha:0.5].CGColor;
+    hotLabel.text = @"  热销商品";
+    hotLabel.textColor = [UIColor colorWithRed:23/255.0 green:132/255.0 blue:17/255.0 alpha:1.0];
+    hotLabel.textAlignment = NSTextAlignmentLeft;
+    [hotLabel setFont:[UIFont systemFontOfSize:17.0]];
+    [self.view addSubview:hotLabel];
+    
+    UILabel *commentLabel = [[UILabel alloc]initWithFrame:CGRectMake(0, 244, 320, 35)];
+    commentLabel.layer.borderWidth = 1.0;
+    commentLabel.layer.borderColor = [UIColor colorWithRed:162/255.0 green:162/255.0 blue:162/255.0 alpha:0.5].CGColor;
+    commentLabel.text = @"  推荐商品";
+    commentLabel.textColor = [UIColor colorWithRed:23/255.0 green:132/255.0 blue:17/255.0 alpha:1.0];
+    commentLabel.textAlignment = NSTextAlignmentLeft;
+    [commentLabel setFont:[UIFont systemFontOfSize:17.0]];
+    [self.view addSubview:commentLabel];
+    
+    UILabel *newLabel = [[UILabel alloc]initWithFrame:CGRectMake(0, 408, 320, 35)];
+    newLabel.layer.borderWidth = 1.0;
+    newLabel.layer.borderColor = [UIColor colorWithRed:162/255.0 green:162/255.0 blue:162/255.0 alpha:0.5].CGColor;
+    newLabel.text = @"  新品上架";
+    newLabel.textColor = [UIColor colorWithRed:23/255.0 green:132/255.0 blue:17/255.0 alpha:1.0];
+    newLabel.textAlignment = NSTextAlignmentLeft;
+    [newLabel setFont:[UIFont systemFontOfSize:17.0]];
+    [self.view addSubview:newLabel];
+      //添加最新最热
     [self addNewHot];
-    //添加推荐商品列表
-    [self addCommentList];
     // 获取广告
+    [self.view addSubview:self.nhScrollView];
+    [self.view addSubview:self.comScrollView];
     NSMutableDictionary *params = [NSMutableDictionary dictionaryWithObject:@"ad_getAdList" forKey:@"act"];
     MKNetworkOperation* op = [YMGlobal getOperation:params];
     [op addCompletionHandler:^(MKNetworkOperation *completedOperation) {
@@ -93,13 +106,15 @@
         {
             self.adListArray = [object objectForKey:@"result"];
             [self loadAdList];
+            [self.view addSubview:self.pageCtrol];
         }
     } errorHandler:^(MKNetworkOperation *completedOperation, NSError *error) {
         NSLog(@"Error:%@", error);
     }];
     [ApplicationDelegate.engine enqueueOperation: op];
     
-
+    [self loadNewList];
+    [self loadComList];
 }
 
 - (void)didReceiveMemoryWarning
@@ -130,87 +145,52 @@
 - (void)addNewHot
 {
     
-    UIButton *hotImageBtn = [[UIButton alloc]initWithFrame:CGRectMake(0, 174, 160, 80)];
-    UIButton *newImageBtn = [[UIButton alloc]initWithFrame:CGRectMake(160, 174, 160, 80)];
-    [hotImageBtn setBackgroundImage:[UIImage imageNamed:@"ad_default.png"] forState:UIControlStateNormal];
-    [newImageBtn setBackgroundImage:[UIImage imageNamed:@"ad_default.png"] forState:UIControlStateNormal];
-    [self.view addSubview:hotImageBtn];
-    [self.view addSubview:newImageBtn];
+    UIButton *singleImageBtn = [[UIButton alloc]initWithFrame:CGRectMake(0, 164, 160, 80)];
+    UIButton *HotImageBtn = [[UIButton alloc]initWithFrame:CGRectMake(160, 164, 160, 80)];
+    [singleImageBtn setBackgroundImage:[UIImage imageNamed:@"ad_default.png"] forState:UIControlStateNormal];
+    [HotImageBtn setBackgroundImage:[UIImage imageNamed:@"ad_default.png"] forState:UIControlStateNormal];
+    [self.view addSubview:singleImageBtn];
+    [self.view addSubview:HotImageBtn];
+    //加载热销单品
     NSMutableDictionary *param = [[NSMutableDictionary alloc]init];
-    [param setObject:@"ad_getNHImage" forKey:@"act"];
+    [param setObject:@"ad_getSingleGoodsImage" forKey:@"act"];
     MKNetworkOperation *op = [YMGlobal getOperation:param];
     [op addCompletionHandler:^(MKNetworkOperation *completedOperation) {
         SBJsonParser *parser = [[SBJsonParser alloc]init];
         NSMutableDictionary *obj = [parser objectWithData:[completedOperation responseData]];
         if([[obj objectForKey:@"errorCode"] isEqualToString:@"0"])
         {
-            NSLog(@"obj%@",obj);
-            NSArray *imageURLArray = [obj objectForKey:@"result"];
-            [YMGlobal loadImage:[[imageURLArray objectAtIndex:0] objectForKey:@"imageUrl"] andButton:hotImageBtn andControlState:UIControlStateNormal];
-            [YMGlobal loadImage:[[imageURLArray objectAtIndex:1] objectForKey:@"imageUrl"] andButton:newImageBtn andControlState:UIControlStateNormal];
+            NSMutableDictionary *imageURLDic = [obj objectForKey:@"result"];
+            singleImageBtn.tag = [[imageURLDic objectForKey:@"goodsId"] integerValue];
+            [singleImageBtn addTarget:self action:@selector(goodsPressed:) forControlEvents:UIControlEventTouchUpInside];
+            
+            [YMGlobal loadImage:[imageURLDic objectForKey:@"imageUrl"] andButton:singleImageBtn andControlState:UIControlStateNormal];
         }
     } errorHandler:^(MKNetworkOperation *completedOperation, NSError *error) {
         NSLog(@"%@",error);
     }];
     [ApplicationDelegate.engine enqueueOperation:op];
-}
-
-//添加推荐商品列表
-- (void)addCommentList
-{
-    NSMutableArray *btnArray = [[NSMutableArray alloc]init];
-    NSMutableArray *labelArray = [[NSMutableArray alloc]init];
-    for (int i=0; i<9; i++) {
-       float x = i%3*(320/3);
-       float y = floor(i/3)*(320/3+30)+254;
-        UIView *btnView = [[UIView alloc]initWithFrame:CGRectMake(x, y, 107, 320/3+30)];
-        UIButton *goodsBtn = [[UIButton alloc]initWithFrame:CGRectMake(3.5, 3, 100, 90)];
-        UILabel *label = [[UILabel alloc]initWithFrame:CGRectMake(5, 95, 97, 42)];
-        label.tag = i;
-        [labelArray addObject:label];
-        btnView.layer.borderWidth = 0.5;
-        btnView.layer.borderColor = [UIColor colorWithRed:160/255.0 green:160/255.0 blue:160/255.0 alpha:1.0].CGColor;
-        [goodsBtn setBackgroundImage:[UIImage imageNamed:@"goods_default.png"] forState:UIControlStateNormal];
-        goodsBtn.tag = i;
-        [goodsBtn addTarget:self action:@selector(goodsPressed:) forControlEvents:UIControlEventTouchUpInside];
-        [btnView addSubview:goodsBtn];
-        [btnView addSubview:label];
-        [self.view addSubview:btnView];
-        [btnArray addObject:goodsBtn];
-    }
-    NSMutableDictionary *param = [[NSMutableDictionary alloc]init];
-    [param setObject:@"goods_getRecommendList" forKey:@"act"];
-    MKNetworkOperation *op = [YMGlobal getOperation:param];
-    [op addCompletionHandler:^(MKNetworkOperation *completedOperation) {
+    //加载第二个热销图片
+    NSMutableDictionary *paramhot = [[NSMutableDictionary alloc]init];
+    [paramhot setObject:@"ad_getHotImage" forKey:@"act"];
+    MKNetworkOperation *opHot = [YMGlobal getOperation:paramhot];
+    [opHot addCompletionHandler:^(MKNetworkOperation *completedOperation) {
+        NSLog(@"hotImage%@",[completedOperation responseString]);
         SBJsonParser *parser = [[SBJsonParser alloc]init];
         NSMutableDictionary *obj = [parser objectWithData:[completedOperation responseData]];
-        if([[obj objectForKey:@"errorCode"]isEqualToString:@"0"])
+        if([[obj objectForKey:@"errorCode"] isEqualToString:@"0"])
         {
-            NSMutableArray *goodsArray = [obj objectForKey:@"result"];
-            int i=0;
-            for (id o in goodsArray) {
-                NSMutableDictionary *goods = o;
-                NSString *urlString = [goods objectForKey:@"imageUrl"];
-                UILabel *nameLabel = [labelArray objectAtIndex:i];
-                //[nameLabel setText:[goods objectForKey:@"goodsName"]];
-                NSString *labelString = [goods objectForKey:@"goodsName"];
-                CGSize size = [labelString sizeWithFont:[UIFont systemFontOfSize:11.0] constrainedToSize:CGSizeMake(97, 1000)];
-                [nameLabel setFrame:CGRectMake(5, 95, size.width, size.height)];
-                nameLabel.numberOfLines = 0;
-                nameLabel.text = labelString;
-                [nameLabel setFont:[UIFont systemFontOfSize:11.0]];
-                [nameLabel setTextColor:[UIColor blackColor]];
-                UIButton *goodsBtn = [btnArray objectAtIndex:i];
-                
-                [YMGlobal loadFlipImage:urlString andButton:goodsBtn andControlState:UIControlStateNormal];
-                i++;
-            }
+            NSMutableDictionary *hotDic = [obj objectForKey:@"result"];
+            [HotImageBtn addTarget:self action:@selector(hotPressed:) forControlEvents:UIControlEventTouchUpInside];
+            
+            [YMGlobal loadImage:[hotDic objectForKey:@"imageUrl"] andButton:HotImageBtn andControlState:UIControlStateNormal];
         }
     } errorHandler:^(MKNetworkOperation *completedOperation, NSError *error) {
         NSLog(@"%@",error);
     }];
-    [ApplicationDelegate.engine enqueueOperation:op];
+    [ApplicationDelegate.engine enqueueOperation:opHot];
 }
+
 
 //点击搜索
 - (void)search:(id)sender
@@ -266,6 +246,7 @@
         _adScrollView.delegate = self;
         _adScrollView.showsHorizontalScrollIndicator = NO;
         _adScrollView.showsVerticalScrollIndicator = NO;
+        _adScrollView.bounces = NO;
         UIImageView *imageView = [[UIImageView alloc]initWithFrame:CGRectMake(0, 0, 320, 129)];
         [imageView setImage:[UIImage imageNamed:@"ad_default.png"]];
         [imageView setBackgroundColor:[UIColor blackColor]];
@@ -273,40 +254,187 @@
     }
     return _adScrollView;
 }
-- (UIView *)adPageView
-{
-    if(_adPageView == nil)
-    {
-        _adPageView = [[UIView alloc]initWithFrame:CGRectMake(0, 129, 320, 2)];
-        [_adPageView setBackgroundColor:[UIColor colorWithRed:167/255.0 green:216/255.0 blue:100/255.0 alpha:1]];
-    }
-    return _adPageView;
-}
 
--(UIView *)adPageProgressView
-{
-    if (_adPageProgressView == nil) {
-        _adPageProgressView = [[UIView alloc]initWithFrame:CGRectMake(0, 0, 320/3, 2)];
-        [_adPageProgressView setBackgroundColor:[UIColor colorWithRed:128/255.0 green:181/255.0 blue:73/255.0 alpha:0.8]];
-    }
-    return _adPageProgressView;
-}
 
 -(void)scrollViewDidScroll:(UIScrollView *)scrollView
 {
     if(scrollView.tag == 1)
     {
         CGFloat contentoffset = scrollView.contentOffset.x;
-        int i = floor(contentoffset/320);
-        CGFloat progressLength = 320/(scrollView.contentSize.width/320);
-        [self.adPageProgressView setFrame:CGRectMake(i*progressLength, 0, progressLength, 2)];
+        int i = floor(contentoffset/310);
+        [self.pageCtrol setCurrentPage:i];
     }
 }
 
-//点击推荐商品的时候
-- (void)goodsPressed:(id)sender
+- (UIPageControl *)pageCtrol
+{
+    if(_pageCtrol == nil)
+    {
+        _pageCtrol = [[UIPageControl alloc]initWithFrame:CGRectMake(-200, 109, 920, 20)];
+        _pageCtrol.numberOfPages = 3;
+        _pageCtrol.currentPage = 0;
+        [_pageCtrol setBackgroundColor:[UIColor colorWithRed:0 green:0 blue:0 alpha:0.4]];
+    }
+    return _pageCtrol;
+}
+
+- (void)teaBtn1Pressed:(id)sender
 {
     
 }
 
+- (UIScrollView *)nhScrollView
+{
+    if(_nhScrollView == nil)
+    {
+        _nhScrollView = [[UIScrollView alloc]initWithFrame:CGRectMake(0, 443, 320, 133)];
+        _nhScrollView.contentSize = CGSizeMake(320, 129);
+       // _nhScrollView.pagingEnabled = true;
+        _nhScrollView.tag =1;
+        _nhScrollView.delegate = self;
+        _nhScrollView.showsHorizontalScrollIndicator = NO;
+        _nhScrollView.showsVerticalScrollIndicator = NO;
+       // _nhScrollView.bounces = NO;
+    }
+    return _nhScrollView;
+}
+
+- (UIScrollView *)comScrollView
+{
+    if(_comScrollView == nil)
+    {
+        _comScrollView = [[UIScrollView alloc]initWithFrame:CGRectMake(0, 280, 320, 133)];
+        _comScrollView.contentSize = CGSizeMake(320, 150);
+       // _comScrollView.pagingEnabled = true;
+        _comScrollView.tag =1;
+        _comScrollView.delegate = self;
+        _comScrollView.showsHorizontalScrollIndicator = NO;
+        _comScrollView.showsVerticalScrollIndicator = NO;
+        //_comScrollView.bounces = NO;
+    }
+    return _comScrollView;
+}
+
+- (void)loadNewList
+{
+    NSMutableDictionary *param = [[NSMutableDictionary alloc]init];
+    [param setObject:@"goods_getNewList" forKey:@"act"];
+    MKNetworkOperation *op = [YMGlobal getOperation:param];
+    [op addCompletionHandler:^(MKNetworkOperation *completedOperation) {
+        SBJsonParser *parser = [[SBJsonParser alloc]init];
+        NSLog(@"newList%@",[completedOperation responseString]);
+        NSMutableDictionary *obj = [parser objectWithData:[completedOperation responseData]];
+        if([[obj objectForKey:@"errorCode"]isEqualToString:@"0"])
+        {
+            NSMutableArray *newListArray = [obj objectForKey:@"result"];
+            int count = [newListArray count];
+            self.nhScrollView.contentSize = CGSizeMake(107*count, 108);
+            for(int k=0;k<count;k++)
+            {
+                NSMutableDictionary *goods = [newListArray objectAtIndex:k];
+                UIView *backView = [[UIView alloc]initWithFrame:CGRectMake(k*107, 0, 107, 108)];
+                UIButton *newButton = [UIButton buttonWithType:UIButtonTypeCustom];
+                [newButton setImage:[UIImage imageNamed:@"goods_default.png"] forState:UIControlStateNormal];
+                [newButton setFrame:CGRectMake(15, 10, 77, 67)];
+                [newButton setTag:[[goods objectForKey:@"goodsId"] integerValue]];
+                [newButton addTarget:self action:@selector(goodsPressed:) forControlEvents:UIControlEventTouchUpInside];
+                [YMGlobal loadButtonImage:[goods objectForKey:@"imageUrl"] andButton:newButton andControlState:UIControlStateNormal];
+                UILabel *goodsLabel = [[UILabel alloc]initWithFrame:CGRectMake(5, 77, 97, 30)];
+                [goodsLabel setNumberOfLines:0];
+                [goodsLabel setFont:[UIFont systemFontOfSize:11.0]];
+                NSString *nameString = [NSString stringWithFormat:@"%@",[goods objectForKey:@"goodsName"]];
+                if([nameString length]>11)
+                {
+                    nameString = [nameString substringToIndex:11];
+                }
+                [goodsLabel setText:nameString];
+                [goodsLabel setTextColor:[UIColor blackColor]];
+                [goodsLabel setBackgroundColor:[UIColor clearColor]];
+                [goodsLabel setTextAlignment:NSTextAlignmentCenter];
+                UILabel *priceLabel = [[UILabel alloc]initWithFrame:CGRectMake(0, 107, 107, 15)];
+                priceLabel.font = [UIFont systemFontOfSize:12.0];
+                priceLabel.textColor = [UIColor redColor];
+                [priceLabel setText:[NSString stringWithFormat:@"￥%.2f",[[goods objectForKey:@"goodsPrice"] floatValue]]];
+                [priceLabel setTextAlignment:NSTextAlignmentCenter];
+                [backView addSubview:priceLabel];
+                [backView addSubview:newButton];
+                [backView addSubview:goodsLabel];
+                [self.nhScrollView addSubview:backView];
+            }
+        }
+    } errorHandler:^(MKNetworkOperation *completedOperation, NSError *error) {
+        NSLog(@"%@",error);
+    }];
+    [ApplicationDelegate.engine enqueueOperation:op];
+}
+
+
+- (void)loadComList
+{
+    NSMutableDictionary *param = [[NSMutableDictionary alloc]init];
+    [param setObject:@"goods_getRecommendList" forKey:@"act"];
+    MKNetworkOperation *op = [YMGlobal getOperation:param];
+    [op addCompletionHandler:^(MKNetworkOperation *completedOperation) {
+        SBJsonParser *parser = [[SBJsonParser alloc]init];
+        NSMutableDictionary *obj = [parser objectWithData:[completedOperation responseData]];
+        if([[obj objectForKey:@"errorCode"]isEqualToString:@"0"])
+        {
+            NSMutableArray *newListArray = [obj objectForKey:@"result"];
+            int count = [newListArray count];
+            int i = ceil(count/3);
+            self.comScrollView.contentSize = CGSizeMake(320*i, 108);
+            for(int k=0;k<count;k++)
+            {
+                NSMutableDictionary *goods = [newListArray objectAtIndex:k];
+                UIView *backView = [[UIView alloc]initWithFrame:CGRectMake(k*107, 0, 107, 108)];
+                UIButton *newButton = [UIButton buttonWithType:UIButtonTypeCustom];
+                [newButton setImage:[UIImage imageNamed:@"goods_default.png"] forState:UIControlStateNormal];
+                [newButton setFrame:CGRectMake(15, 10, 77, 67)];
+                [newButton setTag:[[goods objectForKey:@"goodsId"] integerValue]];
+                [newButton addTarget:self action:@selector(goodsPressed:) forControlEvents:UIControlEventTouchUpInside];
+                [YMGlobal loadButtonImage:[goods objectForKey:@"imageUrl"] andButton:newButton andControlState:UIControlStateNormal];
+                UILabel *goodsLabel = [[UILabel alloc]initWithFrame:CGRectMake(5, 77, 97, 30)];
+                [goodsLabel setNumberOfLines:0];
+                [goodsLabel setFont:[UIFont systemFontOfSize:11.0]];
+                NSString *nameString = [NSString stringWithFormat:@"%@",[goods objectForKey:@"goodsName"]];
+                if([nameString length]>11)
+                {
+                    nameString = [nameString substringToIndex:11];
+                }
+                [goodsLabel setText:nameString];
+                [goodsLabel setTextColor:[UIColor blackColor]];
+                [goodsLabel setBackgroundColor:[UIColor clearColor]];
+                [goodsLabel setTextAlignment:NSTextAlignmentCenter];
+                UILabel *priceLabel = [[UILabel alloc]initWithFrame:CGRectMake(0, 107, 107, 15)];
+                priceLabel.font = [UIFont systemFontOfSize:12.0];
+                priceLabel.textColor = [UIColor redColor];
+                [priceLabel setText:[NSString stringWithFormat:@"￥%.2f",[[goods objectForKey:@"goodsPrice"] floatValue]]];
+                [priceLabel setTextAlignment:NSTextAlignmentCenter];
+                [backView addSubview:newButton];
+                [backView addSubview:goodsLabel];
+                [backView addSubview:priceLabel];
+                [self.comScrollView addSubview:backView];
+            }
+        }
+    } errorHandler:^(MKNetworkOperation *completedOperation, NSError *error) {
+        NSLog(@"%@",error);
+    }];
+    [ApplicationDelegate.engine enqueueOperation:op];
+}
+
+- (void)goodsPressed:(id)sender
+{
+    UIButton *goodsBtn = sender;
+    GoodsInfoViewController *goodsInfo = [[GoodsInfoViewController alloc]init];
+    goodsInfo.goodsId = [NSString stringWithFormat:@"%i",goodsBtn.tag];
+    UIBarButtonItem *backItem = [[UIBarButtonItem alloc]init];
+    backItem.tintColor = [UIColor colorWithRed:167/255.0 green:216/255.0 blue:106/255.0 alpha:1.0];
+    self.navigationItem.backBarButtonItem = backItem;
+    [self.navigationController pushViewController:goodsInfo animated:YES];
+}
+
+- (void)hotPressed:(id)sender
+{
+    
+}
 @end

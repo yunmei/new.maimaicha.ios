@@ -106,6 +106,7 @@
         [cell.goodsNameLabel setFrame:CGRectMake(120, 0, nameLabelSize.height, nameLabelSize.width)];
         cell.goodsNameLabel.text = nameString;
         cell.goodsNameLabel.font = [UIFont systemFontOfSize:13.0];
+        cell.goodsNameLabel.textAlignment = NSTextAlignmentCenter;
         [cell.goodsNameLabel setFrame:CGRectMake(100, 15, nameLabelSize.width, nameLabelSize.height)];
         [cell.goodsPriceLabel setFrame:CGRectMake(100, 50, 100, 20)];
         [cell.goodsPriceLabel setFont:[UIFont systemFontOfSize:13.0]];

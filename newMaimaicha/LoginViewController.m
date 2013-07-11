@@ -11,6 +11,7 @@
 #import "SBJson.h"
 #import "AppDelegate.h"
 #import "RegisterViewController.h"
+#import "UserModel.h"
 @interface LoginViewController ()
 
 @end
@@ -95,19 +96,51 @@
 
 - (void)userLogin
 {
-    NSMutableDictionary *params = [[NSMutableDictionary alloc]init];
-    [params setObject:@"user_login" forKey:@"act"];
-    [params setObject:usernameTextField.text forKey:@"email"];
-    [params setObject:passwordTextField.text forKey:@"password"];
-    MKNetworkOperation *op = [YMGlobal getOperation:params];
-    [op addCompletionHandler:^(MKNetworkOperation *completedOperation) {
-        NSLog(@"completed:%@",[completedOperation responseString]);
-    } errorHandler:^(MKNetworkOperation *completedOperation, NSError *error) {
-        NSLog(@"%@",error);
-    }];
-    [ApplicationDelegate.engine enqueueOperation:op];
-    
-}
+     UIAlertView *alertView = [[UIAlertView alloc]init];
+    if(usernameTextField.text.length < 1)
+    {
+        [usernameTextField becomeFirstResponder];
+        alertView = [[UIAlertView alloc]initWithTitle:@"提示" message:@"请填写您的账号或邮箱！" delegate:self cancelButtonTitle:@"确认" otherButtonTitles:nil];
+        [alertView show];
+    }else if(passwordTextField.text.length <1){
+        [passwordTextField becomeFirstResponder];
+        alertView = [[UIAlertView alloc]initWithTitle:@"提示" message:@"请填写您的密码！" delegate:self cancelButtonTitle:@"确认" otherButtonTitles:nil];
+        [alertView show];
+    }else{
+        NSMutableDictionary *params = [[NSMutableDictionary alloc]init];
+        [params setObject:@"user_login" forKey:@"act"];
+        [params setObject:usernameTextField.text forKey:@"email"];
+        [params setObject:passwordTextField.text forKey:@"password"];
+        MKNetworkOperation *op = [YMGlobal getOperation:params];
+        [op addCompletionHandler:^(MKNetworkOperation *completedOperation) {
+            SBJsonParser *parser = [[SBJsonParser alloc]init];
+            NSLog(@"result:%@",[completedOperation responseString]);
+            NSMutableDictionary *obj = [parser objectWithData:[completedOperation responseData]];
+            if([[obj objectForKey:@"errorCode"]isEqualToString:@"0"])
+            {
+                NSMutableDictionary *data = [obj objectForKey:@"result"];
+                UserModel *user = [[UserModel alloc]init];
+                user.userId = [data objectForKey:@"userId"];
+                user.session = [data objectForKey:@"session"];
+                user.userName = [data objectForKey:@"userName"];
+                user.point = [data objectForKey:@"point"];
+                user.advance = [data objectForKey:@"advance"];
+                if([user addUser])
+                {
+                    [self.navigationController dismissViewControllerAnimated:YES completion:nil];
+                }
+                
+            }else{
+                
+                UIAlertView *alertView = [[UIAlertView alloc]initWithTitle:@"提示" message:[obj objectForKey:@"errorMessage"] delegate:self cancelButtonTitle:@"确认" otherButtonTitles:nil];
+                [alertView show];
+            }
+        } errorHandler:^(MKNetworkOperation *completedOperation, NSError *error) {
+            NSLog(@"%@",error);
+        }];
+        [ApplicationDelegate.engine enqueueOperation:op];
+        }
+    }
 
 - (void)userCancel
 {

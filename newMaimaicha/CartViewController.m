@@ -9,6 +9,12 @@
 #import "CartViewController.h"
 #import "goodsModel.h"
 #import "cartCell.h"
+#import "UserModel.h"
+#import "OrderSubmitViewController.h"
+#import "YMGlobal.h"
+#import "SBJson.h"
+#import "AppDelegate.h"
+#import "MBProgressHUD.h"
 @interface CartViewController ()
 
 @end
@@ -122,6 +128,11 @@
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     cartCell *cell = [[cartCell alloc]init];
+    if(tableView.editing)
+    {
+        cell.buyCountLabel.hidden = YES;
+        cell.buyCountField.hidden = NO;
+    }
     cell.selectionStyle = UITableViewCellSelectionStyleNone;
     if(indexPath.row%2>0)
     {
@@ -167,6 +178,8 @@
         NSString *goodsId = [[self.goodsInfoArray objectAtIndex:indexPath.row] objectForKey:@"id"];
         if([goodsModel deleteCartData:goodsId])
         {
+            [self.labelArray removeAllObjects];
+            [self.textFieldArray removeAllObjects];
             [self refreshData];
             [self.goodsTableView reloadData];
         }
@@ -321,6 +334,57 @@
 
 - (void)pay:(id)sender
 {
-    
+    if(![UserModel checkLogin])
+    {
+        [[NSNotificationCenter defaultCenter] postNotificationName:@"INeedLogin" object:nil];
+    }else{
+        MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:self.navigationController.view animated:NO];
+        UserModel *user = [UserModel getUserModel];
+        OrderSubmitViewController *orderSubVC = [[OrderSubmitViewController alloc]init];
+        orderSubVC.userId = user.userId;
+        NSMutableDictionary *param = [[NSMutableDictionary alloc]init];
+        [param setObject:user.userId forKey:@"userId"];
+        [param setObject:@"addr_getAddrs" forKey:@"act"];
+        MKNetworkOperation *op = [YMGlobal getOperation:param];
+        [op addCompletionHandler:^(MKNetworkOperation *completedOperation) {
+            [hud hide:YES];
+            SBJsonParser *parser = [[SBJsonParser alloc]init];
+            NSMutableDictionary *obj = [parser objectWithData:[completedOperation responseData]];
+            if([[obj objectForKey:@"errorCode"]isEqualToString:@"0"])
+            {
+                OrderSubmitViewController *orderSubVC = [[OrderSubmitViewController alloc]init];
+                orderSubVC.userId = user.userId;
+                orderSubVC.addrArray = [obj objectForKey:@"result"];
+                if(orderSubVC.addrArray.count >0)
+                {
+                    for(id o in [obj objectForKey:@"result"])
+                    {
+                        NSMutableDictionary *addr = o;
+                        if([[addr objectForKey:@"default"]isEqualToString:@"1"])
+                        {
+                            orderSubVC.defaultAddr = addr;
+                        }else{
+                            orderSubVC.defaultAddr = [orderSubVC.addrArray objectAtIndex:0];
+                        }
+                    }
+                }
+                UIBarButtonItem *backBar = [[UIBarButtonItem alloc]init];
+                [backBar setTintColor:[UIColor colorWithRed:169/255.0 green:217/255.0 blue:110/255.0 alpha:1.0]];
+                self.navigationItem.backBarButtonItem = backBar;
+                [self.navigationController pushViewController:orderSubVC animated:YES];
+            }else{
+                OrderSubmitViewController *orderSubVC = [[OrderSubmitViewController alloc]init];
+                orderSubVC.userId = user.userId;
+                UIBarButtonItem *backBar = [[UIBarButtonItem alloc]init];
+                [backBar setTintColor:[UIColor colorWithRed:169/255.0 green:217/255.0 blue:110/255.0 alpha:1.0]];
+                self.navigationItem.backBarButtonItem = backBar;
+                [self.navigationController pushViewController:orderSubVC animated:YES];
+            }
+        } errorHandler:^(MKNetworkOperation *completedOperation, NSError *error) {
+            [hud hide:YES];
+            NSLog(@"%@",error);
+        }];
+        [ApplicationDelegate.engine enqueueOperation:op];
+    }
 }
 @end

@@ -21,6 +21,7 @@
 @synthesize tabBarctrl = _tabBarctrl;
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
+
     self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
     // Override point for customization after application launch.
    UINavigationController *indexNav = [[UINavigationController alloc]initWithRootViewController: [[IndexViewController alloc]initWithNibName:@"IndexViewController" bundle:nil]];
@@ -44,6 +45,7 @@
     [self.window makeKeyAndVisible];
     //add NSNotificationCenter
     [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(openLoginView:) name:@"INeedLogin" object:nil];
+    [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(loginSuccess) name:@"LoginSuccess" object:nil];
     [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(respondsLogin:) name:@"UserRespondsLogin" object:nil];
     return YES;
 }
@@ -58,6 +60,7 @@
 
 - (void)respondsLogin:(NSNotification *)note
 {
+    if(self.tabBarctrl.selectedIndex == 3)
     [self.tabBarctrl setSelectedIndex:0];
 }
 - (void)applicationWillResignActive:(UIApplication *)application

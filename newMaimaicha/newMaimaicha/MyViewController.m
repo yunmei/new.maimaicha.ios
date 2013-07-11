@@ -30,6 +30,7 @@
                                                                        style:UIBarButtonItemStyleBordered
                                                                       target:self
                                                                       action:@selector(deleteLogin)];
+        [buttonItem setTintColor:[UIColor colorWithRed:131/255.0 green:187/255.0 blue:72/255.0 alpha:1.0]];
         self.navigationItem.rightBarButtonItem = buttonItem;
     }
     return self;
