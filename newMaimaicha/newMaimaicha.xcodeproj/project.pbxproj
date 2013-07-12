@@ -42,6 +42,12 @@
 		464FF7731775486A0092334B /* tabbar_bg@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 464FF76F177548680092334B /* tabbar_bg@2x.png */; };
 		464FF7741775486A0092334B /* tabbar_selection.png in Resources */ = {isa = PBXBuildFile; fileRef = 464FF770177548680092334B /* tabbar_selection.png */; };
 		464FF7751775486A0092334B /* tabbar_selection@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 464FF771177548690092334B /* tabbar_selection@2x.png */; };
+		46633CA6178FD93400127BB4 /* ordersuccesslogo.png in Resources */ = {isa = PBXBuildFile; fileRef = 46633CA5178FD93400127BB4 /* ordersuccesslogo.png */; };
+		46633CAA178FD99100127BB4 /* OrderSuccessViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 46633CA8178FD99100127BB4 /* OrderSuccessViewController.m */; };
+		46633CAB178FD99100127BB4 /* OrderSuccessViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 46633CA9178FD99100127BB4 /* OrderSuccessViewController.xib */; };
+		46633CB0178FE23E00127BB4 /* AlipayViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 46633CAE178FE23E00127BB4 /* AlipayViewController.m */; };
+		46633CB1178FE23E00127BB4 /* AlipayViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 46633CAF178FE23E00127BB4 /* AlipayViewController.xib */; };
+		46633CB6178FE90700127BB4 /* libalixpay.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 46633CB5178FE90700127BB4 /* libalixpay.a */; };
 		4664145717829DF700028C0D /* CommentsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4664145517829DF700028C0D /* CommentsViewController.m */; };
 		4664145817829DF700028C0D /* CommentsViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4664145617829DF700028C0D /* CommentsViewController.xib */; };
 		4664145B1782CC0F00028C0D /* empty.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 4664145A1782CC0F00028C0D /* empty.jpg */; };
@@ -211,6 +217,17 @@
 		464FF76F177548680092334B /* tabbar_bg@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "tabbar_bg@2x.png"; sourceTree = "<group>"; };
 		464FF770177548680092334B /* tabbar_selection.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = tabbar_selection.png; sourceTree = "<group>"; };
 		464FF771177548690092334B /* tabbar_selection@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "tabbar_selection@2x.png"; sourceTree = "<group>"; };
+		46633CA5178FD93400127BB4 /* ordersuccesslogo.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = ordersuccesslogo.png; sourceTree = "<group>"; };
+		46633CA7178FD99100127BB4 /* OrderSuccessViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OrderSuccessViewController.h; sourceTree = "<group>"; };
+		46633CA8178FD99100127BB4 /* OrderSuccessViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OrderSuccessViewController.m; sourceTree = "<group>"; };
+		46633CA9178FD99100127BB4 /* OrderSuccessViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = OrderSuccessViewController.xib; sourceTree = "<group>"; };
+		46633CAD178FE23E00127BB4 /* AlipayViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AlipayViewController.h; sourceTree = "<group>"; };
+		46633CAE178FE23E00127BB4 /* AlipayViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AlipayViewController.m; sourceTree = "<group>"; };
+		46633CAF178FE23E00127BB4 /* AlipayViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = AlipayViewController.xib; sourceTree = "<group>"; };
+		46633CB2178FE8DE00127BB4 /* AlixPay.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AlixPay.h; sourceTree = "<group>"; };
+		46633CB3178FE8DE00127BB4 /* AlixPayOrder.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AlixPayOrder.h; sourceTree = "<group>"; };
+		46633CB4178FE8DE00127BB4 /* AlixPayResult.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AlixPayResult.h; sourceTree = "<group>"; };
+		46633CB5178FE90700127BB4 /* libalixpay.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libalixpay.a; sourceTree = "<group>"; };
 		4664145417829DF700028C0D /* CommentsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CommentsViewController.h; sourceTree = "<group>"; };
 		4664145517829DF700028C0D /* CommentsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CommentsViewController.m; sourceTree = "<group>"; };
 		4664145617829DF700028C0D /* CommentsViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = CommentsViewController.xib; sourceTree = "<group>"; };
@@ -377,6 +394,7 @@
 				46180838177426FE00AF8B51 /* Foundation.framework in Frameworks */,
 				4618083A177426FE00AF8B51 /* CoreGraphics.framework in Frameworks */,
 				46471BA5177938EC00872248 /* libzbar.a in Frameworks */,
+				46633CB6178FE90700127BB4 /* libalixpay.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -389,6 +407,9 @@
 				46C6C441178AC035006B7650 /* OrderSubmitViewController.h */,
 				46C6C442178AC035006B7650 /* OrderSubmitViewController.m */,
 				46C6C443178AC035006B7650 /* OrderSubmitViewController.xib */,
+				46633CA7178FD99100127BB4 /* OrderSuccessViewController.h */,
+				46633CA8178FD99100127BB4 /* OrderSuccessViewController.m */,
+				46633CA9178FD99100127BB4 /* OrderSuccessViewController.xib */,
 			);
 			name = Order;
 			path = ..;
@@ -414,6 +435,7 @@
 		46180834177426FE00AF8B51 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				46633CB5178FE90700127BB4 /* libalixpay.a */,
 				468EFAE0177BE3E8000AC0FB /* libz.dylib */,
 				46471BB217794D4200872248 /* libiconv.dylib */,
 				46471BB017794D1600872248 /* QuartzCore.framework */,
@@ -451,6 +473,7 @@
 				464FF76517753CB60092334B /* MyViewController.h */,
 				464FF76617753CB70092334B /* MyViewController.m */,
 				464FF76717753CB80092334B /* MyViewController.xib */,
+				46633CAC178FE0AB00127BB4 /* Alipay */,
 				46C6C446178BB218006B7650 /* Addr */,
 				460D33521784FFB8006FDAF5 /* Order */,
 				46A675E3178425E400761668 /* center */,
@@ -538,6 +561,19 @@
 				46471BA4177938EC00872248 /* zbar-samples.png */,
 			);
 			path = Resources;
+			sourceTree = "<group>";
+		};
+		46633CAC178FE0AB00127BB4 /* Alipay */ = {
+			isa = PBXGroup;
+			children = (
+				46633CB2178FE8DE00127BB4 /* AlixPay.h */,
+				46633CB3178FE8DE00127BB4 /* AlixPayOrder.h */,
+				46633CB4178FE8DE00127BB4 /* AlixPayResult.h */,
+				46633CAD178FE23E00127BB4 /* AlipayViewController.h */,
+				46633CAE178FE23E00127BB4 /* AlipayViewController.m */,
+				46633CAF178FE23E00127BB4 /* AlipayViewController.xib */,
+			);
+			name = Alipay;
 			sourceTree = "<group>";
 		};
 		466414591782B06900028C0D /* Cart */ = {
@@ -730,6 +766,7 @@
 		46FAB5B417744DF700D6508C /* images */ = {
 			isa = PBXGroup;
 			children = (
+				46633CA5178FD93400127BB4 /* ordersuccesslogo.png */,
 				46C6C458178D4515006B7650 /* checkbox_mmc_pressed.png */,
 				46C6C45A178D451C006B7650 /* checkbox_mmc.png */,
 				46C6C44C178BBC2C006B7650 /* RadioButton-Selected.png */,
@@ -908,6 +945,9 @@
 				46C6C457178CEB10006B7650 /* AddrAddViewController.xib in Resources */,
 				46C6C459178D4515006B7650 /* checkbox_mmc_pressed.png in Resources */,
 				46C6C45B178D451C006B7650 /* checkbox_mmc.png in Resources */,
+				46633CA6178FD93400127BB4 /* ordersuccesslogo.png in Resources */,
+				46633CAB178FD99100127BB4 /* OrderSuccessViewController.xib in Resources */,
+				46633CB1178FE23E00127BB4 /* AlipayViewController.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -968,6 +1008,8 @@
 				46C6C44A178BB250006B7650 /* AddrListViewController.m in Sources */,
 				46C6C452178BBC90006B7650 /* AddrCell.m in Sources */,
 				46C6C467178E42E9006B7650 /* AddrAddViewController.m in Sources */,
+				46633CAA178FD99100127BB4 /* OrderSuccessViewController.m in Sources */,
+				46633CB0178FE23E00127BB4 /* AlipayViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1052,6 +1094,7 @@
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					"\"$(SRCROOT)/newMaimaicha/ZBarSDK\"",
+					"\"$(SRCROOT)\"",
 				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				WRAPPER_EXTENSION = app;
@@ -1067,6 +1110,7 @@
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					"\"$(SRCROOT)/newMaimaicha/ZBarSDK\"",
+					"\"$(SRCROOT)\"",
 				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				WRAPPER_EXTENSION = app;

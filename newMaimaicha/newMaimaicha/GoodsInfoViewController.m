@@ -116,7 +116,7 @@
             [storeLabel setFrame:CGRectMake(240, nameLabel.frame.size.height+nameLabel.frame.origin.y+6, 80, 40)];
             [buyButton setFrame:CGRectMake(56, priceLabel.frame.size.height+priceLabel.frame.origin.y+15, 208, 41)];
             [buyButton setEnabled:YES];
-            [self.propertyTableView setFrame:CGRectMake(0, buyButton.frame.origin.y+buyButton.frame.size.height+20, 320, 200)];
+            [self.propertyTableView setFrame:CGRectMake(0, buyButton.frame.origin.y+buyButton.frame.size.height+20, 320, 220)];
             [self.propertyTableView reloadData];
             [self.flowView reloadData];
         }
@@ -235,9 +235,9 @@
     {
         return 80;
     }else if (indexPath.section == 1){
-        return 30;
+        return 40;
     }else{
-        return 30;
+        return 40;
     }
 }
 
@@ -272,7 +272,7 @@
             //unit
             UILabel *unitLabel = [[UILabel alloc]initWithFrame:CGRectMake(10, 60, 300, 15)];
             unitLabel.font = [UIFont systemFontOfSize:13.0];
-            unitLabel.text = [NSString stringWithFormat:@"计量单位: %@",[self.goodsModel.property objectForKey:@"goodsUnit"]];
+            unitLabel.text = [NSString stringWithFormat:@"源产地: %@",[self.goodsModel.property objectForKey:@"goodsUnit"]];
             [unitLabel setBackgroundColor:[UIColor clearColor]];
             [cell.contentView addSubview:unitLabel];
         }
