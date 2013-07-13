@@ -99,6 +99,8 @@
 
         }
     }else{
+        [self.goodsTableView removeFromSuperview];
+        [self.footerView removeFromSuperview];
         [self.view addSubview:self.cartNullView];
     }
 }

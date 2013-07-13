@@ -105,4 +105,21 @@
         return NO;
     }
 }
+
++(BOOL)clearCart
+{
+    YMDbClass *db = [[YMDbClass alloc]init];
+    if([db connect])
+    {
+        NSString *query = [NSString stringWithFormat:@"delete from goodslist_car"];
+        if([db exec:query])
+        {
+            return YES;
+        }else{
+            return NO;
+        }
+    }else{
+        return NO;
+    }
+}
 @end

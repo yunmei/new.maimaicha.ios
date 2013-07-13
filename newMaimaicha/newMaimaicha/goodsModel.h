@@ -27,4 +27,5 @@
 +(BOOL)updateCartData:(NSString *)goodsId
            goodsCount:(NSString *)goodsCount;
 +(BOOL)deleteCartData:(NSString *)goodsId;
++(BOOL)clearCart;
 @end

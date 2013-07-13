@@ -15,6 +15,7 @@
 #import "AppDelegate.h"
 #import "SBJson.h"
 #import "OrderSuccessViewController.h"
+#import "goodsModel.h"
 @interface OrderSubmitViewController ()
 
 @end
@@ -471,13 +472,16 @@
             NSMutableDictionary *obj = [parser objectWithData:[completedOperation responseData]];
             if([[obj objectForKey:@"errorCode"]isEqualToString:@"0"])
             {
-                
+                if([goodsModel clearCart])
+                {
+                    [[self.tabBarController.tabBar.items objectAtIndex:2] setBadgeValue:nil];
+                }
                 OrderSuccessViewController *orderSuVC = [[OrderSuccessViewController alloc]initWithNibName:@"OrderSuccessViewController" bundle:nil];
                 orderSuVC.orderId = [[obj objectForKey:@"result"] objectForKey:@"orderId"];
                 orderSuVC.totalFee = self.payAmount;
                 UIBarButtonItem * rightBar = [[UIBarButtonItem alloc]initWithTitle:@"返回" style:UIBarButtonItemStyleBordered target:self action:nil];
                 [rightBar setTintColor:[UIColor colorWithRed:172/255.0 green:219/255.0 blue:115/255.0 alpha:1.0]];
-                self.navigationItem.backBarButtonItem = rightBar;
+                self.navigationItem.backBarButtonItem = nil;
                 [self.navigationController pushViewController:orderSuVC animated:YES];
             }else{
                 UIAlertView *alert = [[UIAlertView alloc]initWithTitle:@"提示" message:[obj objectForKey:@"errorMessage"] delegate:self cancelButtonTitle:@"确定" otherButtonTitles:nil, nil];

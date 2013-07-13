@@ -28,6 +28,8 @@
 {
     [super viewDidLoad];
     // Do any additional setup after loading the view from its nib.
+    self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc]initWithTitle:@"返回" style:UIBarButtonItemStyleBordered target:self action:@selector(goBack:)];
+    self.navigationItem.leftBarButtonItem.tintColor = [UIColor colorWithRed:162/255.0 green:210/255.0 blue:94/255.0 alpha:1.0];
     [self.orderIdLabel setText:self.orderId];
 }
 
@@ -46,5 +48,10 @@
     alipay.totalAmount = self.totalFee;
     [self.navigationController pushViewController:alipay animated:YES];
     
+}
+
+- (void)goBack:(id)sender
+{
+    [self.navigationController popToRootViewControllerAnimated:NO];
 }
 @end
