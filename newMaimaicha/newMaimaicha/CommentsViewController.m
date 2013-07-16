@@ -29,6 +29,7 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    self.navigationItem.title = @"商品评论";
     NSMutableDictionary *params = [[NSMutableDictionary alloc]init];
     [params setObject:@"goods_getCommentByGoodsId" forKey:@"act"];
     [params setObject:self.goodsId forKey:@"goodsId"];

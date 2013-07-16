@@ -14,6 +14,7 @@
 #import <QuartzCore/QuartzCore.h>
 #import "GoodsInfoViewController.h"
 #import "KeyGoodsListViewController.h"
+#import "HotListViewController.h"
 @interface IndexViewController ()
 
 @end
@@ -370,6 +371,11 @@
 
 - (void)hotPressed:(id)sender
 {
-    
+    HotListViewController *hotList = [[HotListViewController alloc]init];
+    UIBarButtonItem *backItem = [[UIBarButtonItem alloc]initWithTitle:@"返回" style:UIBarButtonItemStyleBordered target:nil action:nil];
+    backItem.tintColor = [UIColor colorWithRed:167/255.0 green:216/255.0 blue:106/255.0 alpha:1.0];
+    self.navigationItem.backBarButtonItem = backItem;
+    hotList.title = @"热销产品";
+    [self.navigationController pushViewController:hotList animated:YES];
 }
 @end

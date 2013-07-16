@@ -38,6 +38,7 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    self.navigationItem.title = @"商品详情";
     UIScrollView *selfview = (UIScrollView *)self.view;
     [selfview setContentSize:CGSizeMake(320, 560)];
     selfview.showsVerticalScrollIndicator = NO;
