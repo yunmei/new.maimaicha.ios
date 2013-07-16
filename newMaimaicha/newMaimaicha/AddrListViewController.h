@@ -21,4 +21,5 @@
 @property (strong, nonatomic) IBOutlet UITableView *addListTable;
 @property (strong) NSObject <PassValueDelegate>*delegate;
 @property (strong, nonatomic)UIView *nullView;
+@property (strong, nonatomic)NSString *comeFrom;
 @end

@@ -16,6 +16,7 @@
 #import "goodsModel.h"
 #import "UserModel.h"
 #import "LoginViewController.h"
+#import "KeyGoodsListViewController.h"
 @implementation AppDelegate
 @synthesize engine = _engine;
 @synthesize tabBarctrl = _tabBarctrl;
@@ -47,6 +48,7 @@
     [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(openLoginView:) name:@"INeedLogin" object:nil];
     [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(loginSuccess) name:@"LoginSuccess" object:nil];
     [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(respondsLogin:) name:@"UserRespondsLogin" object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(pushVC:) name:@"pushKeyVC" object:nil];
     return YES;
 }
 
@@ -110,5 +112,22 @@
         _tabBarctrl.tabBar.selectionIndicatorImage = [UIImage imageNamed:@"tabbar_selection.png"];
     }
     return _tabBarctrl;
+}
+
+
+- (void)pushVC:(NSNotification *)note
+{
+    UINavigationController *selectNav = (UINavigationController *)self.tabBarctrl.selectedViewController;
+    KeyGoodsListViewController *keyGoodsVC = [[KeyGoodsListViewController alloc]init];
+    keyGoodsVC.keywords = [[note userInfo] objectForKey:@"keywords"];
+    keyGoodsVC.navigationItem.title = keyGoodsVC.keywords;
+    UILabel *itemTitle = [[UILabel alloc]initWithFrame:CGRectMake(0, 0, 170, 44)];
+    itemTitle.textAlignment = NSTextAlignmentCenter;
+    itemTitle.text = [NSString stringWithFormat:@"关键字\"%@\"的产品列表", [[note userInfo] objectForKey:@"keywords"]];
+    itemTitle.font = [UIFont systemFontOfSize:15.0];
+    itemTitle.backgroundColor = [UIColor clearColor];
+    itemTitle.textColor = [UIColor whiteColor];
+    keyGoodsVC.navigationItem.titleView = itemTitle;
+    [selectNav pushViewController:keyGoodsVC animated:YES];
 }
 @end

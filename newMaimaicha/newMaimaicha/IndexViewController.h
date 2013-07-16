@@ -9,10 +9,7 @@
 #import <UIKit/UIKit.h>
 #import "ZBarSDK.h"
 @interface IndexViewController : UIViewController<ZBarReaderDelegate,UIScrollViewDelegate>
-@property (strong,nonatomic) NSMutableArray *adListArray;
-@property (strong,nonatomic) UIScrollView *adScrollView;
 @property (strong,nonatomic) NSMutableArray *commendGoodsList;
-@property (strong,nonatomic) UIPageControl *pageCtrol;
 @property (strong,nonatomic) UIScrollView *nhScrollView;
 @property (strong,nonatomic) UIScrollView *comScrollView;
 @end

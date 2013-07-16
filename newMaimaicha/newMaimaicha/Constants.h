@@ -12,7 +12,7 @@
 #define API_METHOD      @"POST"
 
 #define URL_HOME        @"http://www.maimaicha.com/"
-#define URL_HELP        @"http://www.967067.cn/waphelp/index.php"
+#define URL_HELP        @"http://www.maimaicha.com/waphelp/index.php"
 
 #define DB_NAME         @"newmmc.db"
-#define SYS_VERSION     @"2"
+#define SYS_VERSION     @"2.0"

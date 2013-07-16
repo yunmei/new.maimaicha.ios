@@ -204,7 +204,7 @@
         }
         [self.reachPayButton setFrame:CGRectMake(180, 20, 20, 20)];
         UIButton *reachLabelBtn = [UIButton buttonWithType:UIButtonTypeCustom];
-        [reachLabelBtn setTitle:@"活到付款" forState:UIControlStateNormal];
+        [reachLabelBtn setTitle:@"货到付款" forState:UIControlStateNormal];
         [reachLabelBtn setFrame:CGRectMake(200, 15, 60, 30)];
         reachLabelBtn.titleLabel.font = [UIFont systemFontOfSize:14.0];
         [reachLabelBtn setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
@@ -277,6 +277,7 @@
     if(indexPath.row == 0)
     {
         AddrListViewController *addrListVC = [[AddrListViewController alloc]init];
+        addrListVC.comeFrom = @"orderSubmit";
         addrListVC.delegate = self;
         UIBarButtonItem *backBar = [[UIBarButtonItem alloc]init];
         [backBar setTintColor:[UIColor colorWithRed:169/255.0 green:217/255.0 blue:110/255.0 alpha:1.0]];
@@ -428,7 +429,7 @@
         }else{
             [param setObject:@"" forKey:@"memo"];
         }
-        [param setObject:@"买买茶配送" forKey:@"shipName"];
+        [param setObject:[self.defaultAddr objectForKey:@"name"] forKey:@"shipName"];
         [param setObject:self.payAmount forKey:@"totalAmount"];
         [param setObject:@"ios手机客户端" forKey:@"source"];
         NSString *goodsIdString = @"";

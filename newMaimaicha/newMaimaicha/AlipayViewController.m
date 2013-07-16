@@ -76,6 +76,7 @@
     cell.textLabel.text = @"支付宝无线支付";
     cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
     cell.textLabel.font = [UIFont systemFontOfSize:15.0];
+    cell.selectionStyle = UITableViewCellSelectionStyleNone;
     return cell;
 }
 

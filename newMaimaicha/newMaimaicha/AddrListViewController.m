@@ -23,6 +23,7 @@
 @synthesize addListTable;
 @synthesize delegate;
 @synthesize nullView;
+@synthesize comeFrom;
 - (id)initWithStyle:(UITableViewStyle)style
 {
     self = [super initWithStyle:style];
@@ -143,27 +144,60 @@
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    NSMutableDictionary  * selectAddr = [self.addrList objectAtIndex:indexPath.row];
-    NSString *addrId = [selectAddr objectForKey:@"addrId"];
-    NSMutableDictionary *params = [[NSMutableDictionary alloc]init];
-    [params setObject:addrId forKey:@"addrId"];
-    [params setObject:@"addr_setAddrDef" forKey:@"act"];
-    MKNetworkOperation *op = [YMGlobal getOperation:params];
-    [op addCompletionHandler:^(MKNetworkOperation *completedOperation) {
-        NSLog(@"completesetDefault:%@",[completedOperation responseString]);
-        SBJsonParser *parser = [[SBJsonParser alloc]init];
-        NSMutableDictionary *obj = [parser objectWithData:[completedOperation responseData]];
-        if([obj objectForKey:@"errorCode"])
-        {
-            [self.delegate passVlaue:[obj objectForKey:@"result"]];
-            [self.navigationController popViewControllerAnimated:YES];
-        }
-    } errorHandler:^(MKNetworkOperation *completedOperation, NSError *error) {
-        NSLog(@"%@",error);
-    }];
-    [ApplicationDelegate.engine enqueueOperation:op];
-    
-    
+
+    if([self.comeFrom isEqualToString:@"userCenter"])
+    {
+        NSMutableDictionary  * selectAddr = [self.addrList objectAtIndex:indexPath.row];
+        NSString *addrId = [selectAddr objectForKey:@"addrId"];
+        NSMutableDictionary *params = [[NSMutableDictionary alloc]init];
+        [params setObject:addrId forKey:@"addrId"];
+        [params setObject:@"addr_setAddrDef" forKey:@"act"];
+        MKNetworkOperation *op = [YMGlobal getOperation:params];
+        [op addCompletionHandler:^(MKNetworkOperation *completedOperation) {
+            NSLog(@"completesetDefault:%@",[completedOperation responseString]);
+            SBJsonParser *parser = [[SBJsonParser alloc]init];
+            NSMutableDictionary *obj = [parser objectWithData:[completedOperation responseData]];
+            if([obj objectForKey:@"errorCode"])
+            {
+                int i = 0;
+                for(id o in self.addrList)
+                {
+                  NSMutableDictionary *addr = o;
+                  if(indexPath.row == i)
+                  {
+                      [addr setObject:@"1" forKey:@"default"];
+                  }else{
+                      [addr setObject:@"0" forKey:@"default"];
+                  }
+                    i++;
+                }
+                [self.addListTable reloadData];
+            }
+        } errorHandler:^(MKNetworkOperation *completedOperation, NSError *error) {
+            NSLog(@"%@",error);
+        }];
+        [ApplicationDelegate.engine enqueueOperation:op];
+    }else{
+        NSMutableDictionary  * selectAddr = [self.addrList objectAtIndex:indexPath.row];
+        NSString *addrId = [selectAddr objectForKey:@"addrId"];
+        NSMutableDictionary *params = [[NSMutableDictionary alloc]init];
+        [params setObject:addrId forKey:@"addrId"];
+        [params setObject:@"addr_setAddrDef" forKey:@"act"];
+        MKNetworkOperation *op = [YMGlobal getOperation:params];
+        [op addCompletionHandler:^(MKNetworkOperation *completedOperation) {
+            NSLog(@"completesetDefault:%@",[completedOperation responseString]);
+            SBJsonParser *parser = [[SBJsonParser alloc]init];
+            NSMutableDictionary *obj = [parser objectWithData:[completedOperation responseData]];
+            if([obj objectForKey:@"errorCode"])
+            {
+                [self.delegate passVlaue:[obj objectForKey:@"result"]];
+                [self.navigationController popViewControllerAnimated:YES];
+            }
+        } errorHandler:^(MKNetworkOperation *completedOperation, NSError *error) {
+            NSLog(@"%@",error);
+        }];
+        [ApplicationDelegate.engine enqueueOperation:op];
+    }
 }
 
 /*

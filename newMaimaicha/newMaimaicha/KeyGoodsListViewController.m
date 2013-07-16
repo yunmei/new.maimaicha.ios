@@ -1,12 +1,12 @@
 //
-//  GoodsListViewController.m
+//  KeyGoodsListViewController.m
 //  newMaimaicha
 //
-//  Created by ken on 13-6-27.
+//  Created by ken on 13-7-15.
 //  Copyright (c) 2013年 maimaicha. All rights reserved.
 //
 
-#import "GoodsListViewController.h"
+#import "KeyGoodsListViewController.h"
 #import <QuartzCore/QuartzCore.h>
 #import "MBProgressHUD.h"
 #import "YMGlobal.h"
@@ -14,21 +14,21 @@
 #import "AppDelegate.h"
 #import "GoodsListCell.h"
 #import "GoodsInfoViewController.h"
-@interface GoodsListViewController ()
+@interface KeyGoodsListViewController ()
 
 @end
 
-@implementation GoodsListViewController
+@implementation KeyGoodsListViewController
 @synthesize goodsListTableView = _goodsListTableView;
 @synthesize goodsListArray;
 @synthesize headBgView;
-@synthesize catId;
 @synthesize catName;
 @synthesize priceButton = _priceButton;
 @synthesize buyCountButton = _buyCountButton;
 @synthesize viewCountButton = _viewCountButton;
 @synthesize orderBy;
 @synthesize sort;
+@synthesize keywords;
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
@@ -43,6 +43,10 @@
     [super viewDidLoad];
     // Do any additional setup after loading the view from its nib.
     self.navigationItem.title = self.catName;
+    
+    UIBarButtonItem *backItem = [[UIBarButtonItem alloc]initWithTitle:@"返回" style:UIBarButtonItemStyleDone target:self action:@selector(backView)];
+    backItem.tintColor = [UIColor colorWithRed:167/255.0 green:216/255.0 blue:106/255.0 alpha:1.0];
+    self.navigationItem.leftBarButtonItem = backItem;
     self.headBgView = [[UIImageView alloc]initWithFrame:CGRectMake(0, 0, 320, 30)];
     [headBgView setBackgroundColor:[UIColor whiteColor]];
     [headBgView setUserInteractionEnabled:YES];
@@ -57,8 +61,8 @@
     
     [self.view bringSubviewToFront:self.headBgView];
     NSMutableDictionary *param = [[NSMutableDictionary alloc]init];
-    [param setObject:self.catId forKey:@"catId"];
-    [param setObject:@"goods_getListByCatId" forKey:@"act"];
+    [param setObject:self.keywords forKey:@"keywords"];
+    [param setObject:@"goods_getGoodsByKeywords" forKey:@"act"];
     MKNetworkOperation *op = [YMGlobal getOperation:param];
     [op addCompletionHandler:^(MKNetworkOperation *completedOperation) {
         SBJsonParser *parser = [[SBJsonParser alloc]init];
@@ -72,7 +76,7 @@
     } errorHandler:^(MKNetworkOperation *completedOperation, NSError *error) {
         NSLog(@"%@",error);
     }];
-    [ApplicationDelegate.engine enqueueOperation:op];   
+    [ApplicationDelegate.engine enqueueOperation:op];
 }
 
 - (void)didReceiveMemoryWarning
@@ -140,11 +144,11 @@
     if(state == k_RETURN_LOADMORE){
         MBProgressHUD *HUD = [MBProgressHUD showHUDAddedTo:self.navigationController.view animated:YES];
         NSMutableDictionary *params = [[NSMutableDictionary alloc]init];
-        [params setObject:@"goods_getListByCatId" forKey:@"act"];
-        [params setObject:self.catId forKey:@"catId"];
+        [params setObject:@"goods_getGoodsByKeywords" forKey:@"act"];
+        [params setObject:self.keywords  forKey:@"keywords"];
         [params setObject:[NSString stringWithFormat:@"%i",countPage+1] forKey:@"page"];
         if(self.orderBy != nil)
-        [params setObject:self.sort forKey:self.orderBy];
+            [params setObject:self.sort forKey:self.orderBy];
         MKNetworkOperation *op = [YMGlobal getOperation:params];
         [op addCompletionHandler:^(MKNetworkOperation *completedOperation) {
             [HUD hide:YES];
@@ -172,8 +176,8 @@
     }else if (state == k_RETURN_REFRESH){
         MBProgressHUD *HUD = [MBProgressHUD showHUDAddedTo:self.navigationController.view animated:YES];
         NSMutableDictionary *params = [[NSMutableDictionary alloc]init];
-        [params setObject:@"goods_getListByCatId" forKey:@"act"];
-        [params setObject:self.catId forKey:@"catId"];
+        [params setObject:@"goods_getGoodsByKeywords" forKey:@"act"];
+        [params setObject:self.keywords forKey:@"keywords"];
         MKNetworkOperation *op = [YMGlobal getOperation:params];
         [op addCompletionHandler:^(MKNetworkOperation *completedOperation) {
             [HUD hide:YES];
@@ -213,7 +217,7 @@
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-   NSString *goodsId = [[self.goodsListArray objectAtIndex:indexPath.row] objectForKey:@"goodsId"];
+    NSString *goodsId = [[self.goodsListArray objectAtIndex:indexPath.row] objectForKey:@"goodsId"];
     GoodsInfoViewController *goodsInfoVC = [[GoodsInfoViewController alloc]init];
     goodsInfoVC.goodsId = goodsId;
     goodsInfoVC.goodsName = self.catName;
@@ -283,8 +287,8 @@
         [pressedButton setBackgroundImage:[UIImage imageNamed:@"price_up.png"] forState:UIControlStateNormal];
         MBProgressHUD *HUD = [MBProgressHUD showHUDAddedTo:self.navigationController.view animated:YES];
         NSMutableDictionary *params = [[NSMutableDictionary alloc]init];
-        [params setObject:@"goods_getListByCatId" forKey:@"act"];
-        [params setObject:self.catId forKey:@"catId"];
+        [params setObject:@"goods_getGoodsByKeywords" forKey:@"act"];
+        [params setObject:self.keywords forKey:@"keywords"];
         [params setObject:@"asc" forKey:@"priceOrder"];
         MKNetworkOperation *op = [YMGlobal getOperation:params];
         [op addCompletionHandler:^(MKNetworkOperation *completedOperation) {
@@ -308,8 +312,8 @@
         [pressedButton setBackgroundImage:[UIImage imageNamed:@"price_up.png"] forState:UIControlStateNormal];
         MBProgressHUD *HUD = [MBProgressHUD showHUDAddedTo:self.navigationController.view animated:YES];
         NSMutableDictionary *params = [[NSMutableDictionary alloc]init];
-        [params setObject:@"goods_getListByCatId" forKey:@"act"];
-        [params setObject:self.catId forKey:@"catId"];
+        [params setObject:@"goods_getGoodsByKeywords" forKey:@"act"];
+        [params setObject:self.keywords forKey:@"keywords"];
         [params setObject:@"asc" forKey:@"priceOrder"];
         MKNetworkOperation *op = [YMGlobal getOperation:params];
         [op addCompletionHandler:^(MKNetworkOperation *completedOperation) {
@@ -333,8 +337,8 @@
         [pressedButton setBackgroundImage:[UIImage imageNamed:@"price_down.png"] forState:UIControlStateNormal];
         MBProgressHUD *HUD = [MBProgressHUD showHUDAddedTo:self.navigationController.view animated:YES];
         NSMutableDictionary *params = [[NSMutableDictionary alloc]init];
-        [params setObject:@"goods_getListByCatId" forKey:@"act"];
-        [params setObject:self.catId forKey:@"catId"];
+        [params setObject:@"goods_getGoodsByKeywords" forKey:@"act"];
+        [params setObject:self.keywords forKey:@"keywords"];
         [params setObject:@"desc" forKey:@"priceOrder"];
         MKNetworkOperation *op = [YMGlobal getOperation:params];
         [op addCompletionHandler:^(MKNetworkOperation *completedOperation) {
@@ -363,8 +367,8 @@
     [pressedButton setBackgroundImage:[UIImage imageNamed:@"android_sort_middle_pressed.png"] forState:UIControlStateNormal];
     MBProgressHUD *HUD = [MBProgressHUD showHUDAddedTo:self.navigationController.view animated:YES];
     NSMutableDictionary *params = [[NSMutableDictionary alloc]init];
-    [params setObject:@"goods_getListByCatId" forKey:@"act"];
-    [params setObject:self.catId forKey:@"catId"];
+    [params setObject:@"goods_getGoodsByKeywords" forKey:@"act"];
+    [params setObject:self.keywords forKey:@"keywords"];
     [params setObject:@"desc" forKey:@"buyCount"];
     MKNetworkOperation *op = [YMGlobal getOperation:params];
     [op addCompletionHandler:^(MKNetworkOperation *completedOperation) {
@@ -381,7 +385,7 @@
         NSLog(@"%@",error);
     }];
     [ApplicationDelegate.engine enqueueOperation:op];
-
+    
 }
 - (void)viewCountButtonPressed:(id)sender
 {
@@ -393,8 +397,8 @@
     [pressedButton setBackgroundImage:[UIImage imageNamed:@"android_sort_right_pressed.png"] forState:UIControlStateNormal];
     MBProgressHUD *HUD = [MBProgressHUD showHUDAddedTo:self.navigationController.view animated:YES];
     NSMutableDictionary *params = [[NSMutableDictionary alloc]init];
-    [params setObject:@"goods_getListByCatId" forKey:@"act"];
-    [params setObject:self.catId forKey:@"catId"];
+    [params setObject:@"goods_getGoodsByKeywords" forKey:@"act"];
+    [params setObject:self.keywords forKey:@"keywords"];
     [params setObject:@"desc" forKey:@"viewCount"];
     MKNetworkOperation *op = [YMGlobal getOperation:params];
     [op addCompletionHandler:^(MKNetworkOperation *completedOperation) {
@@ -411,5 +415,10 @@
         NSLog(@"%@",error);
     }];
     [ApplicationDelegate.engine enqueueOperation:op];
+}
+
+ - (void) backView
+{
+    [self.navigationController popViewControllerAnimated:YES];
 }
 @end
