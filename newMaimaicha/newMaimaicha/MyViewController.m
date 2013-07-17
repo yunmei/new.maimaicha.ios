@@ -10,6 +10,8 @@
 #import "LoginViewController.h"
 #import "AddrListViewController.h"
 #import "OrderListViewController.h"
+#import "SCViewController.h"
+#import "goodsModel.h"
 @interface MyViewController ()
 
 @end
@@ -137,7 +139,13 @@
           self.navigationItem.backBarButtonItem = backItem;
           [self.navigationController pushViewController:orderListVC animated:YES];
       }else if (indexPath.row == 1){
-      
+          SCViewController *scVC = [[SCViewController alloc]init];
+          NSMutableArray *goodsArray = [goodsModel fetchSCList];
+          scVC.scList = goodsArray;
+          UIBarButtonItem *backItem = [[UIBarButtonItem alloc]initWithTitle:@"返回" style:UIBarButtonItemStyleBordered target:nil action:nil];
+          [backItem setTintColor:[UIColor colorWithRed:160/255.0 green:210/255.0 blue:94/255.0 alpha:1.0]];
+          self.navigationItem.backBarButtonItem = backItem;
+          [self.navigationController pushViewController:scVC animated:YES];
       }else{
           AddrListViewController *addListVC = [[AddrListViewController alloc]init];
           addListVC.comeFrom = @"userCenter";

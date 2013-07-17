@@ -16,6 +16,7 @@
 #import "UILabelStrikeThrough.h"
 #import "CommentsViewController.h"
 #import "YMDbClass.h"
+#import "goodsModel.h"
 @interface GoodsInfoViewController ()
 
 @end
@@ -76,12 +77,18 @@
     
     //buy
     UIButton *buyButton = [UIButton buttonWithType:UIButtonTypeCustom];
-    [buyButton setFrame:CGRectMake(56, 290, 208, 41)];
+    [buyButton setFrame:CGRectMake(16, 290, 200, 41)];
     [buyButton setBackgroundImage:[UIImage imageNamed:@"quickBuyBtn.png"] forState:UIControlStateNormal];
     [buyButton addTarget:self action:@selector(buy:) forControlEvents:UIControlEventTouchUpInside];
     [buyButton setEnabled:NO];
     [self.view addSubview:buyButton];
-
+    UIButton *scButton = [UIButton buttonWithType:UIButtonTypeCustom];
+    [scButton setFrame:CGRectMake(240, 290, 70, 41)];
+    [scButton setTitle:@"    收藏" forState:UIControlStateNormal];
+    [scButton setBackgroundImage:[UIImage imageNamed:@"sc.png"] forState:UIControlStateNormal];
+    [scButton addTarget:self action:@selector(favor) forControlEvents:UIControlEventTouchUpInside];
+    [scButton setEnabled:NO];
+    [self.view addSubview:scButton];
     //property tableView
     [self.view addSubview:self.propertyTableView];
     
@@ -115,7 +122,9 @@
             [mktLabel setFrame:CGRectMake(95, nameLabel.frame.size.height+nameLabel.frame.origin.y+6, 100, 40)];
             [storeLabel setText:[NSString stringWithFormat:@"库存量:%@",self.goodsModel.store]];
             [storeLabel setFrame:CGRectMake(240, nameLabel.frame.size.height+nameLabel.frame.origin.y+6, 80, 40)];
-            [buyButton setFrame:CGRectMake(56, priceLabel.frame.size.height+priceLabel.frame.origin.y+15, 208, 41)];
+            [buyButton setFrame:CGRectMake(16, priceLabel.frame.size.height+priceLabel.frame.origin.y+15, 200, 41)];
+            [scButton setFrame:CGRectMake(230, priceLabel.frame.size.height+priceLabel.frame.origin.y+15, 80, 41)];
+            [scButton setEnabled:YES];
             [buyButton setEnabled:YES];
             [self.propertyTableView setFrame:CGRectMake(0, buyButton.frame.origin.y+buyButton.frame.size.height+20, 320, 220)];
             [self.propertyTableView reloadData];
@@ -324,5 +333,23 @@
         [[self.tabBarController.tabBar.items objectAtIndex:2] setBadgeValue:[db count_sum:@"goodslist_car" tablefiled:@"goods_count"]];
     }
     [db close];
+}
+
+- (void)favor
+{
+    [goodsModel creatSC];
+    NSMutableDictionary *goodsDic = [[NSMutableDictionary alloc]init];
+    [goodsDic setObject:self.goodsModel.goodsId forKey:@"goodsId"];
+    [goodsDic setObject:[[self.goodsModel.imageArray objectAtIndex:0] objectForKey:@"url"] forKey:@"imageUrl"];
+    [goodsDic setObject:self.goodsModel.name forKey:@"goodsName"];
+    [goodsDic setObject:self.goodsModel.price forKey:@"goodsPrice"];
+   if([goodsModel AddSC:goodsDic])
+   {
+       UIAlertView *alert = [[UIAlertView alloc]initWithTitle:@"提示" message:@"收藏成功" delegate:self cancelButtonTitle:@"确定" otherButtonTitles:nil, nil];
+       [alert show];
+   }else{
+       UIAlertView *alert = [[UIAlertView alloc]initWithTitle:@"提示" message:@"已收藏该商品，无需重复收藏!" delegate:self cancelButtonTitle:@"确定" otherButtonTitles:nil, nil];
+       [alert show];
+   }
 }
 @end

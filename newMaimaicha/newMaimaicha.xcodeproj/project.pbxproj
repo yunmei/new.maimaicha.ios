@@ -76,10 +76,10 @@
 		46770BAC1794ED8C000F419A /* HelpWebViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 46770BAA1794ED8C000F419A /* HelpWebViewController.xib */; };
 		46770BB01794EF05000F419A /* UserSurggestViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 46770BAE1794EF05000F419A /* UserSurggestViewController.m */; };
 		46770BB11794EF05000F419A /* UserSurggestViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 46770BAF1794EF05000F419A /* UserSurggestViewController.xib */; };
-		46770BB317953871000F419A /* gwc_on.png in Resources */ = {isa = PBXBuildFile; fileRef = 46770BB21795386F000F419A /* gwc_on.png */; };
-		46770BB51795387F000F419A /* sc_on.png in Resources */ = {isa = PBXBuildFile; fileRef = 46770BB41795387D000F419A /* sc_on.png */; };
 		46770BBE17953D8E000F419A /* HotListViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 46770BBC17953D8D000F419A /* HotListViewController.m */; };
 		46770BBF17953D8E000F419A /* HotListViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 46770BBD17953D8D000F419A /* HotListViewController.xib */; };
+		46770BC4179628B4000F419A /* SCViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 46770BC2179628B2000F419A /* SCViewController.m */; };
+		46770BC5179628B4000F419A /* SCViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 46770BC3179628B3000F419A /* SCViewController.xib */; };
 		4682CCBF178267490048EA5D /* quickBuyBtn.png in Resources */ = {isa = PBXBuildFile; fileRef = 4682CCBE178267480048EA5D /* quickBuyBtn.png */; };
 		4682CCC1178267C20048EA5D /* sc.png in Resources */ = {isa = PBXBuildFile; fileRef = 4682CCC0178267C20048EA5D /* sc.png */; };
 		4682CCC517827FE20048EA5D /* GoodsIntroViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4682CCC317827FE10048EA5D /* GoodsIntroViewController.m */; };
@@ -287,11 +287,12 @@
 		46770BAD1794EF05000F419A /* UserSurggestViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UserSurggestViewController.h; sourceTree = "<group>"; };
 		46770BAE1794EF05000F419A /* UserSurggestViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UserSurggestViewController.m; sourceTree = "<group>"; };
 		46770BAF1794EF05000F419A /* UserSurggestViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = UserSurggestViewController.xib; sourceTree = "<group>"; };
-		46770BB21795386F000F419A /* gwc_on.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = gwc_on.png; sourceTree = "<group>"; };
-		46770BB41795387D000F419A /* sc_on.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = sc_on.png; sourceTree = "<group>"; };
 		46770BBB17953D8D000F419A /* HotListViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HotListViewController.h; sourceTree = "<group>"; };
 		46770BBC17953D8D000F419A /* HotListViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HotListViewController.m; sourceTree = "<group>"; };
 		46770BBD17953D8D000F419A /* HotListViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = HotListViewController.xib; sourceTree = "<group>"; };
+		46770BC1179628B2000F419A /* SCViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SCViewController.h; sourceTree = "<group>"; };
+		46770BC2179628B2000F419A /* SCViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SCViewController.m; sourceTree = "<group>"; };
+		46770BC3179628B3000F419A /* SCViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = SCViewController.xib; sourceTree = "<group>"; };
 		4682CCBE178267480048EA5D /* quickBuyBtn.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = quickBuyBtn.png; sourceTree = "<group>"; };
 		4682CCC0178267C20048EA5D /* sc.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = sc.png; sourceTree = "<group>"; };
 		4682CCC217827FE10048EA5D /* GoodsIntroViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GoodsIntroViewController.h; sourceTree = "<group>"; };
@@ -665,6 +666,9 @@
 				46770BBB17953D8D000F419A /* HotListViewController.h */,
 				46770BBC17953D8D000F419A /* HotListViewController.m */,
 				46770BBD17953D8D000F419A /* HotListViewController.xib */,
+				46770BC1179628B2000F419A /* SCViewController.h */,
+				46770BC2179628B2000F419A /* SCViewController.m */,
+				46770BC3179628B3000F419A /* SCViewController.xib */,
 			);
 			name = goods;
 			sourceTree = "<group>";
@@ -836,8 +840,6 @@
 		46FAB5B417744DF700D6508C /* images */ = {
 			isa = PBXGroup;
 			children = (
-				46770BB21795386F000F419A /* gwc_on.png */,
-				46770BB41795387D000F419A /* sc_on.png */,
 				46633CD41793D0AB00127BB4 /* price_down.png */,
 				46633CCE1793CFD000127BB4 /* android_sort_middle.png */,
 				46633CCC1793CFC500127BB4 /* android_sort_middle_pressed.png */,
@@ -1043,9 +1045,8 @@
 				46633CDC1793F57300127BB4 /* KeyGoodsListViewController.xib in Resources */,
 				46770BAC1794ED8C000F419A /* HelpWebViewController.xib in Resources */,
 				46770BB11794EF05000F419A /* UserSurggestViewController.xib in Resources */,
-				46770BB317953871000F419A /* gwc_on.png in Resources */,
-				46770BB51795387F000F419A /* sc_on.png in Resources */,
 				46770BBF17953D8E000F419A /* HotListViewController.xib in Resources */,
+				46770BC5179628B4000F419A /* SCViewController.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1114,6 +1115,7 @@
 				46770BAB1794ED8C000F419A /* HelpWebViewController.m in Sources */,
 				46770BB01794EF05000F419A /* UserSurggestViewController.m in Sources */,
 				46770BBE17953D8E000F419A /* HotListViewController.m in Sources */,
+				46770BC4179628B4000F419A /* SCViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

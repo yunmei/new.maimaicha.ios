@@ -32,11 +32,11 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    self.navigationItem.title = self.title;
     NSMutableDictionary *param = [[NSMutableDictionary alloc]init];
     [param setObject:@"goods_getHotList" forKey:@"act"];
     MKNetworkOperation *op = [YMGlobal getOperation:param];
     [op addCompletionHandler:^(MKNetworkOperation *completedOperation) {
-        NSLog(@"compeleteHotlist%@",[completedOperation responseString]);
         SBJsonParser *parser = [[SBJsonParser alloc]init];
         NSMutableDictionary *obj = [parser objectWithData:[completedOperation responseData]];
         if([[obj objectForKey:@"errorCode"] isEqualToString:@"0"])
