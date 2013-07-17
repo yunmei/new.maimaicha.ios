@@ -7,7 +7,11 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "UserModel.h"
+@interface MoreViewController : UIViewController<
+UITableViewDataSource,
+UITableViewDelegate,
+UIAlertViewDelegate>
 
-@interface MoreViewController : UIViewController
-
+@property(strong,nonatomic)NSString *downloadURl;
 @end

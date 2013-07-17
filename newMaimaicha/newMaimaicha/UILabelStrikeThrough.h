@@ -10,4 +10,5 @@
 
 @interface UILabelStrikeThrough : UILabel
  @property (nonatomic) BOOL strikeThroughEnabled;
++(BOOL)AddSC:(NSMutableDictionary *)goodsSCInfo;
 @end

@@ -11,6 +11,7 @@
 #import "YMDbClass.h"
 #import "SBJson.h"
 #import "AppDelegate.h"
+#import "MBProgressHUD.h"
 @interface SearchViewController ()
 
 @end
@@ -34,17 +35,22 @@
 {
     [super viewDidLoad];
     // Do any additional setup after loading the view from its nib.
+    NSDictionary *attribute = [NSDictionary dictionaryWithObjectsAndKeys:[UIColor blackColor],UITextAttributeTextColor,[UIFont systemFontOfSize:12.0],UITextAttributeFont,[UIColor clearColor],UITextAttributeTextShadowColor,nil];
+    [self.viewSegmentCtrl setTitleTextAttributes:attribute forState:UIControlStateNormal];
+    MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:self.view animated:NO];
     NSMutableDictionary *param = [[NSMutableDictionary alloc]init];
     [param setObject:@"goods_getHotKeyWords" forKey:@"act"];
     [viewSegmentCtrl addTarget:self action:@selector(segmentChange:) forControlEvents:UIControlEventValueChanged];
     MKNetworkOperation *op = [YMGlobal getOperation:param];
     [op addCompletionHandler:^(MKNetworkOperation *completedOperation) {
+        [hud hide:YES];
         SBJsonParser *parser = [[SBJsonParser alloc]init];
         NSMutableDictionary *data = [parser objectWithData:[completedOperation responseData]];
         self.hotKeywordsArray = [data objectForKey:@"result"];
         [self.keywordsTableView reloadData];
     } errorHandler:^(MKNetworkOperation *completedOperation, NSError *error) {
         NSLog(@"%@",error);
+          [hud hide:YES];
     }];
     [ApplicationDelegate.engine enqueueOperation:op];
 }
@@ -146,6 +152,24 @@
   }
 }
 
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    if(tableView.tag == 1)
+    {
+        if(self.hotKeywordsArray != nil)
+        {
+            [[NSNotificationCenter defaultCenter] postNotificationName:@"pushKeyVC" object:self userInfo:[NSMutableDictionary dictionaryWithObject:[self.hotKeywordsArray objectAtIndex:indexPath.row] forKey:@"keywords"]];
+            [self dismissViewControllerAnimated:NO completion:nil];
+        }
+    }else{
+        if(self.searchDbArray.count >0){
+        [[NSNotificationCenter defaultCenter] postNotificationName:@"pushKeyVC" object:self userInfo:[NSMutableDictionary dictionaryWithObject:[self.hotKeywordsArray objectAtIndex:indexPath.row] forKey:@"keywords"]];
+            [self dismissViewControllerAnimated:NO completion:nil];
+        }
+    }
+
+}
+
 -(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     return 50;
@@ -206,6 +230,8 @@
         }
         [db close];
     }
+    [[NSNotificationCenter defaultCenter] postNotificationName:@"pushKeyVC" object:self userInfo:[NSMutableDictionary dictionaryWithObject:searchContent forKey:@"keywords"]];
+        [self dismissViewControllerAnimated:NO completion:nil];
 }
 //点击取消
 -(void)searchBarCancelButtonClicked:(UISearchBar *)searchBar

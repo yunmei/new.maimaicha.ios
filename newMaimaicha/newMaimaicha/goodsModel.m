@@ -29,6 +29,56 @@
     }
 }
 
++(void)creatSC
+{
+    YMDbClass *db = [[YMDbClass alloc]init];
+    if([db connect])
+    {
+        [db exec:@"CREATE TABLE IF NOT EXISTS goodsSC('id','name','price','image_url');"];
+        [db close];
+    }
+}
+
++(BOOL)AddSC:(NSMutableDictionary *)goodsSCInfo
+{
+    YMDbClass *db = [[YMDbClass alloc]init];
+    if([db connect])
+    {
+        NSString *querysql = [NSString stringWithFormat:@"goodsSC where id = '%@'",[goodsSCInfo objectForKey:@"goodsId"]];
+        NSString *resultCount = [db count:querysql];
+        if([resultCount isEqualToString:@"0"])
+        {
+            querysql = [NSString stringWithFormat:@"INSERT INTO goodsSC ('id','name','price','image_url')VALUES('%@','%@','%@','%@');",[goodsSCInfo objectForKey:@"goodsId"],[goodsSCInfo objectForKey:@"goodsName"],[goodsSCInfo objectForKey:@"goodsPrice"],[goodsSCInfo objectForKey:@"imageUrl"]];
+            if([db exec:querysql])
+            {
+                return YES;
+            }else{
+                return NO;
+            }
+                [db close];
+            
+        }else{
+            return NO;
+        }
+
+        
+    }else{
+        return NO;
+    }
+}
+
++(NSMutableArray *)fetchSCList
+{
+    YMDbClass *db = [[YMDbClass alloc]init];
+    NSMutableArray *resultArray;
+    if([db connect])
+    {
+        NSString *query = @"select * from goodsSC";
+        resultArray = [db fetchAll:query];
+    }
+    return resultArray;
+}
+
 +(void)AddCar:(goodsModel *)goodsItem
 {
     YMDbClass *db = [[YMDbClass alloc]init];
@@ -46,6 +96,7 @@
         [db close];
     }
 }
+
 
 +(NSInteger)countGoods
 {
@@ -95,6 +146,40 @@
     if([db connect])
     {
         NSString *query = [NSString stringWithFormat:@"delete from goodslist_car where id = '%@'",goodsId];;
+        if([db exec:query])
+        {
+            return YES;
+        }else{
+            return NO;
+        }
+    }else{
+        return NO;
+    }
+}
+
++(BOOL)clearCart
+{
+    YMDbClass *db = [[YMDbClass alloc]init];
+    if([db connect])
+    {
+        NSString *query = [NSString stringWithFormat:@"delete from goodslist_car"];
+        if([db exec:query])
+        {
+            return YES;
+        }else{
+            return NO;
+        }
+    }else{
+        return NO;
+    }
+}
+
++(BOOL)clearSC
+{
+    YMDbClass *db = [[YMDbClass alloc]init];
+    if([db connect])
+    {
+        NSString *query = [NSString stringWithFormat:@"delete from goodsSC"];
         if([db exec:query])
         {
             return YES;

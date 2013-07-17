@@ -22,11 +22,13 @@
 @synthesize goodsListTableView = _goodsListTableView;
 @synthesize goodsListArray;
 @synthesize headBgView;
-@synthesize segControl;
 @synthesize catId;
 @synthesize catName;
-@synthesize sort;
+@synthesize priceButton = _priceButton;
+@synthesize buyCountButton = _buyCountButton;
+@synthesize viewCountButton = _viewCountButton;
 @synthesize orderBy;
+@synthesize sort;
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
@@ -41,15 +43,19 @@
     [super viewDidLoad];
     // Do any additional setup after loading the view from its nib.
     self.navigationItem.title = self.catName;
+    self.headBgView = [[UIImageView alloc]initWithFrame:CGRectMake(0, 0, 320, 30)];
+    [headBgView setBackgroundColor:[UIColor whiteColor]];
+    [headBgView setUserInteractionEnabled:YES];
+    [self.view addSubview:self.headBgView];
+    UIView *lineView = [[UIView alloc]initWithFrame:CGRectMake(0, 29, 320, 1)];
+    [lineView setBackgroundColor:[UIColor colorWithRed:167/255.0 green:167/255.0 blue:167/255.0 alpha:0.5]];
+    [self.headBgView addSubview:lineView];
+    [self.headBgView addSubview:self.priceButton];
+    [self.headBgView addSubview:self.buyCountButton];
+    [self.headBgView addSubview:self.viewCountButton];
     [self.view addSubview:self.goodsListTableView];
-    self.headBgView.layer.borderWidth = 1;
-    self.headBgView.layer.borderColor = [UIColor grayColor].CGColor;
-    [self.headBgView setFrame:CGRectMake(-0.5, 0, 321, 43)];
+    
     [self.view bringSubviewToFront:self.headBgView];
-    NSDictionary *attribute = [NSDictionary dictionaryWithObjectsAndKeys:[UIColor blackColor],UITextAttributeTextColor,[UIFont systemFontOfSize:12.0],UITextAttributeFont,[UIColor clearColor],UITextAttributeTextShadowColor,nil];
-    [self.segControl setTitleTextAttributes:attribute forState:UIControlStateNormal];
-    [self.segControl addTarget:self action:@selector(contrlSelected:) forControlEvents:UIControlEventValueChanged];
-    [self.view bringSubviewToFront:self.segControl];
     NSMutableDictionary *param = [[NSMutableDictionary alloc]init];
     [param setObject:self.catId forKey:@"catId"];
     [param setObject:@"goods_getListByCatId" forKey:@"act"];
@@ -106,6 +112,7 @@
         [cell.goodsNameLabel setFrame:CGRectMake(120, 0, nameLabelSize.height, nameLabelSize.width)];
         cell.goodsNameLabel.text = nameString;
         cell.goodsNameLabel.font = [UIFont systemFontOfSize:13.0];
+        cell.goodsNameLabel.textAlignment = NSTextAlignmentCenter;
         [cell.goodsNameLabel setFrame:CGRectMake(100, 15, nameLabelSize.width, nameLabelSize.height)];
         [cell.goodsPriceLabel setFrame:CGRectMake(100, 50, 100, 20)];
         [cell.goodsPriceLabel setFont:[UIFont systemFontOfSize:13.0]];
@@ -136,6 +143,8 @@
         [params setObject:@"goods_getListByCatId" forKey:@"act"];
         [params setObject:self.catId forKey:@"catId"];
         [params setObject:[NSString stringWithFormat:@"%i",countPage+1] forKey:@"page"];
+        if(self.orderBy != nil)
+        [params setObject:self.sort forKey:self.orderBy];
         MKNetworkOperation *op = [YMGlobal getOperation:params];
         [op addCompletionHandler:^(MKNetworkOperation *completedOperation) {
             [HUD hide:YES];
@@ -201,41 +210,162 @@
 }
 
 //↓↑
-- (void)contrlSelected:(id)sender
+
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
+   NSString *goodsId = [[self.goodsListArray objectAtIndex:indexPath.row] objectForKey:@"goodsId"];
+    GoodsInfoViewController *goodsInfoVC = [[GoodsInfoViewController alloc]init];
+    goodsInfoVC.goodsId = goodsId;
+    goodsInfoVC.goodsName = self.catName;
+    UIBarButtonItem *backItem = [[UIBarButtonItem alloc]initWithTitle:@"返回" style:UIBarButtonItemStyleBordered target:nil action:nil];
+    [backItem setTintColor:[UIColor colorWithRed:167/255.0 green:216/255.0 blue:106/255.0 alpha:1.0]];
+    self.navigationItem.backBarButtonItem = backItem;
+    [self.navigationController pushViewController:goodsInfoVC animated:YES];
+}
+
+-(UIButton *)priceButton
+{
+    if(_priceButton == nil)
+    {
+        _priceButton = [UIButton buttonWithType:UIButtonTypeCustom];
+        [_priceButton setBackgroundImage:[UIImage imageNamed:@"android_sort_left.png"] forState:UIControlStateNormal];
+        [_priceButton setFrame:CGRectMake(40,5,80, 20)];
+        [_priceButton addTarget:self action:@selector(priceButtonPressed:) forControlEvents:UIControlEventTouchUpInside];
+        _priceButton.tag = 0;
+        [_priceButton setTitle:@"价格" forState:UIControlStateNormal];
+        [_priceButton setTintColor:[UIColor blackColor]];
+        _priceButton.titleLabel.font = [UIFont systemFontOfSize:12.0];
+        [_priceButton setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
+    }
+    return _priceButton;
+}
+
+-(UIButton *)buyCountButton
+{
+    if(_buyCountButton == nil)
+    {
+        _buyCountButton = [UIButton buttonWithType:UIButtonTypeCustom];
+        [_buyCountButton setBackgroundImage:[UIImage imageNamed:@"android_sort_middle.png"] forState:UIControlStateNormal];
+        [_buyCountButton setFrame:CGRectMake(120,5,80, 20)];
+        [_buyCountButton addTarget:self action:@selector(buyCountButtonPressed:) forControlEvents:UIControlEventTouchUpInside];
+        [_buyCountButton setTitle:@"销量" forState:UIControlStateNormal];
+        [_buyCountButton setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
+        _buyCountButton.titleLabel.font = [UIFont systemFontOfSize:12.0];
+    }
+    return _buyCountButton;
+}
+
+-(UIButton *)viewCountButton
+{
+    if(_viewCountButton == nil)
+    {
+        _viewCountButton = [UIButton buttonWithType:UIButtonTypeCustom];
+        [_viewCountButton setBackgroundImage:[UIImage imageNamed:@"android_sort_right.png"] forState:UIControlStateNormal];
+        [_viewCountButton setFrame:CGRectMake(200,5,80, 20)];
+        [_viewCountButton addTarget:self action:@selector(viewCountButtonPressed:) forControlEvents:UIControlEventTouchUpInside];
+        [_viewCountButton setTitle:@"人气" forState:UIControlStateNormal];
+        [_viewCountButton setTintColor:[UIColor blackColor]];
+        _viewCountButton.titleLabel.font = [UIFont systemFontOfSize:12.0];
+        [_viewCountButton setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
+    }
+    return _viewCountButton;
+}
+
+- (void)priceButtonPressed:(id)sender
+{
+    [self.viewCountButton setBackgroundImage:[UIImage imageNamed:@"android_sort_right.png"] forState:UIControlStateNormal];
+    [self.buyCountButton setBackgroundImage:[UIImage imageNamed:@"android_sort_middle.png"] forState:UIControlStateNormal];
+    UIButton *pressedButton = sender;
+    if(pressedButton.tag == 0){
+        self.orderBy = @"priceOrder";
+        self.sort = @"asc";
+        pressedButton.tag = 1;
+        [pressedButton setBackgroundImage:[UIImage imageNamed:@"price_up.png"] forState:UIControlStateNormal];
+        MBProgressHUD *HUD = [MBProgressHUD showHUDAddedTo:self.navigationController.view animated:YES];
+        NSMutableDictionary *params = [[NSMutableDictionary alloc]init];
+        [params setObject:@"goods_getListByCatId" forKey:@"act"];
+        [params setObject:self.catId forKey:@"catId"];
+        [params setObject:@"asc" forKey:@"priceOrder"];
+        MKNetworkOperation *op = [YMGlobal getOperation:params];
+        [op addCompletionHandler:^(MKNetworkOperation *completedOperation) {
+            [HUD hide:YES];
+            SBJsonParser *parser = [[SBJsonParser alloc]init];
+            NSMutableDictionary *obj = [parser objectWithData:[completedOperation responseData]];
+            if([[obj objectForKey:@"errorCode"]isEqualToString:@"0"])
+            {
+                self.goodsListArray = [obj objectForKey:@"result"];
+                [self.goodsListTableView reloadData];
+            }
+        } errorHandler:^(MKNetworkOperation *completedOperation, NSError *error) {
+            [HUD hide:YES];
+            NSLog(@"%@",error);
+        }];
+        [ApplicationDelegate.engine enqueueOperation:op];
+    }else if (pressedButton.tag == 2){
+        pressedButton.tag = 1;
+        self.orderBy = @"priceOrder";
+        self.sort = @"asc";
+        [pressedButton setBackgroundImage:[UIImage imageNamed:@"price_up.png"] forState:UIControlStateNormal];
+        MBProgressHUD *HUD = [MBProgressHUD showHUDAddedTo:self.navigationController.view animated:YES];
+        NSMutableDictionary *params = [[NSMutableDictionary alloc]init];
+        [params setObject:@"goods_getListByCatId" forKey:@"act"];
+        [params setObject:self.catId forKey:@"catId"];
+        [params setObject:@"asc" forKey:@"priceOrder"];
+        MKNetworkOperation *op = [YMGlobal getOperation:params];
+        [op addCompletionHandler:^(MKNetworkOperation *completedOperation) {
+            [HUD hide:YES];
+            SBJsonParser *parser = [[SBJsonParser alloc]init];
+            NSMutableDictionary *obj = [parser objectWithData:[completedOperation responseData]];
+            if([[obj objectForKey:@"errorCode"]isEqualToString:@"0"])
+            {
+                self.goodsListArray = [obj objectForKey:@"result"];
+                [self.goodsListTableView reloadData];
+            }
+        } errorHandler:^(MKNetworkOperation *completedOperation, NSError *error) {
+            [HUD hide:YES];
+            NSLog(@"%@",error);
+        }];
+        [ApplicationDelegate.engine enqueueOperation:op];
+    }else{
+        self.orderBy = @"priceOrder";
+        self.sort = @"desc";
+        pressedButton.tag = 2;
+        [pressedButton setBackgroundImage:[UIImage imageNamed:@"price_down.png"] forState:UIControlStateNormal];
+        MBProgressHUD *HUD = [MBProgressHUD showHUDAddedTo:self.navigationController.view animated:YES];
+        NSMutableDictionary *params = [[NSMutableDictionary alloc]init];
+        [params setObject:@"goods_getListByCatId" forKey:@"act"];
+        [params setObject:self.catId forKey:@"catId"];
+        [params setObject:@"desc" forKey:@"priceOrder"];
+        MKNetworkOperation *op = [YMGlobal getOperation:params];
+        [op addCompletionHandler:^(MKNetworkOperation *completedOperation) {
+            [HUD hide:YES];
+            SBJsonParser *parser = [[SBJsonParser alloc]init];
+            NSMutableDictionary *obj = [parser objectWithData:[completedOperation responseData]];
+            if([[obj objectForKey:@"errorCode"]isEqualToString:@"0"])
+            {
+                self.goodsListArray = [obj objectForKey:@"result"];
+                [self.goodsListTableView reloadData];
+            }
+        } errorHandler:^(MKNetworkOperation *completedOperation, NSError *error) {
+            [HUD hide:YES];
+            NSLog(@"%@",error);
+        }];
+        [ApplicationDelegate.engine enqueueOperation:op];
+    }
+}
+- (void)buyCountButtonPressed:(id)sender
+{
+    self.orderBy = @"buyCount";
+    self.sort = @"desc";
+    [self.priceButton setBackgroundImage:[UIImage imageNamed:@"android_sort_left.png"] forState:UIControlStateNormal];
+    [self.viewCountButton setBackgroundImage:[UIImage imageNamed:@"android_sort_right.png"] forState:UIControlStateNormal];
+    UIButton *pressedButton = sender;
+    [pressedButton setBackgroundImage:[UIImage imageNamed:@"android_sort_middle_pressed.png"] forState:UIControlStateNormal];
     MBProgressHUD *HUD = [MBProgressHUD showHUDAddedTo:self.navigationController.view animated:YES];
     NSMutableDictionary *params = [[NSMutableDictionary alloc]init];
     [params setObject:@"goods_getListByCatId" forKey:@"act"];
     [params setObject:self.catId forKey:@"catId"];
-    UISegmentedControl *seg = sender;
-    if([seg selectedSegmentIndex] == 0)
-    {
-        self.orderBy = @"priceOrder";
-        if([self.sort isEqualToString:@"desc"])
-        {
-            self.sort = @"asc";
-            [params setObject:self.sort forKey:self.orderBy];
-            [seg setTitle:@"价格 ↑" forSegmentAtIndex:0];
-        }else if ([self.sort isEqualToString:@"asc"]){
-            self.sort = @"desc";
-            [params setObject:self.sort forKey:self.orderBy];
-            [seg setTitle:@"价格 ↓" forSegmentAtIndex:0];
-        }else{
-            self.sort = @"asc";
-            [params setObject:self.sort forKey:self.orderBy];
-            [seg setTitle:@"价格 ↑" forSegmentAtIndex:0];
-        }
-    }else if ([seg selectedSegmentIndex] == 1){
-        self.sort = @"desc";
-        self.orderBy = @"buyCount";
-        [params setObject:self.sort forKey:self.orderBy];
-        [seg setTitle:@"价格" forSegmentAtIndex:0];
-    }else{
-        self.sort = @"desc";
-        self.orderBy = @"viewCount";
-        [params setObject:self.sort forKey:self.orderBy];
-        [seg setTitle:@"价格" forSegmentAtIndex:0];
-    }
+    [params setObject:@"desc" forKey:@"buyCount"];
     MKNetworkOperation *op = [YMGlobal getOperation:params];
     [op addCompletionHandler:^(MKNetworkOperation *completedOperation) {
         [HUD hide:YES];
@@ -248,20 +378,38 @@
         }
     } errorHandler:^(MKNetworkOperation *completedOperation, NSError *error) {
         [HUD hide:YES];
-         NSLog(@"%@",error);
+        NSLog(@"%@",error);
     }];
     [ApplicationDelegate.engine enqueueOperation:op];
-}
 
-- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
+}
+- (void)viewCountButtonPressed:(id)sender
 {
-   NSString *goodsId = [[self.goodsListArray objectAtIndex:indexPath.row] objectForKey:@"goodsId"];
-    GoodsInfoViewController *goodsInfoVC = [[GoodsInfoViewController alloc]init];
-    goodsInfoVC.goodsId = goodsId;
-    goodsInfoVC.goodsName = self.catName;
-    UIBarButtonItem *backItem = [[UIBarButtonItem alloc]initWithTitle:@"返回" style:UIBarButtonItemStyleBordered target:nil action:nil];
-    [backItem setTintColor:[UIColor colorWithRed:167/255.0 green:216/255.0 blue:106/255.0 alpha:1.0]];
-    self.navigationItem.backBarButtonItem = backItem;
-    [self.navigationController pushViewController:goodsInfoVC animated:YES];
+    self.orderBy = @"viewCount";
+    self.sort  = @"desc";
+    [self.priceButton setBackgroundImage:[UIImage imageNamed:@"android_sort_left.png"] forState:UIControlStateNormal];
+    [self.buyCountButton setBackgroundImage:[UIImage imageNamed:@"android_sort_middle.png"] forState:UIControlStateNormal];
+    UIButton *pressedButton = sender;
+    [pressedButton setBackgroundImage:[UIImage imageNamed:@"android_sort_right_pressed.png"] forState:UIControlStateNormal];
+    MBProgressHUD *HUD = [MBProgressHUD showHUDAddedTo:self.navigationController.view animated:YES];
+    NSMutableDictionary *params = [[NSMutableDictionary alloc]init];
+    [params setObject:@"goods_getListByCatId" forKey:@"act"];
+    [params setObject:self.catId forKey:@"catId"];
+    [params setObject:@"desc" forKey:@"viewCount"];
+    MKNetworkOperation *op = [YMGlobal getOperation:params];
+    [op addCompletionHandler:^(MKNetworkOperation *completedOperation) {
+        [HUD hide:YES];
+        SBJsonParser *parser = [[SBJsonParser alloc]init];
+        NSMutableDictionary *obj = [parser objectWithData:[completedOperation responseData]];
+        if([[obj objectForKey:@"errorCode"]isEqualToString:@"0"])
+        {
+            self.goodsListArray = [obj objectForKey:@"result"];
+            [self.goodsListTableView reloadData];
+        }
+    } errorHandler:^(MKNetworkOperation *completedOperation, NSError *error) {
+        [HUD hide:YES];
+        NSLog(@"%@",error);
+    }];
+    [ApplicationDelegate.engine enqueueOperation:op];
 }
 @end

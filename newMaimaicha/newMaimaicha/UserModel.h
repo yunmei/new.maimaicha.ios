@@ -11,6 +11,9 @@
 @interface UserModel : NSObject
 @property (strong, nonatomic)NSString *userId;
 @property (strong, nonatomic)NSString *session;
+@property (strong, nonatomic)NSString *userName;
+@property (strong, nonatomic)NSString *point;
+@property (strong, nonatomic)NSString *advance;
 +(void)creatTable;
 + (void)clearTable;
 + (UserModel *)getUserModel;

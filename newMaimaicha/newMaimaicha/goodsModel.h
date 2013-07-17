@@ -21,10 +21,15 @@
 @property (strong,nonatomic)NSString *goodsBn;
 +(void)creatTable;
 +(void)AddCar:(goodsModel *)goodsItem;
++(BOOL)AddSC:(NSMutableDictionary *)goodsSCInfo;
 +(NSInteger)countGoods;
 +(NSMutableArray *)fetchGoodsList;
 
 +(BOOL)updateCartData:(NSString *)goodsId
            goodsCount:(NSString *)goodsCount;
 +(BOOL)deleteCartData:(NSString *)goodsId;
++(BOOL)clearCart;
++(void)creatSC;
++(BOOL)clearSC;
++(NSMutableArray *)fetchSCList;
 @end

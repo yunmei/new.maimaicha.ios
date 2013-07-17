@@ -7,7 +7,8 @@
 //
 
 #import <UIKit/UIKit.h>
-
-@interface MyViewController : UIViewController
-
+#import "UserModel.h"
+@interface MyViewController : UIViewController<UITableViewDataSource,UITableViewDelegate>
+@property(strong ,nonatomic)UITableView *userInfoTable;
+@property (strong, nonatomic)UserModel *user;
 @end

@@ -11,13 +11,16 @@
 @implementation UserModel
 @synthesize session;
 @synthesize userId;
+@synthesize userName;
+@synthesize point;
+@synthesize advance;
 //创建表goodslist_car
 +(void)creatTable
 {
     YMDbClass *db = [[YMDbClass alloc]init];
     if([db connect])
     {
-        [db exec:@"CREATE TABLE IF NOT EXISTS user('userId','session');"];
+        [db exec:@"CREATE TABLE IF NOT EXISTS user('userId','session','userName','point','advance');"];
         [db close];
     }
 }
@@ -52,6 +55,9 @@
         dictionary = [db fetchOne:@"select * from user"];
         userModel.userId = [dictionary objectForKey:@"userId"];
         userModel.session = [dictionary objectForKey:@"session"];
+        userModel.userName = [dictionary objectForKey:@"userName"];
+        userModel.point = [dictionary objectForKey:@"point"];
+        userModel.advance = [dictionary objectForKey:@"advance"];
         [db close];
     }
     return userModel;
@@ -72,11 +78,12 @@
     if([db connect])
     {
         [UserModel clearTable];
-        NSString *sql = [NSString stringWithFormat:@"insert into user values ('%@','%@');", self.userId, self.session];
+        NSString *sql = [NSString stringWithFormat:@"insert into user values ('%@','%@','%@','%@','%@');", self.userId, self.session,self.userName,self.point,self.advance];
         if([db exec:sql])
         {
             return YES;
         }else{
+            NSLog(@"addsqlfalse");
             return NO;
         }
         [db close];

@@ -80,7 +80,6 @@
 
 - (void)userRegister
 {
-    NSLog(@"userRegister");
     NSString *regEx = @"^[a-zA-Z0-9_-]+@[a-zA-Z0-9_-]+(\\.[a-zA-Z0-9_-]+)+$";
     NSRange r = [usernameTextField.text rangeOfString:regEx options:NSRegularExpressionSearch];
     
@@ -109,6 +108,7 @@
         [params setObject:passwordTextField.text forKey:@"password"];
         MKNetworkOperation *op = [YMGlobal getOperation:params];
         [op addCompletionHandler:^(MKNetworkOperation *completedOperation) {
+            NSLog(@"completedString%@",[completedOperation responseString]);
             SBJsonParser *parser = [[SBJsonParser alloc]init];
             NSMutableDictionary *obj = [parser objectWithData:[completedOperation responseData]];
             if([[obj objectForKey:@"errorCode"]isEqualToString:@"0"])
@@ -116,10 +116,20 @@
                 UserModel *user = [[UserModel alloc]init];
                 user.userId = [[obj objectForKey:@"result"] objectForKey:@"userId"];
                 user.session = [[obj objectForKey:@"result"] objectForKey:@"session"];
-//                if([user addUser])
-//                {
-//                    UIAlertView *registerAlert = [UIAlertView alloc]initWithTitle:@"提示" message:@"恭喜你" delegate:<#(id)#> cancelButtonTitle:<#(NSString *)#> otherButtonTitles:<#(NSString *), ...#>, nil
-//                }
+                user.userName = [[obj objectForKey:@"result"] objectForKey:@"userName"];
+                user.point = [[obj objectForKey:@"result"] objectForKey:@"point"];
+                user.advance = [[obj objectForKey:@"result"] objectForKey:@"advance"];
+                if([user addUser])
+                {
+                    NSLog(@"add yes");
+                    UIAlertView *registerAlert = [[UIAlertView alloc]initWithTitle:@"提示" message:@"恭喜你,注册成功" delegate:self cancelButtonTitle:@"确定" otherButtonTitles:nil, nil];
+                    registerAlert.delegate = self;
+                    registerAlert.tag = 1;
+                    [registerAlert show];
+                }
+            }else{
+                UIAlertView *registerAlert = [[UIAlertView alloc]initWithTitle:@"提示" message:[obj objectForKey:@"errorMessage"] delegate:self cancelButtonTitle:@"确定" otherButtonTitles:nil, nil];
+                [registerAlert show];
             }
         } errorHandler:^(MKNetworkOperation *completedOperation, NSError *error) {
             NSLog(@"%@",error);
@@ -127,7 +137,6 @@
         [ApplicationDelegate.engine enqueueOperation:op];
     }
 
-    
     
     
 //    NSMutableDictionary *params = [[NSMutableDictionary alloc]init];
@@ -142,6 +151,14 @@
 //    }];
 //    [ApplicationDelegate.engine enqueueOperation:op];
     
+}
+
+- (void)alertView:(UIAlertView *)alertView didDismissWithButtonIndex:(NSInteger)buttonIndex
+{
+    if(alertView.tag == 1)
+    {
+        [self.navigationController dismissViewControllerAnimated:NO completion:nil];
+    }
 }
 
 - (void)userCancel

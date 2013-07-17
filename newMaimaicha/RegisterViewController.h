@@ -8,7 +8,7 @@
 
 #import <UIKit/UIKit.h>
 
-@interface RegisterViewController : UIViewController<UITableViewDataSource, UITableViewDelegate, UITextFieldDelegate>
+@interface RegisterViewController : UIViewController<UITableViewDataSource, UITableViewDelegate, UITextFieldDelegate,UIAlertViewDelegate>
 @property (strong, nonatomic) UITableView *registerTableView;
 @property (strong, nonatomic) UITextField *usernameTextField;
 @property (strong, nonatomic) UITextField *passwordTextField;

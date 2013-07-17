@@ -29,11 +29,13 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    self.navigationItem.title = @"商品评论";
     NSMutableDictionary *params = [[NSMutableDictionary alloc]init];
     [params setObject:@"goods_getCommentByGoodsId" forKey:@"act"];
     [params setObject:self.goodsId forKey:@"goodsId"];
     MKNetworkOperation *op = [YMGlobal getOperation:params];
     [op addCompletionHandler:^(MKNetworkOperation *completedOperation) {
+        NSLog(@"comments%@",[completedOperation responseString]);
         SBJsonParser *parser = [[SBJsonParser alloc]init];
         NSMutableDictionary *obj = [parser objectWithData:[completedOperation responseData]];
         if([[obj objectForKey:@"errorCode"]isEqualToString:@"0"])
@@ -78,22 +80,22 @@
     cell.selectionStyle = UITableViewCellSelectionStyleNone;
     [cell setBackgroundColor:[UIColor whiteColor]];
     UILabel *authorLabel = [[UILabel alloc]initWithFrame:CGRectMake(5, 5, 280, 15)];
-    [authorLabel setText:[NSString stringWithFormat:@"作者 : %@",[[self.commentInfo objectAtIndex:indexPath.row] objectForKey:@"author"]]];
+    [authorLabel setText:[NSString stringWithFormat:@"作者 : %@",[[self.commentInfo objectAtIndex:indexPath.section] objectForKey:@"author"]]];
     [authorLabel setFont:[UIFont systemFontOfSize:14.0]];
     
     UILabel *timeLabel = [[UILabel alloc]initWithFrame:CGRectMake(5, 25, 280, 15)];
-    [timeLabel setText:[NSString stringWithFormat:@"时间 : %@",[[self.commentInfo objectAtIndex:indexPath.row] objectForKey:@"time"]]];
+    [timeLabel setText:[NSString stringWithFormat:@"时间 : %@",[[self.commentInfo objectAtIndex:indexPath.section] objectForKey:@"time"]]];
     [timeLabel setFont:[UIFont systemFontOfSize:14.0]];
     
     UILabel *contentTitleLabel = [[UILabel alloc]initWithFrame:CGRectMake(5, 40, 40, 15)];
     [contentTitleLabel setFont:[UIFont systemFontOfSize:14.0]];
     [contentTitleLabel setText:@"内容 : "];
 
-    NSString *commentString = [[self.commentInfo objectAtIndex:indexPath.row] objectForKey:@"comment"];
+    NSString *commentString = [[self.commentInfo objectAtIndex:indexPath.section] objectForKey:@"comment"];
     CGSize size = [commentString sizeWithFont:[UIFont systemFontOfSize:14.0] constrainedToSize:CGSizeMake(260, 1000)];
     UILabel *contentLabel = [[UILabel alloc]initWithFrame:CGRectMake(45, 40, 250, size.height)];
     [contentLabel setNumberOfLines:0];
-    [contentLabel setText:[NSString stringWithFormat:@"%@",[[self.commentInfo objectAtIndex:indexPath.row] objectForKey:@"comment"]]];
+    [contentLabel setText:[NSString stringWithFormat:@"%@",[[self.commentInfo objectAtIndex:indexPath.section] objectForKey:@"comment"]]];
     [contentLabel setFont:[UIFont systemFontOfSize:14.0]];
     
     [cell.contentView addSubview:authorLabel];
@@ -107,9 +109,9 @@
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    if(self.commentInfo != nil)
+    if(self.commentInfo >0)
     {
-        NSString *commentString = [[self.commentInfo objectAtIndex:indexPath.row] objectForKey:@"comment"];
+        NSString *commentString = [[self.commentInfo objectAtIndex:indexPath.section] objectForKey:@"comment"];
         CGSize size = [commentString sizeWithFont:[UIFont systemFontOfSize:14.0] constrainedToSize:CGSizeMake(260, 1000)];
         return size.height+45;
     }else{

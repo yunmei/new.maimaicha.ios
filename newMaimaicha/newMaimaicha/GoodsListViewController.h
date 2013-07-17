@@ -11,12 +11,12 @@
 @interface GoodsListViewController : UIViewController<UITableViewDelegate,UITableViewDataSource,UIScrollViewDelegate>
 @property (strong, nonatomic) PullToRefreshTableView *goodsListTableView;
 @property (strong, nonatomic) NSMutableArray *goodsListArray;
-@property (strong, nonatomic) IBOutlet UIImageView *headBgView;
-@property (strong, nonatomic) IBOutlet UISegmentedControl *segControl;
+@property (strong, nonatomic) UIImageView *headBgView;
 @property (strong, nonatomic) NSString *catId;
 @property (strong, nonatomic) NSString *catName;
-//esc  desc
-@property (strong, nonatomic) NSString *sort;
-//priceOrder  buyCount  viewCount
+@property (strong, nonatomic) UIButton *priceButton;
+@property (strong, nonatomic) UIButton *buyCountButton;
+@property (strong, nonatomic) UIButton *viewCountButton;
 @property (strong, nonatomic) NSString *orderBy;
+@property (strong, nonatomic)NSString *sort;
 @end
