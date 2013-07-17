@@ -8,14 +8,11 @@
 
 #import "MyViewController.h"
 #import "LoginViewController.h"
-<<<<<<< HEAD
-#import "UserModel.h"/Users/bevin1984/ios开发/new.maimaicha.ios/newMaimaicha/newMaimaicha.xcodeproj
-=======
+#import "UserModel.h"
 #import "AddrListViewController.h"
 #import "OrderListViewController.h"
 #import "SCViewController.h"
 #import "goodsModel.h"
->>>>>>> development
 @interface MyViewController ()
 
 @end
