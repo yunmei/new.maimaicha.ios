@@ -8,7 +8,7 @@
 
 #import "MyViewController.h"
 #import "LoginViewController.h"
-#import "UserModel.h"
+#import "UserModel.h"/Users/bevin1984/ios开发/new.maimaicha.ios/newMaimaicha/newMaimaicha.xcodeproj
 @interface MyViewController ()
 
 @end
