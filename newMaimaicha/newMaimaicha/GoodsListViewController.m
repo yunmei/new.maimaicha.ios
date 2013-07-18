@@ -43,11 +43,11 @@
     [super viewDidLoad];
     // Do any additional setup after loading the view from its nib.
     self.navigationItem.title = self.catName;
-    self.headBgView = [[UIImageView alloc]initWithFrame:CGRectMake(0, 0, 320, 30)];
+    self.headBgView = [[UIImageView alloc]initWithFrame:CGRectMake(0, 0, 320, 40)];
     [headBgView setBackgroundColor:[UIColor whiteColor]];
     [headBgView setUserInteractionEnabled:YES];
     [self.view addSubview:self.headBgView];
-    UIView *lineView = [[UIView alloc]initWithFrame:CGRectMake(0, 29, 320, 1)];
+    UIView *lineView = [[UIView alloc]initWithFrame:CGRectMake(0, 39, 320, 1)];
     [lineView setBackgroundColor:[UIColor colorWithRed:167/255.0 green:167/255.0 blue:167/255.0 alpha:0.5]];
     [self.headBgView addSubview:lineView];
     [self.headBgView addSubview:self.priceButton];
@@ -57,10 +57,12 @@
     
     [self.view bringSubviewToFront:self.headBgView];
     NSMutableDictionary *param = [[NSMutableDictionary alloc]init];
+    MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:self.navigationController.view animated:YES];
     [param setObject:self.catId forKey:@"catId"];
     [param setObject:@"goods_getListByCatId" forKey:@"act"];
     MKNetworkOperation *op = [YMGlobal getOperation:param];
     [op addCompletionHandler:^(MKNetworkOperation *completedOperation) {
+        [hud hide:YES];
         SBJsonParser *parser = [[SBJsonParser alloc]init];
         NSMutableDictionary *obj = [parser objectWithData:[completedOperation responseData]];
         if([[obj objectForKey:@"errorCode"]isEqualToString:@"0"])
@@ -71,6 +73,7 @@
         }
     } errorHandler:^(MKNetworkOperation *completedOperation, NSError *error) {
         NSLog(@"%@",error);
+        [hud hide:YES];
     }];
     [ApplicationDelegate.engine enqueueOperation:op];   
 }
@@ -201,7 +204,7 @@
 {
     if(_goodsListTableView == nil)
     {
-        _goodsListTableView = [[PullToRefreshTableView alloc]initWithFrame:CGRectMake(0, 44, 320, self.view.frame.size.height-200)];
+        _goodsListTableView = [[PullToRefreshTableView alloc]initWithFrame:CGRectMake(0, 44, 320, self.view.frame.size.height-93)];
         _goodsListTableView.delegate = self;
         _goodsListTableView.dataSource = self;
         _goodsListTableView.showsVerticalScrollIndicator = NO;
@@ -229,7 +232,7 @@
     {
         _priceButton = [UIButton buttonWithType:UIButtonTypeCustom];
         [_priceButton setBackgroundImage:[UIImage imageNamed:@"android_sort_left.png"] forState:UIControlStateNormal];
-        [_priceButton setFrame:CGRectMake(40,5,80, 20)];
+        [_priceButton setFrame:CGRectMake(20,5,90, 30)];
         [_priceButton addTarget:self action:@selector(priceButtonPressed:) forControlEvents:UIControlEventTouchUpInside];
         _priceButton.tag = 0;
         [_priceButton setTitle:@"价格" forState:UIControlStateNormal];
@@ -246,7 +249,7 @@
     {
         _buyCountButton = [UIButton buttonWithType:UIButtonTypeCustom];
         [_buyCountButton setBackgroundImage:[UIImage imageNamed:@"android_sort_middle.png"] forState:UIControlStateNormal];
-        [_buyCountButton setFrame:CGRectMake(120,5,80, 20)];
+        [_buyCountButton setFrame:CGRectMake(110,5,90, 30)];
         [_buyCountButton addTarget:self action:@selector(buyCountButtonPressed:) forControlEvents:UIControlEventTouchUpInside];
         [_buyCountButton setTitle:@"销量" forState:UIControlStateNormal];
         [_buyCountButton setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
@@ -261,7 +264,7 @@
     {
         _viewCountButton = [UIButton buttonWithType:UIButtonTypeCustom];
         [_viewCountButton setBackgroundImage:[UIImage imageNamed:@"android_sort_right.png"] forState:UIControlStateNormal];
-        [_viewCountButton setFrame:CGRectMake(200,5,80, 20)];
+        [_viewCountButton setFrame:CGRectMake(200,5,90, 30)];
         [_viewCountButton addTarget:self action:@selector(viewCountButtonPressed:) forControlEvents:UIControlEventTouchUpInside];
         [_viewCountButton setTitle:@"人气" forState:UIControlStateNormal];
         [_viewCountButton setTintColor:[UIColor blackColor]];

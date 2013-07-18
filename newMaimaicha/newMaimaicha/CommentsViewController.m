@@ -10,6 +10,7 @@
 #import "YMGlobal.h"
 #import "SBJson.h"
 #import "AppDelegate.h"
+#import "MBProgressHUD.h"
 @interface CommentsViewController ()
 
 @end
@@ -30,11 +31,13 @@
 {
     [super viewDidLoad];
     self.navigationItem.title = @"商品评论";
+    MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:self.view animated:YES];
     NSMutableDictionary *params = [[NSMutableDictionary alloc]init];
     [params setObject:@"goods_getCommentByGoodsId" forKey:@"act"];
     [params setObject:self.goodsId forKey:@"goodsId"];
     MKNetworkOperation *op = [YMGlobal getOperation:params];
     [op addCompletionHandler:^(MKNetworkOperation *completedOperation) {
+        [hud hide:YES];
         NSLog(@"comments%@",[completedOperation responseString]);
         SBJsonParser *parser = [[SBJsonParser alloc]init];
         NSMutableDictionary *obj = [parser objectWithData:[completedOperation responseData]];
@@ -46,6 +49,7 @@
         }
     } errorHandler:^(MKNetworkOperation *completedOperation, NSError *error) {
         NSLog(@"%@",error);
+        [hud hide:YES];
     }];
     [ApplicationDelegate.engine enqueueOperation:op];
 }

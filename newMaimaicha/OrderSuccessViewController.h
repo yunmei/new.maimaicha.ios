@@ -12,6 +12,7 @@
 @property (strong,nonatomic)NSString *orderId;
 @property (strong, nonatomic) IBOutlet UILabel *orderIdLabel;
 @property (strong,nonatomic)NSString *totalFee;
-- (IBAction)goPay:(id)sender;
 
+@property (strong, nonatomic) IBOutlet UIButton *payButton;
+@property (strong, nonatomic) NSString *payType;
 @end

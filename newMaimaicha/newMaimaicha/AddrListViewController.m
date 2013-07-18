@@ -149,12 +149,13 @@
     {
         NSMutableDictionary  * selectAddr = [self.addrList objectAtIndex:indexPath.row];
         NSString *addrId = [selectAddr objectForKey:@"addrId"];
+        MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:self.navigationController.view animated:YES];
         NSMutableDictionary *params = [[NSMutableDictionary alloc]init];
         [params setObject:addrId forKey:@"addrId"];
         [params setObject:@"addr_setAddrDef" forKey:@"act"];
         MKNetworkOperation *op = [YMGlobal getOperation:params];
         [op addCompletionHandler:^(MKNetworkOperation *completedOperation) {
-            NSLog(@"completesetDefault:%@",[completedOperation responseString]);
+            [hud hide:YES];
             SBJsonParser *parser = [[SBJsonParser alloc]init];
             NSMutableDictionary *obj = [parser objectWithData:[completedOperation responseData]];
             if([obj objectForKey:@"errorCode"])
@@ -175,9 +176,11 @@
             }
         } errorHandler:^(MKNetworkOperation *completedOperation, NSError *error) {
             NSLog(@"%@",error);
+            [hud hide:YES];
         }];
         [ApplicationDelegate.engine enqueueOperation:op];
     }else{
+          MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:self.navigationController.view animated:YES];
         NSMutableDictionary  * selectAddr = [self.addrList objectAtIndex:indexPath.row];
         NSString *addrId = [selectAddr objectForKey:@"addrId"];
         NSMutableDictionary *params = [[NSMutableDictionary alloc]init];
@@ -185,6 +188,7 @@
         [params setObject:@"addr_setAddrDef" forKey:@"act"];
         MKNetworkOperation *op = [YMGlobal getOperation:params];
         [op addCompletionHandler:^(MKNetworkOperation *completedOperation) {
+            [hud hide:YES];
             NSLog(@"completesetDefault:%@",[completedOperation responseString]);
             SBJsonParser *parser = [[SBJsonParser alloc]init];
             NSMutableDictionary *obj = [parser objectWithData:[completedOperation responseData]];
@@ -195,6 +199,7 @@
             }
         } errorHandler:^(MKNetworkOperation *completedOperation, NSError *error) {
             NSLog(@"%@",error);
+            [hud hide:YES];
         }];
         [ApplicationDelegate.engine enqueueOperation:op];
     }
@@ -209,20 +214,47 @@
 }
 */
 
-/*
+
 // Override to support editing the table view.
 - (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath
 {
     if (editingStyle == UITableViewCellEditingStyleDelete) {
-        // Delete the row from the data source
-        [tableView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationFade];
-    }   
-    else if (editingStyle == UITableViewCellEditingStyleInsert) {
-        // Create a new instance of the appropriate class, insert it into the array, and add a new row to the table view
-    }   
-}
-*/
+        UserModel *user = [UserModel getUserModel];
+        NSMutableDictionary *param = [[NSMutableDictionary alloc]init];
+        [param setObject:user.userId forKey:@"userId"];
+        [param setObject:@"addr_deleteAddr" forKey:@"act"];
+        [param setObject:[[self.addrList objectAtIndex:indexPath.row] objectForKey:@"addrId"] forKey:@"addrId"];
+        MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:self.navigationController.view animated:NO];
+        MKNetworkOperation *op = [YMGlobal getOperation:param];
+        [op addCompletionHandler:^(MKNetworkOperation *completedOperation) {
+            [hud hide:YES];
+            SBJsonParser *parser = [[SBJsonParser alloc]init];
+            NSMutableDictionary *obj = [parser objectWithData:[completedOperation responseData]];
+            if([[obj objectForKey:@"errorCode"]isEqualToString:@"0"])
+            {
+                [self.addrList removeObjectAtIndex:indexPath.row];
+                if(self.addrList.count < 1)
+                {
+                    [self.addListTable reloadData];
+                    [self.view addSubview:self.nullView];
+                }else{
+                    [self.addListTable reloadData];
+                }
 
+            }
+        } errorHandler:^(MKNetworkOperation *completedOperation, NSError *error) {
+            [hud hide:YES];
+            NSLog(@"%@",error);
+        }];
+        [ApplicationDelegate.engine enqueueOperation:op];
+
+              }
+}
+
+-(NSString *)tableView:(UITableView *)tableView titleForDeleteConfirmationButtonForRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    return @"删除";
+}
 /*
 // Override to support rearranging the table view.
 - (void)tableView:(UITableView *)tableView moveRowAtIndexPath:(NSIndexPath *)fromIndexPath toIndexPath:(NSIndexPath *)toIndexPath

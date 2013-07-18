@@ -14,6 +14,7 @@
 #import "AppDelegate.h"
 #import "GoodsListCell.h"
 #import "GoodsInfoViewController.h"
+#import "MBProgressHUD.h"
 @interface KeyGoodsListViewController ()
 
 @end
@@ -60,11 +61,13 @@
     [self.view addSubview:self.goodsListTableView];
     
     [self.view bringSubviewToFront:self.headBgView];
+    MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:self.navigationController.view animated:YES];
     NSMutableDictionary *param = [[NSMutableDictionary alloc]init];
     [param setObject:self.keywords forKey:@"keywords"];
     [param setObject:@"goods_getGoodsByKeywords" forKey:@"act"];
     MKNetworkOperation *op = [YMGlobal getOperation:param];
     [op addCompletionHandler:^(MKNetworkOperation *completedOperation) {
+        [hud hide:YES];
         SBJsonParser *parser = [[SBJsonParser alloc]init];
         NSMutableDictionary *obj = [parser objectWithData:[completedOperation responseData]];
         if([[obj objectForKey:@"errorCode"]isEqualToString:@"0"])
@@ -75,6 +78,7 @@
         }
     } errorHandler:^(MKNetworkOperation *completedOperation, NSError *error) {
         NSLog(@"%@",error);
+        [hud hide:YES];
     }];
     [ApplicationDelegate.engine enqueueOperation:op];
 }

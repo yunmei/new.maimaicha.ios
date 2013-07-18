@@ -11,6 +11,7 @@
 #import "SBJson.h"
 #import "AppDelegate.h"
 #import "UserModel.h"
+#import "MBProgressHUD.h"
 @interface RegisterViewController ()
 
 @end
@@ -102,12 +103,14 @@
         alertView = [[UIAlertView alloc]initWithTitle:@"提示" message:@"为了您的密码安全，请填写6位以上的密码！" delegate:self cancelButtonTitle:@"确认" otherButtonTitles:nil];
         [alertView show];
     } else {
+        MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:self.view animated:NO];
         NSMutableDictionary *params = [[NSMutableDictionary alloc]init];
         [params setObject:@"user_register" forKey:@"act"];
         [params setObject:usernameTextField.text forKey:@"email"];
         [params setObject:passwordTextField.text forKey:@"password"];
         MKNetworkOperation *op = [YMGlobal getOperation:params];
         [op addCompletionHandler:^(MKNetworkOperation *completedOperation) {
+            [hud hide:YES];
             NSLog(@"completedString%@",[completedOperation responseString]);
             SBJsonParser *parser = [[SBJsonParser alloc]init];
             NSMutableDictionary *obj = [parser objectWithData:[completedOperation responseData]];
@@ -128,6 +131,7 @@
                     [registerAlert show];
                 }
             }else{
+                [hud hide:YES];
                 UIAlertView *registerAlert = [[UIAlertView alloc]initWithTitle:@"提示" message:[obj objectForKey:@"errorMessage"] delegate:self cancelButtonTitle:@"确定" otherButtonTitles:nil, nil];
                 [registerAlert show];
             }

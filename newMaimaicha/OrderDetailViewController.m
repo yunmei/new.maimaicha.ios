@@ -12,6 +12,7 @@
 #import "AppDelegate.h"
 #import <QuartzCore/QuartzCore.h>
 #import "AlipayViewController.h"
+#import "GoodsInfoViewController.h"
 @interface OrderDetailViewController ()
 
 @end
@@ -172,7 +173,12 @@
     }else{
         if(indexPath.row == 0)
         {
-            cell.textLabel.text = [NSString stringWithFormat:@"支付方式 : 支付宝无线支付"];
+            if([[self.orderInfo objectForKey:@"payType"] isEqualToString:@"-1"])
+            {
+                cell.textLabel.text = [NSString stringWithFormat:@"支付方式 : 货到付款"];
+            }else{
+                cell.textLabel.text = [NSString stringWithFormat:@"支付方式 : 支付宝无线支付"];
+            }
             cell.textLabel.font = [UIFont systemFontOfSize:15.0];
             
         }else{
@@ -204,6 +210,18 @@
         }
 }
 
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    if(indexPath.section == 3)
+    {
+        GoodsInfoViewController *goodsInfo = [[GoodsInfoViewController alloc]init];
+        goodsInfo.goodsId = [NSString stringWithFormat:@"%@",[[[self.orderInfo objectForKey:@"orderItem"] objectAtIndex:indexPath.row] objectForKey:@"goodsId"]];
+        UIBarButtonItem *backItem = [[UIBarButtonItem alloc]initWithTitle:@"返回" style:UIBarButtonItemStyleBordered target:nil action:nil];
+        backItem.tintColor = [UIColor colorWithRed:167/255.0 green:216/255.0 blue:106/255.0 alpha:1.0];
+        self.navigationItem.backBarButtonItem = backItem;
+        [self.navigationController pushViewController:goodsInfo animated:YES];
+    }
+}
 -(UIView *)tableView:(UITableView *)tableView viewForFooterInSection:(NSInteger)section
 {
     if(section == 4){

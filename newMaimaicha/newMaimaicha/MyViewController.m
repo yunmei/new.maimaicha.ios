@@ -44,10 +44,13 @@
 {
     if(![UserModel checkLogin])
     {
+        NSLog(@"00000000000");
         [[NSNotificationCenter defaultCenter] postNotificationName:@"INeedLogin" object:nil];
     }else{
+        NSLog(@"11111111");
         self.user = [UserModel getUserModel];
         [self.view addSubview:self.userInfoTable];
+        [self.userInfoTable reloadData];
     }
 }
 - (void)viewDidLoad
@@ -140,8 +143,6 @@
           [self.navigationController pushViewController:orderListVC animated:YES];
       }else if (indexPath.row == 1){
           SCViewController *scVC = [[SCViewController alloc]init];
-          NSMutableArray *goodsArray = [goodsModel fetchSCList];
-          scVC.scList = goodsArray;
           UIBarButtonItem *backItem = [[UIBarButtonItem alloc]initWithTitle:@"返回" style:UIBarButtonItemStyleBordered target:nil action:nil];
           [backItem setTintColor:[UIColor colorWithRed:160/255.0 green:210/255.0 blue:94/255.0 alpha:1.0]];
           self.navigationItem.backBarButtonItem = backItem;
@@ -165,6 +166,7 @@
 - (void)deleteLogin
 {
     [UserModel clearTable];
+    
     [[NSNotificationCenter defaultCenter]postNotificationName:@"INeedLogin" object:nil];
 }
 

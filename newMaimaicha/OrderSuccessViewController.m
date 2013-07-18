@@ -15,6 +15,8 @@
 @implementation OrderSuccessViewController
 @synthesize orderId;
 @synthesize totalFee;
+@synthesize payButton;
+@synthesize payType;
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
@@ -30,6 +32,11 @@
     // Do any additional setup after loading the view from its nib.
     self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc]initWithTitle:@"返回" style:UIBarButtonItemStyleBordered target:self action:@selector(goBack:)];
     self.navigationItem.leftBarButtonItem.tintColor = [UIColor colorWithRed:162/255.0 green:210/255.0 blue:94/255.0 alpha:1.0];
+    if([payType isEqualToString:@"-1"])
+    {
+        [self.payButton setHidden:YES];
+    }
+    [self.payButton addTarget:self action:@selector(goPay:) forControlEvents:UIControlEventTouchUpInside];
     [self.orderIdLabel setText:self.orderId];
 }
 
@@ -39,7 +46,7 @@
     // Dispose of any resources that can be recreated.
 }
 
-- (IBAction)goPay:(id)sender {
+- (void)goPay:(id)sender {
     UIBarButtonItem * rightBar = [[UIBarButtonItem alloc]initWithTitle:@"返回" style:UIBarButtonItemStyleBordered target:self action:nil];
     [rightBar setTintColor:[UIColor colorWithRed:172/255.0 green:219/255.0 blue:115/255.0 alpha:1.0]];
     self.navigationItem.backBarButtonItem = rightBar;

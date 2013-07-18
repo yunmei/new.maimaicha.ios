@@ -80,6 +80,8 @@
 		46770BBF17953D8E000F419A /* HotListViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 46770BBD17953D8D000F419A /* HotListViewController.xib */; };
 		46770BC4179628B4000F419A /* SCViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 46770BC2179628B2000F419A /* SCViewController.m */; };
 		46770BC5179628B4000F419A /* SCViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 46770BC3179628B3000F419A /* SCViewController.xib */; };
+		46770BC71797DFF5000F419A /* Icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 46770BC61797DFF5000F419A /* Icon.png */; };
+		46770BC91797E00C000F419A /* Icon@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 46770BC81797E00C000F419A /* Icon@2x.png */; };
 		4682CCBF178267490048EA5D /* quickBuyBtn.png in Resources */ = {isa = PBXBuildFile; fileRef = 4682CCBE178267480048EA5D /* quickBuyBtn.png */; };
 		4682CCC1178267C20048EA5D /* sc.png in Resources */ = {isa = PBXBuildFile; fileRef = 4682CCC0178267C20048EA5D /* sc.png */; };
 		4682CCC517827FE20048EA5D /* GoodsIntroViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4682CCC317827FE10048EA5D /* GoodsIntroViewController.m */; };
@@ -175,14 +177,14 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		46180832177426FE00AF8B51 /* newMaimaicha.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = newMaimaicha.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		46180832177426FE00AF8B51 /* app.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = app.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		46180835177426FE00AF8B51 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
 		46180837177426FE00AF8B51 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		46180839177426FE00AF8B51 /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
-		4618083D177426FF00AF8B51 /* newMaimaicha-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "newMaimaicha-Info.plist"; sourceTree = "<group>"; };
+		4618083D177426FF00AF8B51 /* app-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "app-Info.plist"; sourceTree = "<group>"; };
 		4618083F177426FF00AF8B51 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		46180841177426FF00AF8B51 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
-		46180843177426FF00AF8B51 /* newMaimaicha-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "newMaimaicha-Prefix.pch"; sourceTree = "<group>"; };
+		46180843177426FF00AF8B51 /* app-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "app-Prefix.pch"; sourceTree = "<group>"; };
 		46180844177426FF00AF8B51 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
 		46180845177426FF00AF8B51 /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
 		46471B85177933A000872248 /* search.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = search.png; sourceTree = "<group>"; };
@@ -293,6 +295,8 @@
 		46770BC1179628B2000F419A /* SCViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SCViewController.h; sourceTree = "<group>"; };
 		46770BC2179628B2000F419A /* SCViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SCViewController.m; sourceTree = "<group>"; };
 		46770BC3179628B3000F419A /* SCViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = SCViewController.xib; sourceTree = "<group>"; };
+		46770BC61797DFF5000F419A /* Icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = Icon.png; path = ../Icon.png; sourceTree = "<group>"; };
+		46770BC81797E00C000F419A /* Icon@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "Icon@2x.png"; path = "../Icon@2x.png"; sourceTree = "<group>"; };
 		4682CCBE178267480048EA5D /* quickBuyBtn.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = quickBuyBtn.png; sourceTree = "<group>"; };
 		4682CCC0178267C20048EA5D /* sc.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = sc.png; sourceTree = "<group>"; };
 		4682CCC217827FE10048EA5D /* GoodsIntroViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GoodsIntroViewController.h; sourceTree = "<group>"; };
@@ -486,7 +490,7 @@
 		46180833177426FE00AF8B51 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				46180832177426FE00AF8B51 /* newMaimaicha.app */,
+				46180832177426FE00AF8B51 /* app.app */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -549,10 +553,10 @@
 			children = (
 				46FAB5B417744DF700D6508C /* images */,
 				46FAB56217742EA500D6508C /* class */,
-				4618083D177426FF00AF8B51 /* newMaimaicha-Info.plist */,
+				4618083D177426FF00AF8B51 /* app-Info.plist */,
 				4618083E177426FF00AF8B51 /* InfoPlist.strings */,
 				46180841177426FF00AF8B51 /* main.m */,
-				46180843177426FF00AF8B51 /* newMaimaicha-Prefix.pch */,
+				46180843177426FF00AF8B51 /* app-Prefix.pch */,
 				46FAB5B21774308F00D6508C /* Constants.h */,
 			);
 			name = "Supporting Files";
@@ -840,6 +844,9 @@
 		46FAB5B417744DF700D6508C /* images */ = {
 			isa = PBXGroup;
 			children = (
+				46770BC81797E00C000F419A /* Icon@2x.png */,
+				46770BC61797DFF5000F419A /* Icon.png */,
+				46FAB5C017744EFE00D6508C /* iTunesArtwork.png */,
 				46633CD41793D0AB00127BB4 /* price_down.png */,
 				46633CCE1793CFD000127BB4 /* android_sort_middle.png */,
 				46633CCC1793CFC500127BB4 /* android_sort_middle_pressed.png */,
@@ -897,7 +904,6 @@
 				46FAB5BD17744EFE00D6508C /* Icon-Small@2x.png */,
 				46FAB5BE17744EFE00D6508C /* Icon.png */,
 				46FAB5BF17744EFE00D6508C /* Icon@2x.png */,
-				46FAB5C017744EFE00D6508C /* iTunesArtwork.png */,
 				46FAB5B917744EE200D6508C /* Icon-72.png */,
 				46FAB5B517744E2500D6508C /* navigation_bar_bg.png */,
 				46FAB5B617744E2500D6508C /* navigation_bar_bg@2x.png */,
@@ -908,9 +914,9 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		46180831177426FE00AF8B51 /* newMaimaicha */ = {
+		46180831177426FE00AF8B51 /* app */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 46180855177426FF00AF8B51 /* Build configuration list for PBXNativeTarget "newMaimaicha" */;
+			buildConfigurationList = 46180855177426FF00AF8B51 /* Build configuration list for PBXNativeTarget "app" */;
 			buildPhases = (
 				4618082E177426FE00AF8B51 /* Sources */,
 				4618082F177426FE00AF8B51 /* Frameworks */,
@@ -920,9 +926,9 @@
 			);
 			dependencies = (
 			);
-			name = newMaimaicha;
+			name = app;
 			productName = newMaimaicha;
-			productReference = 46180832177426FE00AF8B51 /* newMaimaicha.app */;
+			productReference = 46180832177426FE00AF8B51 /* app.app */;
 			productType = "com.apple.product-type.application";
 		};
 /* End PBXNativeTarget section */
@@ -934,7 +940,7 @@
 				LastUpgradeCheck = 0460;
 				ORGANIZATIONNAME = maimaicha;
 			};
-			buildConfigurationList = 4618082D177426FE00AF8B51 /* Build configuration list for PBXProject "newMaimaicha" */;
+			buildConfigurationList = 4618082D177426FE00AF8B51 /* Build configuration list for PBXProject "app" */;
 			compatibilityVersion = "Xcode 3.2";
 			developmentRegion = English;
 			hasScannedForEncodings = 0;
@@ -946,7 +952,7 @@
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				46180831177426FE00AF8B51 /* newMaimaicha */,
+				46180831177426FE00AF8B51 /* app */,
 			);
 		};
 /* End PBXProject section */
@@ -1047,6 +1053,8 @@
 				46770BB11794EF05000F419A /* UserSurggestViewController.xib in Resources */,
 				46770BBF17953D8E000F419A /* HotListViewController.xib in Resources */,
 				46770BC5179628B4000F419A /* SCViewController.xib in Resources */,
+				46770BC71797DFF5000F419A /* Icon.png in Resources */,
+				46770BC91797E00C000F419A /* Icon@2x.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1145,8 +1153,8 @@
 				CLANG_WARN_ENUM_CONVERSION = YES;
 				CLANG_WARN_INT_CONVERSION = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
-				CODE_SIGN_IDENTITY = "iPhone Developer: 宏 王 (3JHA9Y4RS7)";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: 宏 王 (3JHA9Y4RS7)";
+				CODE_SIGN_IDENTITY = "iPhone Distribution: TeaUNi(Shandong) Company Limited";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: TeaUNi(Shandong) Company Limited";
 				COPY_PHASE_STRIP = NO;
 				GCC_C_LANGUAGE_STANDARD = "compiler-default";
 				GCC_DYNAMIC_NO_PIC = NO;
@@ -1162,8 +1170,8 @@
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 6.1;
 				ONLY_ACTIVE_ARCH = YES;
-				PROVISIONING_PROFILE = "F02E4123-9EE7-48AC-AA62-E1E851F5E33E";
-				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "F02E4123-9EE7-48AC-AA62-E1E851F5E33E";
+				PROVISIONING_PROFILE = "80826620-F7AD-45DB-AF07-D5D3DE761F1F";
+				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "80826620-F7AD-45DB-AF07-D5D3DE761F1F";
 				SDKROOT = iphoneos;
 			};
 			name = Debug;
@@ -1180,8 +1188,8 @@
 				CLANG_WARN_ENUM_CONVERSION = YES;
 				CLANG_WARN_INT_CONVERSION = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
-				CODE_SIGN_IDENTITY = "iPhone Developer: 宏 王 (3JHA9Y4RS7)";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: 宏 王 (3JHA9Y4RS7)";
+				CODE_SIGN_IDENTITY = "iPhone Distribution: TeaUNi(Shandong) Company Limited";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: TeaUNi(Shandong) Company Limited";
 				COPY_PHASE_STRIP = YES;
 				GCC_C_LANGUAGE_STANDARD = "compiler-default";
 				GCC_VERSION = "";
@@ -1189,9 +1197,10 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 6.1;
+				ONLY_ACTIVE_ARCH = YES;
 				OTHER_CFLAGS = "-DNS_BLOCK_ASSERTIONS=1";
-				PROVISIONING_PROFILE = "F02E4123-9EE7-48AC-AA62-E1E851F5E33E";
-				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "F02E4123-9EE7-48AC-AA62-E1E851F5E33E";
+				PROVISIONING_PROFILE = "80826620-F7AD-45DB-AF07-D5D3DE761F1F";
+				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "80826620-F7AD-45DB-AF07-D5D3DE761F1F";
 				SDKROOT = iphoneos;
 				VALIDATE_PRODUCT = YES;
 			};
@@ -1201,14 +1210,14 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
-				GCC_PREFIX_HEADER = "newMaimaicha/newMaimaicha-Prefix.pch";
-				INFOPLIST_FILE = "newMaimaicha/newMaimaicha-Info.plist";
+				GCC_PREFIX_HEADER = "newMaimaicha/app-Prefix.pch";
+				INFOPLIST_FILE = "newMaimaicha/app-Info.plist";
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					"\"$(SRCROOT)/newMaimaicha/ZBarSDK\"",
 					"\"$(SRCROOT)\"",
 				);
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				PRODUCT_NAME = app;
 				WRAPPER_EXTENSION = app;
 			};
 			name = Debug;
@@ -1217,14 +1226,14 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
-				GCC_PREFIX_HEADER = "newMaimaicha/newMaimaicha-Prefix.pch";
-				INFOPLIST_FILE = "newMaimaicha/newMaimaicha-Info.plist";
+				GCC_PREFIX_HEADER = "newMaimaicha/app-Prefix.pch";
+				INFOPLIST_FILE = "newMaimaicha/app-Info.plist";
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					"\"$(SRCROOT)/newMaimaicha/ZBarSDK\"",
 					"\"$(SRCROOT)\"",
 				);
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				PRODUCT_NAME = app;
 				WRAPPER_EXTENSION = app;
 			};
 			name = Release;
@@ -1232,7 +1241,7 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		4618082D177426FE00AF8B51 /* Build configuration list for PBXProject "newMaimaicha" */ = {
+		4618082D177426FE00AF8B51 /* Build configuration list for PBXProject "app" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				46180853177426FF00AF8B51 /* Debug */,
@@ -1241,7 +1250,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		46180855177426FF00AF8B51 /* Build configuration list for PBXNativeTarget "newMaimaicha" */ = {
+		46180855177426FF00AF8B51 /* Build configuration list for PBXNativeTarget "app" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				46180856177426FF00AF8B51 /* Debug */,

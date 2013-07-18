@@ -13,6 +13,7 @@
 #import "SearchViewController.h"
 #import <QuartzCore/QuartzCore.h>
 #import "SecCategoryViewController.h"
+#import "MBProgressHUD.h"
 @interface CategoryViewController ()
 
 @end
@@ -44,10 +45,12 @@
     UIBarButtonItem *searchItem = [[UIBarButtonItem alloc]initWithBarButtonSystemItem:UIBarButtonSystemItemSearch target:self action:@selector(search:)];
     searchItem.tintColor = [UIColor colorWithRed:167/255.0 green:216/255.0 blue:106/255.0 alpha:1.0];
     self.navigationItem.rightBarButtonItem = searchItem;
+    MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:self.navigationController.view animated:YES];
     NSMutableDictionary *param = [[NSMutableDictionary alloc]init];
     [param setObject:@"cat_getList" forKey:@"act"];
     MKNetworkOperation *op = [YMGlobal getOperation:param];
     [op addCompletionHandler:^(MKNetworkOperation *completedOperation) {
+        [hud hide:YES];
         SBJsonParser *parser = [[SBJsonParser alloc]init];
         NSMutableDictionary *obj = [parser objectWithData:[completedOperation responseData]];
         if([[obj objectForKey:@"errorCode"]isEqualToString:@"0"])
@@ -57,6 +60,7 @@
         }
     } errorHandler:^(MKNetworkOperation *completedOperation, NSError *error) {
         NSLog(@"%@",error);
+        [hud hide:YES];
     }];
     [ApplicationDelegate.engine enqueueOperation:op];
     
@@ -102,11 +106,13 @@
 {
    if([[self.catArray objectAtIndex:indexPath.row] objectForKey:@"goodsId"] == nil)
    {
+       MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:self.navigationController.view animated:YES];
        NSMutableDictionary *param = [[NSMutableDictionary alloc]init];
        [param setObject:@"cat_getSubList" forKey:@"act"];
        [param setObject:[[self.catArray objectAtIndex:indexPath.row] objectForKey:@"catId"] forKey:@"parentCatId"];
        MKNetworkOperation *op = [YMGlobal getOperation:param];
        [op addCompletionHandler:^(MKNetworkOperation *completedOperation) {
+           [hud hide:YES];
            SBJsonParser *parser = [[SBJsonParser alloc]init];
            NSMutableDictionary *obj = [parser objectWithData:[completedOperation responseData]];
            if([[obj objectForKey:@"errorCode"]isEqualToString:@"0"])
@@ -121,6 +127,7 @@
            }
        } errorHandler:^(MKNetworkOperation *completedOperation, NSError *error) {
            NSLog(@"%@",error);
+           [hud hide:YES];
        }];
        [ApplicationDelegate.engine enqueueOperation:op];
    }else{

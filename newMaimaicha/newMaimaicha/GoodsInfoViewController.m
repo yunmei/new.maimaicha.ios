@@ -93,12 +93,13 @@
     [self.view addSubview:self.propertyTableView];
     
     //network loading...
+    MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:self.navigationController.view animated:YES];
     NSMutableDictionary *params = [[NSMutableDictionary alloc]init];
     [params setObject:@"goods_getInfoByGoodsId" forKey:@"act"];
     [params setObject:self.goodsId forKey:@"goodsId"];
     MKNetworkOperation *op = [YMGlobal getOperation:params];
     [op addCompletionHandler:^(MKNetworkOperation *completedOperation) {
-        NSLog(@"respon:%@",[completedOperation responseString]);
+        [hud hide:YES];
         SBJsonParser *parser = [[SBJsonParser alloc]init];
         NSMutableDictionary *obj = [parser objectWithData:[completedOperation responseData]];
         if([[obj objectForKey:@"errorCode"]isEqualToString:@"0"])
@@ -132,6 +133,7 @@
         }
     } errorHandler:^(MKNetworkOperation *completedOperation, NSError *error) {
         NSLog(@"%@",error);
+        [hud hide:YES];
     }];
     [ApplicationDelegate.engine enqueueOperation:op];
 }
@@ -213,6 +215,9 @@
     [goodsModel creatTable];
     [goodsModel AddCar:self.goodsModel];
     [self statisCart];
+    UIAlertView *alert = [[UIAlertView alloc]initWithTitle:@"提示" message:@"是否立即去购买？" delegate:self cancelButtonTitle:@"确定" otherButtonTitles:@"取消", nil];
+    alert.tag = 5;
+    [alert show];
 }
 
 - (UITableView *)propertyTableView
@@ -292,7 +297,7 @@
         cell.selectionStyle = UITableViewCellSelectionStyleNone;
         cell.textLabel.font = [UIFont systemFontOfSize:16.0];
          cell.backgroundColor = [UIColor whiteColor];
-        cell.textLabel.text = @"商品详情";
+        cell.textLabel.text = @"商品图文";
         cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
         return cell;
 
@@ -320,6 +325,7 @@
         CommentsViewController *commentVC = [[CommentsViewController alloc]init];
         commentVC.goodsId = self.goodsId;
         self.navigationItem.backBarButtonItem = backItem;
+        self.navigationItem.backBarButtonItem.title = @"返回";
         [self.navigationController pushViewController:commentVC animated:YES];
     }
 }
@@ -351,5 +357,15 @@
        UIAlertView *alert = [[UIAlertView alloc]initWithTitle:@"提示" message:@"已收藏该商品，无需重复收藏!" delegate:self cancelButtonTitle:@"确定" otherButtonTitles:nil, nil];
        [alert show];
    }
+}
+
+- (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
+{
+    if(alertView.tag == 5){
+        if(buttonIndex == 0)
+        {
+            [self.tabBarController setSelectedIndex:2];
+        }
+    }
 }
 @end

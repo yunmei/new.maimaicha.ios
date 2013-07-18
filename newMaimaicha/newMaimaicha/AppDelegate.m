@@ -17,6 +17,9 @@
 #import "UserModel.h"
 #import "LoginViewController.h"
 #import "KeyGoodsListViewController.h"
+#import "AlixPay.h"
+#import "AlixPayResult.h"
+#import "SBJson.h"
 @implementation AppDelegate
 @synthesize engine = _engine;
 @synthesize tabBarctrl = _tabBarctrl;
@@ -130,4 +133,97 @@
     keyGoodsVC.navigationItem.titleView = itemTitle;
     [selectNav pushViewController:keyGoodsVC animated:YES];
 }
+
+
+- (BOOL)application:(UIApplication *)application handleOpenURL:(NSURL *)url {
+	
+	[self parseURL:url application:application];
+	return YES;
+}
+
+- (void)parseURL:(NSURL *)url application:(UIApplication *)application {
+	AlixPay *alixpay = [AlixPay shared];
+	AlixPayResult *result = [alixpay handleOpenURL:url];
+	if (result) {
+		//是否支付成功
+		if (9000 == result.statusCode) {
+			/*
+			 *用公钥验证签名
+			 */
+            //去服务端用支付宝公共钥对支付宝返回的信息进行验证
+            NSLog(@"resultString%@",result.resultString);
+            NSLog(@"result.signString%@",result.signString);
+            NSString *resultString = [result.resultString stringByReplacingOccurrencesOfString:@"&" withString:@"%26"];
+            NSString *resultSignString = [result.signString stringByReplacingOccurrencesOfString:@"/" withString:@"%2F"];
+            resultSignString = [resultSignString stringByReplacingOccurrencesOfString:@"+" withString:@"%2B"];
+            resultSignString = [resultSignString stringByReplacingOccurrencesOfString:@"=" withString:@"%3D"];
+            NSURL *url = [[NSURL alloc]initWithString:@"http://api.mobile.maimaicha.com/api"];
+            NSMutableURLRequest *request = [[NSMutableURLRequest alloc]initWithURL:url cachePolicy:NSURLRequestReloadIgnoringCacheData timeoutInterval:60];
+            [request setHTTPMethod:@"post"];
+            NSString *postString = [NSString stringWithFormat:@"act=sign_validateSign&signString=%@&resultString=%@",resultSignString,resultString];
+            [request setHTTPBody:[postString dataUsingEncoding:NSUTF8StringEncoding]];
+            NSOperationQueue *queue = [[NSOperationQueue alloc]init];
+            [NSURLConnection sendAsynchronousRequest:request queue:queue completionHandler:^(NSURLResponse *response, NSData *data, NSError *error) {
+                SBJsonParser *parser = [[SBJsonParser alloc]init];
+                NSMutableDictionary *returnData = [parser objectWithData:data];
+                NSLog(@"returnData:%@",returnData);
+                if([[returnData objectForKey:@"result"] isEqualToString:@"true"])
+                {
+                    //回到主线程加载控件
+                    dispatch_async(dispatch_get_main_queue(), ^{
+                        UIAlertView * alertView = [[UIAlertView alloc] initWithTitle:@"提示"
+                                                                             message:@"支付成功"
+                                                                            delegate:nil
+                                                                   cancelButtonTitle:@"确定"
+                                                                   otherButtonTitles:nil];
+                        [alertView show];
+                        
+                    });
+                    
+                }else{
+                    dispatch_async(dispatch_get_main_queue(), ^{
+                        UIAlertView * alertView = [[UIAlertView alloc] initWithTitle:@"提示"
+                                                                             message:@"验证失败"
+                                                                            delegate:nil
+                                                                   cancelButtonTitle:@"确定"
+                                                                   otherButtonTitles:nil];
+                        [alertView show];
+                        
+                    });
+                }
+            }];
+            
+            //			id<DataVerifier> verifier = CreateRSADataVerifier([[NSBundle mainBundle] objectForInfoDictionaryKey:@"RSA public key"]);
+            //			if ([verifier verifyString:result.resultString withSign:result.signString]) {
+            //				UIAlertView * alertView = [[UIAlertView alloc] initWithTitle:@"提示"
+            //																	 message:@"支付成功"
+            //																	delegate:nil
+            //														   cancelButtonTitle:@"确定"
+            //														   otherButtonTitles:nil];
+            //				[alertView show];
+            //				[alertView release];
+            //			}//验签错误
+            //			else {
+            //				UIAlertView * alertView = [[UIAlertView alloc] initWithTitle:@"提示"
+            //																	 message:@"签名错误"
+            //																	delegate:nil
+            //														   cancelButtonTitle:@"确定"
+            //														   otherButtonTitles:nil];
+            //				[alertView show];
+            //				[alertView release];
+            //			}
+		}
+		//如果支付失败,可以通过result.statusCode查询错误码
+		else {
+			UIAlertView * alertView = [[UIAlertView alloc] initWithTitle:@"提示"
+																 message:@"支付失败"
+																delegate:nil 
+													   cancelButtonTitle:@"确定" 
+													   otherButtonTitles:nil];
+			[alertView show];
+		}
+		
+	}	
+}
+
 @end

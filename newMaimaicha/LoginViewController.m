@@ -12,6 +12,7 @@
 #import "AppDelegate.h"
 #import "RegisterViewController.h"
 #import "UserModel.h"
+#import "MBProgressHUD.h"
 @interface LoginViewController ()
 
 @end
@@ -107,12 +108,14 @@
         alertView = [[UIAlertView alloc]initWithTitle:@"提示" message:@"请填写您的密码！" delegate:self cancelButtonTitle:@"确认" otherButtonTitles:nil];
         [alertView show];
     }else{
+        MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:self.view animated:NO];
         NSMutableDictionary *params = [[NSMutableDictionary alloc]init];
         [params setObject:@"user_login" forKey:@"act"];
         [params setObject:usernameTextField.text forKey:@"email"];
         [params setObject:passwordTextField.text forKey:@"password"];
         MKNetworkOperation *op = [YMGlobal getOperation:params];
         [op addCompletionHandler:^(MKNetworkOperation *completedOperation) {
+            [hud hide:YES];
             SBJsonParser *parser = [[SBJsonParser alloc]init];
             NSLog(@"result:%@",[completedOperation responseString]);
             NSMutableDictionary *obj = [parser objectWithData:[completedOperation responseData]];
@@ -136,6 +139,7 @@
                 [alertView show];
             }
         } errorHandler:^(MKNetworkOperation *completedOperation, NSError *error) {
+            [hud hide:YES];
             NSLog(@"%@",error);
         }];
         [ApplicationDelegate.engine enqueueOperation:op];

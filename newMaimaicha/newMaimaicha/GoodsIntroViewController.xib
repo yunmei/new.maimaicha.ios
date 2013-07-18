@@ -49,10 +49,10 @@
 							<int key="NSColorSpace">2</int>
 							<bytes key="NSRGB">MC41MDk4MDM5NTA4IDAuODAzOTIxNjM5OSAwLjEwNTg4MjM2MTUAA</bytes>
 						</object>
-						<array class="NSMutableArray" key="IBUIItems">
+						<array key="IBUIItems">
 							<object class="IBUINavigationItem" id="754017471">
 								<reference key="IBUINavigationBar" ref="137413287"/>
-								<string key="IBUITitle">Title</string>
+								<string key="IBUITitle">商品图文</string>
 								<object class="IBUIBarButtonItem" key="IBUILeftBarButtonItem" id="1028844682">
 									<string key="targetRuntimeIdentifier">IBCocoaTouchFramework</string>
 									<int key="IBUIStyle">1</int>

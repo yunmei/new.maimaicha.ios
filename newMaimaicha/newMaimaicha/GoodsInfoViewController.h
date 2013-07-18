@@ -9,7 +9,7 @@
 #import <UIKit/UIKit.h>
 #import "SBPageFlowView.h"
 #import "goodsModel.h"
-@interface GoodsInfoViewController : UIViewController<SBPageFlowViewDataSource,SBPageFlowViewDelegate,UITableViewDataSource,UITableViewDelegate>
+@interface GoodsInfoViewController : UIViewController<SBPageFlowViewDataSource,SBPageFlowViewDelegate,UITableViewDataSource,UITableViewDelegate,UIAlertViewDelegate>
 @property (strong ,nonatomic)NSString *goodsId;
 @property (strong ,nonatomic)NSString *goodsName;
 @property (strong ,nonatomic)SBPageFlowView *flowView;

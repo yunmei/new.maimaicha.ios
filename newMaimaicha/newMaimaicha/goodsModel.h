@@ -32,4 +32,5 @@
 +(void)creatSC;
 +(BOOL)clearSC;
 +(NSMutableArray *)fetchSCList;
++(BOOL)deleteSCData:(NSString *)goodsId;
 @end

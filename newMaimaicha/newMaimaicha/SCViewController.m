@@ -12,6 +12,7 @@
 #import "AppDelegate.h"
 #import "GoodsListCell.h"
 #import "GoodsInfoViewController.h"
+#import "goodsModel.h"
 @interface SCViewController ()
 
 @end
@@ -32,11 +33,13 @@
 
 -(void)viewWillAppear:(BOOL)animated
 {
+    self.scList = [goodsModel fetchSCList];
     if(self.scList.count < 1)
     {
         [self.view addSubview:self.emptyView];
     }else{
-        
+        [self.emptyView removeFromSuperview];
+        [self.scListTable reloadData];
     }
 }
 
@@ -110,28 +113,44 @@
 {
     return 80;
 }
-/*
- // Override to support conditional editing of the table view.
- - (BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath
- {
- // Return NO if you do not want the specified item to be editable.
- return YES;
- }
- */
 
-/*
+-(NSString *)tableView:(UITableView *)tableView titleForDeleteConfirmationButtonForRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    return @"删除";
+}
+
+ // Override to support conditional editing of the table view.
+// - (BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath
+// {
+// // Return NO if you do not want the specified item to be editable.
+//     return YES;
+// }
+
+
+-(UITableViewCellEditingStyle)tableView:(UITableView *)tableView editingStyleForRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    return UITableViewCellEditingStyleDelete;
+}
+
+
  // Override to support editing the table view.
  - (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath
  {
  if (editingStyle == UITableViewCellEditingStyleDelete) {
  // Delete the row from the data source
- [tableView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationFade];
+     NSString *goodsId = [[self.scList objectAtIndex:indexPath.row] objectForKey:@"id"];
+     if([goodsModel deleteSCData:goodsId])
+     {
+         self.scList = [goodsModel fetchSCList];
+     }
+     [self.scListTable reloadData];
+     if(self.scList.count <1)
+     {
+         [self.view addSubview:self.emptyView];
+     }
  }
- else if (editingStyle == UITableViewCellEditingStyleInsert) {
- // Create a new instance of the appropriate class, insert it into the array, and add a new row to the table view
- }
- }
- */
+  }
+ 
 
 /*
  // Override to support rearranging the table view.

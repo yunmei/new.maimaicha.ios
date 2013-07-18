@@ -529,20 +529,30 @@
 {
     if(pickerView.tag == 1)
     {
-        if(self.provinceArray != nil)
+        if(self.provinceArray.count == 0)
+        {
+            self.picker.userInteractionEnabled = NO;
+        }else{
+            self.picker.userInteractionEnabled = YES;
+        }
         return self.provinceArray.count;
-        else
-            return 0;
+
     }else if (pickerView.tag == 2){
-        if(self.cityArray != nil)
+        if(self.cityArray.count == 0)
+        {
+            self.picker.userInteractionEnabled = NO;
+        }else{
+             self.picker.userInteractionEnabled = YES;
+        }
         return self.cityArray.count;
-        else
-            return 0;
     }else{
-        if(self.countyArray != nil)
+        if(self.countyArray.count == 0)
+        {
+            self.picker.userInteractionEnabled = NO;
+        }else{
+            self.picker.userInteractionEnabled = YES;
+        }
         return self.countyArray.count;
-        else
-            return 0;
     }
 }
 
@@ -570,7 +580,6 @@
 
 - (void)pickerView:(UIPickerView *)pickerView didSelectRow:(NSInteger)row inComponent:(NSInteger)component
 {
-    NSLog(@"selectselectselectselectselect");
     if(pickerView.tag == 1)
     {
        if(self.provinceArray !=nil)

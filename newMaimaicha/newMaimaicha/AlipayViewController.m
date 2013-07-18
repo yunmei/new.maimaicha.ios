@@ -101,7 +101,7 @@
         {
             NSMutableDictionary *returnData = [obj objectForKey:@"result"];
             NSString *orderString1 = [NSString stringWithFormat:@"%@&sign=\"%@\"&sign_type=\"%@\"",[returnData objectForKey:@"codeSign"],[returnData objectForKey:@"signData"],@"RSA"];
-            NSString *appScheme = @"com.company.maimaicha.newMaimaicha";
+            NSString *appScheme = @"com.maimaicha.app";
             AlixPay * alixpay = [AlixPay shared];
             int ret = [alixpay pay:orderString1 applicationScheme:appScheme];
             if (ret == kSPErrorAlipayClientNotInstalled) {

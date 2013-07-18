@@ -10,7 +10,7 @@
 #import "SBJson.h"
 #import "YMGlobal.h"
 #import "AppDelegate.h"
-
+#import "MBProgressHUD.h"
 @interface GoodsIntroViewController ()
 
 @end
@@ -32,11 +32,13 @@
     [super viewDidLoad];
     // Do any additional setup after loading the view from its nib.
     [self.view addSubview:self.contentWebView];
+    MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:self.view animated:YES];
     NSMutableDictionary *params = [[NSMutableDictionary alloc]init];
     [params setObject:@"goods_getIntroByGoodsId" forKey:@"act"];
     [params setObject:self.goodsId forKey:@"goodsId"];
     MKNetworkOperation *op = [YMGlobal getOperation:params];
     [op addCompletionHandler:^(MKNetworkOperation *completedOperation) {
+        [hud hide:YES];
         SBJsonParser *parser = [[SBJsonParser alloc]init];
         NSMutableDictionary *obj = [parser objectWithData:[completedOperation responseData]];
         if([[obj objectForKey:@"errorCode"]isEqualToString:@"0"])
@@ -46,6 +48,7 @@
         }
     } errorHandler:^(MKNetworkOperation *completedOperation, NSError *error) {
         NSLog(@"%@",error);
+        [hud hide:YES];
     }];
     [ApplicationDelegate.engine enqueueOperation:op];
 }

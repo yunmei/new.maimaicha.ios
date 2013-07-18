@@ -190,4 +190,21 @@
         return NO;
     }
 }
+
++(BOOL)deleteSCData:(NSString *)goodsId
+{
+    YMDbClass *db = [[YMDbClass alloc]init];
+    if([db connect])
+    {
+        NSString *query = [NSString stringWithFormat:@"delete from goodsSC where id='%@'",goodsId];
+        if([db exec:query])
+        {
+            return YES;
+        }else{
+            return NO;
+        }
+    }else{
+        return NO;
+    }
+}
 @end

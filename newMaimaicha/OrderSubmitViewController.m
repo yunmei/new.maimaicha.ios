@@ -16,6 +16,7 @@
 #import "SBJson.h"
 #import "OrderSuccessViewController.h"
 #import "goodsModel.h"
+#import "MBProgressHUD.h"
 @interface OrderSubmitViewController ()
 
 @end
@@ -254,6 +255,7 @@
             self.payAmount = [NSString stringWithFormat:@"%.2f",totalAmount];
             
         }else{
+            //暂时修改
             [shipCostLabel setText:@"运费:8.00元"];
             [toalAmountLabel setText:[NSString stringWithFormat:@"￥%.2f",totalAmount+8]];
             self.payAmount = [NSString stringWithFormat:@"%.2f",totalAmount+8];
@@ -280,6 +282,7 @@
         addrListVC.comeFrom = @"orderSubmit";
         addrListVC.delegate = self;
         UIBarButtonItem *backBar = [[UIBarButtonItem alloc]init];
+        backBar.title = @"返回";
         [backBar setTintColor:[UIColor colorWithRed:169/255.0 green:217/255.0 blue:110/255.0 alpha:1.0]];
         self.navigationItem.backBarButtonItem = backBar;
         [self.navigationController pushViewController:addrListVC animated:YES];
@@ -412,89 +415,105 @@
 
 - (void)submit:(id)sender
 {
-    if([UserModel checkLogin])
+    if(self.defaultAddr == nil)
     {
-        UserModel *user = [UserModel getUserModel];
-        NSMutableDictionary *param = [[NSMutableDictionary alloc]init];
-        [param setObject:@"order_orderSubmit" forKey:@"act"];
-        [param setObject:user.userId forKey:@"userId"];
-        [param setObject:user.session forKey:@"session"];
-        [param setObject:[self.defaultAddr objectForKey:@"area"] forKey:@"shipArea"];
-        [param setObject:[self.defaultAddr objectForKey:@"addr"] forKey:@"shipAddr"];
-        [param setObject:@"" forKey:@"shipTime"];
-        [param setObject:[self.defaultAddr objectForKey:@"mobile"] forKey:@"shipMobile"];
-        if(self.memoField.text != nil)
+        UIAlertView *alert = [[UIAlertView alloc]initWithTitle:@"提示" message:@"请先选择用户地址" delegate:self cancelButtonTitle:@"确定" otherButtonTitles:nil, nil];
+        [alert show];
+    }else{
+        if([UserModel checkLogin])
         {
-            [param setObject:self.memoField.text forKey:@"memo"];
-        }else{
-            [param setObject:@"" forKey:@"memo"];
-        }
-        [param setObject:[self.defaultAddr objectForKey:@"name"] forKey:@"shipName"];
-        [param setObject:self.payAmount forKey:@"totalAmount"];
-        [param setObject:@"ios手机客户端" forKey:@"source"];
-        NSString *goodsIdString = @"";
-        int itemNum = 0;
-        int i = 1;
-        for(id o in self.goodsList)
-        {
-            NSMutableDictionary *goods = o;
-            goodsIdString = [goodsIdString stringByAppendingString:[goods objectForKey:@"id"]];
-            if(i< self.goodsList.count)
+            UserModel *user = [UserModel getUserModel];
+            NSMutableDictionary *param = [[NSMutableDictionary alloc]init];
+            [param setObject:@"order_orderSubmit" forKey:@"act"];
+            [param setObject:user.userId forKey:@"userId"];
+            [param setObject:user.session forKey:@"session"];
+            [param setObject:[self.defaultAddr objectForKey:@"area"] forKey:@"shipArea"];
+            [param setObject:[self.defaultAddr objectForKey:@"addr"] forKey:@"shipAddr"];
+            [param setObject:@"" forKey:@"shipTime"];
+            [param setObject:[self.defaultAddr objectForKey:@"mobile"] forKey:@"shipMobile"];
+            if(self.memoField.text != nil)
             {
-                goodsIdString = [goodsIdString stringByAppendingString:@","];
-            }
-            itemNum += [[goods objectForKey:@"goods_count"] integerValue];
-            i++;
-        }
-        NSString *goodsCountString = @"";
-        int k = 1;
-        for(id o in self.goodsList)
-        {
-            NSMutableDictionary *goods = o;
-            goodsCountString = [goodsCountString stringByAppendingString:[goods objectForKey:@"goods_count"]];
-            if(k < self.goodsList.count)
-            {
-                goodsCountString = [goodsCountString stringByAppendingString:@","];
-            }
-            k++;
-        }
-        [param setObject:[NSString stringWithFormat:@"%i",itemNum] forKey:@"itemNums"];
-        [param setObject:goodsIdString forKey:@"goodsIds"];
-        [param setObject:goodsCountString forKey:@"goodsNums"];
-        if(PAYONLINE)
-        {
-            [param setObject:@"1" forKey:@"payType"];
-        }else{
-            [param setObject:@"-1" forKey:@"payType"];
-        }
-        MKNetworkOperation *op = [YMGlobal getOperation:param];
-        [op addCompletionHandler:^(MKNetworkOperation *completedOperation) {
-            SBJsonParser *parser = [[SBJsonParser alloc]init];
-            NSMutableDictionary *obj = [parser objectWithData:[completedOperation responseData]];
-            if([[obj objectForKey:@"errorCode"]isEqualToString:@"0"])
-            {
-                if([goodsModel clearCart])
-                {
-                    [[self.tabBarController.tabBar.items objectAtIndex:2] setBadgeValue:nil];
-                }
-                OrderSuccessViewController *orderSuVC = [[OrderSuccessViewController alloc]initWithNibName:@"OrderSuccessViewController" bundle:nil];
-                orderSuVC.orderId = [[obj objectForKey:@"result"] objectForKey:@"orderId"];
-                orderSuVC.totalFee = self.payAmount;
-                UIBarButtonItem * rightBar = [[UIBarButtonItem alloc]initWithTitle:@"返回" style:UIBarButtonItemStyleBordered target:self action:nil];
-                [rightBar setTintColor:[UIColor colorWithRed:172/255.0 green:219/255.0 blue:115/255.0 alpha:1.0]];
-                self.navigationItem.backBarButtonItem = nil;
-                [self.navigationController pushViewController:orderSuVC animated:YES];
+                [param setObject:self.memoField.text forKey:@"memo"];
             }else{
-                UIAlertView *alert = [[UIAlertView alloc]initWithTitle:@"提示" message:[obj objectForKey:@"errorMessage"] delegate:self cancelButtonTitle:@"确定" otherButtonTitles:nil, nil];
-                [alert show];
+                [param setObject:@"" forKey:@"memo"];
             }
-
-            NSLog(@"completetion%@",[completedOperation responseString]);
-        } errorHandler:^(MKNetworkOperation *completedOperation, NSError *error) {
-            NSLog(@"%@",error);
-        }];
-        [ApplicationDelegate.engine enqueueOperation:op];
-        //MKNetworkOperation *op = YMGlobal getOperation:<#(NSMutableDictionary *)#>
+            [param setObject:[self.defaultAddr objectForKey:@"name"] forKey:@"shipName"];
+            [param setObject:self.payAmount forKey:@"totalAmount"];
+            [param setObject:@"ios手机客户端" forKey:@"source"];
+            NSString *goodsIdString = @"";
+            int itemNum = 0;
+            int i = 1;
+            for(id o in self.goodsList)
+            {
+                NSMutableDictionary *goods = o;
+                goodsIdString = [goodsIdString stringByAppendingString:[goods objectForKey:@"id"]];
+                if(i< self.goodsList.count)
+                {
+                    goodsIdString = [goodsIdString stringByAppendingString:@","];
+                }
+                itemNum += [[goods objectForKey:@"goods_count"] integerValue];
+                i++;
+            }
+            NSString *goodsCountString = @"";
+            int k = 1;
+            for(id o in self.goodsList)
+            {
+                NSMutableDictionary *goods = o;
+                goodsCountString = [goodsCountString stringByAppendingString:[goods objectForKey:@"goods_count"]];
+                if(k < self.goodsList.count)
+                {
+                    goodsCountString = [goodsCountString stringByAppendingString:@","];
+                }
+                k++;
+            }
+            [param setObject:[NSString stringWithFormat:@"%i",itemNum] forKey:@"itemNums"];
+            [param setObject:goodsIdString forKey:@"goodsIds"];
+            [param setObject:goodsCountString forKey:@"goodsNums"];
+            if(PAYONLINE)
+            {
+                NSLog(@"在线支付");
+                [param setObject:@"1" forKey:@"payType"];
+            }else{
+                NSLog(@"货到付款");
+                [param setObject:@"-1" forKey:@"payType"];
+            }
+            MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:self.navigationController.view animated:YES];
+            MKNetworkOperation *op = [YMGlobal getOperation:param];
+            [op addCompletionHandler:^(MKNetworkOperation *completedOperation) {
+                [hud hide:YES];
+                SBJsonParser *parser = [[SBJsonParser alloc]init];
+                NSMutableDictionary *obj = [parser objectWithData:[completedOperation responseData]];
+                if([[obj objectForKey:@"errorCode"]isEqualToString:@"0"])
+                {
+                    if([goodsModel clearCart])
+                    {
+                        [[self.tabBarController.tabBar.items objectAtIndex:2] setBadgeValue:nil];
+                    }
+                    OrderSuccessViewController *orderSuVC = [[OrderSuccessViewController alloc]initWithNibName:@"OrderSuccessViewController" bundle:nil];
+                    orderSuVC.orderId = [[obj objectForKey:@"result"] objectForKey:@"orderId"];
+                    orderSuVC.totalFee = self.payAmount;
+                    if(!PAYONLINE)
+                    {
+                        orderSuVC.payType = @"-1";
+                    }
+                    UIBarButtonItem * rightBar = [[UIBarButtonItem alloc]initWithTitle:@"返回" style:UIBarButtonItemStyleBordered target:self action:nil];
+                    [rightBar setTintColor:[UIColor colorWithRed:172/255.0 green:219/255.0 blue:115/255.0 alpha:1.0]];
+                    self.navigationItem.backBarButtonItem = nil;
+                    [self.navigationController pushViewController:orderSuVC animated:YES];
+                }else{
+                    UIAlertView *alert = [[UIAlertView alloc]initWithTitle:@"提示" message:[obj objectForKey:@"errorMessage"] delegate:self cancelButtonTitle:@"确定" otherButtonTitles:nil, nil];
+                    [alert show];
+                }
+                
+                NSLog(@"completetion%@",[completedOperation responseString]);
+            } errorHandler:^(MKNetworkOperation *completedOperation, NSError *error) {
+                NSLog(@"%@",error);
+                [hud hide:YES];
+            }];
+            [ApplicationDelegate.engine enqueueOperation:op];
+            //MKNetworkOperation *op = YMGlobal getOperation:<#(NSMutableDictionary *)#>
+        }
     }
+
 }
 @end

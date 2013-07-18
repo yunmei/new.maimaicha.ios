@@ -15,6 +15,7 @@
 #import "SBJson.h"
 #import "AppDelegate.h"
 #import "MBProgressHUD.h"
+#import "GoodsInfoViewController.h"
 @interface CartViewController ()
 
 @end
@@ -125,6 +126,17 @@
     [self.footerFirstLabel setText:[NSString stringWithFormat:@"原始金额 : ￥%@ - 返现 : ￥0.00",self.totalAmount]];
     [self.footerView setFrame:CGRectMake(0, self.goodsInfoArray.count*80, 320, 100)];
     return self.goodsInfoArray.count;
+}
+
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
+{
+
+    GoodsInfoViewController *goodsInfo = [[GoodsInfoViewController alloc]init];
+    goodsInfo.goodsId = [NSString stringWithFormat:@"%@",[[self.goodsInfoArray objectAtIndex:indexPath.row]objectForKey:@"id"]];
+    UIBarButtonItem *backItem = [[UIBarButtonItem alloc]initWithTitle:@"返回" style:UIBarButtonItemStyleBordered target:nil action:nil];
+    backItem.tintColor = [UIColor colorWithRed:167/255.0 green:216/255.0 blue:106/255.0 alpha:1.0];
+    self.navigationItem.backBarButtonItem = backItem;
+    [self.navigationController pushViewController:goodsInfo animated:YES];
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
