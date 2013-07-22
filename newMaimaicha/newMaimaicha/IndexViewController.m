@@ -65,42 +65,44 @@
     [super viewDidLoad];
     
     UIScrollView *rootView = (UIScrollView *)self.view;
-    [rootView setContentSize:CGSizeMake(320, 545)];
+    [rootView setContentSize:CGSizeMake(320, 455)];
    //初始化广告
    // [self.view addSubview:self.adScrollView];
-    UILabel *hotLabel = [[UILabel alloc]initWithFrame:CGRectMake(0, 0, 320, 45)];
-    hotLabel.layer.borderWidth = 1.0;
-    hotLabel.layer.borderColor = [UIColor colorWithRed:162/255.0 green:162/255.0 blue:162/255.0 alpha:0.5].CGColor;
-    hotLabel.text = @"  热销商品";
-    hotLabel.textColor = [UIColor colorWithRed:23/255.0 green:132/255.0 blue:17/255.0 alpha:1.0];
-    hotLabel.textAlignment = NSTextAlignmentLeft;
-    [hotLabel setFont:[UIFont systemFontOfSize:17.0]];
-    [self.view addSubview:hotLabel];
+//    UILabel *hotLabel = [[UILabel alloc]initWithFrame:CGRectMake(0, 0, 320, 45)];
+//    hotLabel.layer.borderWidth = 1.0;
+//    hotLabel.layer.borderColor = [UIColor colorWithRed:162/255.0 green:162/255.0 blue:162/255.0 alpha:0.5].CGColor;
+//    hotLabel.text = @"  热销商品";
+//    hotLabel.textColor = [UIColor colorWithRed:23/255.0 green:132/255.0 blue:17/255.0 alpha:1.0];
+//    hotLabel.textAlignment = NSTextAlignmentLeft;
+//    [hotLabel setFont:[UIFont systemFontOfSize:17.0]];
+//    [self.view addSubview:hotLabel];
     
-    UILabel *commentLabel = [[UILabel alloc]initWithFrame:CGRectMake(0, 125, 320, 45)];
-    commentLabel.layer.borderWidth = 1.0;
-    commentLabel.layer.borderColor = [UIColor colorWithRed:162/255.0 green:162/255.0 blue:162/255.0 alpha:0.5].CGColor;
+    UILabel *commentLabel = [[UILabel alloc]initWithFrame:CGRectMake(0, 80, 320, 30)];
+    //commentLabel.layer.borderWidth = 1.0;
+    //commentLabel.layer.borderColor = [UIColor colorWithRed:162/255.0 green:162/255.0 blue:162/255.0 alpha:0.5].CGColor;
     commentLabel.text = @"  推荐商品";
     commentLabel.textColor = [UIColor colorWithRed:23/255.0 green:132/255.0 blue:17/255.0 alpha:1.0];
     commentLabel.textAlignment = NSTextAlignmentLeft;
-    [commentLabel setFont:[UIFont systemFontOfSize:17.0]];
+    [commentLabel setFont:[UIFont systemFontOfSize:15.0]];
     [self.view addSubview:commentLabel];
-    
-    UILabel *newLabel = [[UILabel alloc]initWithFrame:CGRectMake(0, 335, 320, 45)];
-    newLabel.layer.borderWidth = 1.0;
+    UIView *newLineView = [[UIView alloc]initWithFrame:CGRectMake(0, 265, 320,1)];
+    [newLineView setBackgroundColor:[UIColor colorWithRed:162/255.0 green:162/255.0 blue:162/255.0 alpha:0.5]];
+    [self.view addSubview:newLineView];
+    UILabel *newLabel = [[UILabel alloc]initWithFrame:CGRectMake(0, 267, 320, 30)];
+    //newLabel.layer.borderWidth = 1.0;
     newLabel.layer.borderColor = [UIColor colorWithRed:162/255.0 green:162/255.0 blue:162/255.0 alpha:0.5].CGColor;
     newLabel.text = @"  新品上架";
     newLabel.textColor = [UIColor colorWithRed:23/255.0 green:132/255.0 blue:17/255.0 alpha:1.0];
     newLabel.textAlignment = NSTextAlignmentLeft;
-    [newLabel setFont:[UIFont systemFontOfSize:17.0]];
+    [newLabel setFont:[UIFont systemFontOfSize:15.0]];
     [self.view addSubview:newLabel];
       //添加最新最热
     [self addNewHot];
     // 获取广告
     [self.view addSubview:self.nhScrollView];
     [self.view addSubview:self.comScrollView];
-    [self.view addSubview:self.compageControl];
-    [self.view addSubview:self.newpageControl];
+    //[self.view addSubview:self.compageControl];
+    //[self.view addSubview:self.newpageControl];
     [self loadNewList];
     [self loadComList];
 }
@@ -114,11 +116,14 @@
 //添加最新最热
 - (void)addNewHot
 {
-    UIView *backView = [[UIView alloc]initWithFrame:CGRectMake(161, 45, 1, 80)];
-    [backView setBackgroundColor:[UIColor colorWithRed:162/255.0 green:162/255.0 blue:162/255.0 alpha:0.5]];
-    [self.view addSubview:backView];
-    UIButton *singleImageBtn = [[UIButton alloc]initWithFrame:CGRectMake(0, 45, 160, 80)];
-    UIButton *HotImageBtn = [[UIButton alloc]initWithFrame:CGRectMake(162, 45, 160, 80)];
+    UIView *valView = [[UIView alloc]initWithFrame:CGRectMake(161, 0, 1, 80)];
+    [valView setBackgroundColor:[UIColor colorWithRed:162/255.0 green:162/255.0 blue:162/255.0 alpha:0.5]];
+    UIView *lineView = [[UIView alloc]initWithFrame:CGRectMake(0, 80, 320, 1)];
+    [lineView setBackgroundColor:[UIColor colorWithRed:162/255.0 green:162/255.0 blue:162/255.0 alpha:0.5]];
+    [self.view addSubview:lineView];
+    [self.view addSubview:valView];
+    UIButton *singleImageBtn = [[UIButton alloc]initWithFrame:CGRectMake(0, 0, 160, 80)];
+    UIButton *HotImageBtn = [[UIButton alloc]initWithFrame:CGRectMake(162, 0, 160, 80)];
     [singleImageBtn setBackgroundImage:[UIImage imageNamed:@"ad_default.png"] forState:UIControlStateNormal];
     [HotImageBtn setBackgroundImage:[UIImage imageNamed:@"ad_default.png"] forState:UIControlStateNormal];
     [self.view addSubview:singleImageBtn];
@@ -227,7 +232,7 @@
 {
     if(_nhScrollView == nil)
     {
-        _nhScrollView = [[UIScrollView alloc]initWithFrame:CGRectMake(0, 380, 320, 165)];
+        _nhScrollView = [[UIScrollView alloc]initWithFrame:CGRectMake(0, 290, 320, 165)];
         _nhScrollView.contentSize = CGSizeMake(320, 129);
        // _nhScrollView.pagingEnabled = true;
         _nhScrollView.tag =2;
@@ -243,7 +248,7 @@
 {
     if(_comScrollView == nil)
     {
-        _comScrollView = [[UIScrollView alloc]initWithFrame:CGRectMake(0, 170, 320, 165)];
+        _comScrollView = [[UIScrollView alloc]initWithFrame:CGRectMake(0, 105, 320, 165)];
         _comScrollView.contentSize = CGSizeMake(320, 150);
        // _comScrollView.pagingEnabled = true;
         _comScrollView.tag =1;
@@ -387,8 +392,8 @@
 {
     if(_compageControl == nil)
     {
-        _compageControl = [[UIPageControl alloc]initWithFrame:CGRectMake(0, 325, 320, 10)];
-        _compageControl.backgroundColor = [UIColor colorWithRed:0 green:0 blue:0 alpha:0.2];
+        _compageControl = [[UIPageControl alloc]initWithFrame:CGRectMake(0, 260, 320, 10)];
+        _compageControl.backgroundColor = [UIColor colorWithRed:0 green:0 blue:0 alpha:0.1];
         _compageControl.numberOfPages = 3;
         _compageControl.tag = 1;
     }

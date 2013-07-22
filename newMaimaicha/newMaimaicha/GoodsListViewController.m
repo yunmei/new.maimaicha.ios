@@ -156,7 +156,7 @@
             if([[obj objectForKey:@"errorCode"]isEqualToString:@"0"])
             {
                 NSMutableArray *temArry = [obj objectForKey:@"result"];
-                if([temArry count]>0)
+                if([temArry count]>5)
                 {
                     for(id o in temArry)
                     {
@@ -204,7 +204,8 @@
 {
     if(_goodsListTableView == nil)
     {
-        _goodsListTableView = [[PullToRefreshTableView alloc]initWithFrame:CGRectMake(0, 44, 320, self.view.frame.size.height-93)];
+        CGSize size = [UIScreen mainScreen].bounds.size;
+        _goodsListTableView = [[PullToRefreshTableView alloc]initWithFrame:CGRectMake(0, 44, 320, size.height-120)];
         _goodsListTableView.delegate = self;
         _goodsListTableView.dataSource = self;
         _goodsListTableView.showsVerticalScrollIndicator = NO;
