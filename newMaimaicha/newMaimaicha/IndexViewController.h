@@ -12,4 +12,6 @@
 @property (strong,nonatomic) NSMutableArray *commendGoodsList;
 @property (strong,nonatomic) UIScrollView *nhScrollView;
 @property (strong,nonatomic) UIScrollView *comScrollView;
+@property (strong,nonatomic) UIPageControl *compageControl;
+@property (strong,nonatomic) UIPageControl *newpageControl;
 @end

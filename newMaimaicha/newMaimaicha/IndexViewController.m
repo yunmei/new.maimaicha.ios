@@ -23,6 +23,8 @@
 @synthesize commendGoodsList;
 @synthesize nhScrollView = _nhScrollView;
 @synthesize comScrollView = _comScrollView;
+@synthesize compageControl = _compageControl;
+@synthesize newpageControl = _newpageControl;
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
@@ -97,7 +99,8 @@
     // 获取广告
     [self.view addSubview:self.nhScrollView];
     [self.view addSubview:self.comScrollView];
-    
+    [self.view addSubview:self.compageControl];
+    [self.view addSubview:self.newpageControl];
     [self loadNewList];
     [self loadComList];
 }
@@ -227,7 +230,7 @@
         _nhScrollView = [[UIScrollView alloc]initWithFrame:CGRectMake(0, 380, 320, 165)];
         _nhScrollView.contentSize = CGSizeMake(320, 129);
        // _nhScrollView.pagingEnabled = true;
-        _nhScrollView.tag =1;
+        _nhScrollView.tag =2;
         _nhScrollView.delegate = self;
         _nhScrollView.showsHorizontalScrollIndicator = NO;
         _nhScrollView.showsVerticalScrollIndicator = NO;
@@ -378,5 +381,39 @@
     self.navigationItem.backBarButtonItem = backItem;
     hotList.title = @"热销产品";
     [self.navigationController pushViewController:hotList animated:YES];
+}
+
+- (UIPageControl *)compageControl
+{
+    if(_compageControl == nil)
+    {
+        _compageControl = [[UIPageControl alloc]initWithFrame:CGRectMake(0, 325, 320, 10)];
+        _compageControl.backgroundColor = [UIColor colorWithRed:0 green:0 blue:0 alpha:0.2];
+        _compageControl.numberOfPages = 3;
+        _compageControl.tag = 1;
+    }
+    return _compageControl;
+}
+
+-(UIPageControl *)newpageControl
+{
+    if(_newpageControl == nil)
+    {
+        _newpageControl = [[UIPageControl alloc]initWithFrame:CGRectMake(0, 535, 320, 10)];
+        _newpageControl.backgroundColor = [UIColor colorWithRed:0 green:0 blue:0 alpha:0.2];
+        _newpageControl.numberOfPages = 3;
+        _newpageControl.tag = 1;
+    }
+    return _newpageControl;
+}
+
+-(void)scrollViewDidScroll:(UIScrollView *)scrollView
+{
+    if(scrollView.tag == 1)
+    {
+        self.compageControl.currentPage = ceil(scrollView.contentOffset.x/320);
+    }else if (scrollView.tag == 2){
+        self.newpageControl.currentPage = ceil(scrollView.contentOffset.x/320);
+    }
 }
 @end

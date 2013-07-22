@@ -232,7 +232,7 @@
     {
         _priceButton = [UIButton buttonWithType:UIButtonTypeCustom];
         [_priceButton setBackgroundImage:[UIImage imageNamed:@"android_sort_left.png"] forState:UIControlStateNormal];
-        [_priceButton setFrame:CGRectMake(20,5,90, 30)];
+        [_priceButton setFrame:CGRectMake(20,5,90, 25)];
         [_priceButton addTarget:self action:@selector(priceButtonPressed:) forControlEvents:UIControlEventTouchUpInside];
         _priceButton.tag = 0;
         [_priceButton setTitle:@"价格" forState:UIControlStateNormal];
@@ -249,7 +249,7 @@
     {
         _buyCountButton = [UIButton buttonWithType:UIButtonTypeCustom];
         [_buyCountButton setBackgroundImage:[UIImage imageNamed:@"android_sort_middle.png"] forState:UIControlStateNormal];
-        [_buyCountButton setFrame:CGRectMake(110,5,90, 30)];
+        [_buyCountButton setFrame:CGRectMake(110,5,90, 25)];
         [_buyCountButton addTarget:self action:@selector(buyCountButtonPressed:) forControlEvents:UIControlEventTouchUpInside];
         [_buyCountButton setTitle:@"销量" forState:UIControlStateNormal];
         [_buyCountButton setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
@@ -264,7 +264,7 @@
     {
         _viewCountButton = [UIButton buttonWithType:UIButtonTypeCustom];
         [_viewCountButton setBackgroundImage:[UIImage imageNamed:@"android_sort_right.png"] forState:UIControlStateNormal];
-        [_viewCountButton setFrame:CGRectMake(200,5,90, 30)];
+        [_viewCountButton setFrame:CGRectMake(200,5,90, 25)];
         [_viewCountButton addTarget:self action:@selector(viewCountButtonPressed:) forControlEvents:UIControlEventTouchUpInside];
         [_viewCountButton setTitle:@"人气" forState:UIControlStateNormal];
         [_viewCountButton setTintColor:[UIColor blackColor]];

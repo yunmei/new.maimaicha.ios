@@ -117,7 +117,6 @@
         [op addCompletionHandler:^(MKNetworkOperation *completedOperation) {
             [hud hide:YES];
             SBJsonParser *parser = [[SBJsonParser alloc]init];
-            NSLog(@"result:%@",[completedOperation responseString]);
             NSMutableDictionary *obj = [parser objectWithData:[completedOperation responseData]];
             if([[obj objectForKey:@"errorCode"]isEqualToString:@"0"])
             {
@@ -211,7 +210,6 @@
 
 - (BOOL)textFieldShouldReturn:(UITextField *)textField
 {
-    NSLog(@"return");
     if(textField.tag == 1)
     {
         [passwordTextField becomeFirstResponder];

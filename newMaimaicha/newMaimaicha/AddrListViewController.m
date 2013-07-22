@@ -22,7 +22,7 @@
 @synthesize addrList;
 @synthesize addListTable;
 @synthesize delegate;
-@synthesize nullView;
+@synthesize nullView = _nullView;
 @synthesize comeFrom;
 - (id)initWithStyle:(UITableViewStyle)style
 {
@@ -71,11 +71,6 @@
                 [self.nullView removeFromSuperview];
                 [self.addListTable reloadData];
             }else{
-                self.nullView = [[UIView alloc]initWithFrame:CGRectMake(0, 0, 320, 480)];
-                [self.nullView setBackgroundColor:[UIColor whiteColor]];
-                UILabel *nullLabel = [[UILabel alloc]initWithFrame:CGRectMake(10, 5, 300, 30)];
-                [nullLabel setText:@"您还没有收货地址，快去添加吧!"];
-                [self.nullView addSubview:nullLabel];
                 [self.view addSubview:self.nullView];
             }
         } errorHandler:^(MKNetworkOperation *completedOperation, NSError *error) {
@@ -280,6 +275,17 @@
     
 }
 
-
+- (UIView *)nullView
+{
+    if(_nullView == nil)
+    {
+        _nullView = [[UIView alloc]initWithFrame:CGRectMake(0, 0, 320, 480)];
+        [_nullView setBackgroundColor:[UIColor whiteColor]];
+        UILabel *nullLabel = [[UILabel alloc]initWithFrame:CGRectMake(10, 5, 300, 30)];
+        [nullLabel setText:@"您还没有收货地址，快去添加吧!"];
+        [_nullView addSubview:nullLabel];
+    }
+    return _nullView;
+}
 
 @end

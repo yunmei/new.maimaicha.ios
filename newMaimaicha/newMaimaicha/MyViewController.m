@@ -44,10 +44,8 @@
 {
     if(![UserModel checkLogin])
     {
-        NSLog(@"00000000000");
         [[NSNotificationCenter defaultCenter] postNotificationName:@"INeedLogin" object:nil];
     }else{
-        NSLog(@"11111111");
         self.user = [UserModel getUserModel];
         [self.view addSubview:self.userInfoTable];
         [self.userInfoTable reloadData];
